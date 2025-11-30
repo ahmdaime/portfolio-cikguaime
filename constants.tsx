@@ -222,27 +222,27 @@ export const SOCIALS: SocialLink[] = [
   }
 ];
 
-// Fallback blog posts if fetching fails
-export const FALLBACK_BLOG_POSTS = [
+// Latest blog posts (manually curated)
+export const BLOG_POSTS = [
   {
     id: 1,
-    title: 'Panduan Menggunakan IDME PBD Helper',
-    excerpt: 'Ketahui cara untuk mengoptimumkan penggunaan extension ini bagi mempercepatkan proses kemasukan markah murid anda.',
-    date: '12 Jan 2025',
-    link: 'https://www.cikguaime.com/'
+    title: 'IDME PBD Helper: Memudahkan Guru Mengisi PBD di IDME',
+    excerpt: 'Extension Chrome yang direka khas untuk membantu guru-guru mengisi data PBD dengan lebih pantas dan efisien.',
+    date: '09 Nov 2025',
+    link: 'https://www.cikguaime.com/2025/11/idme-pbd-helper-memudahkan-guru-mengisi.html'
   },
   {
     id: 2,
-    title: 'Transformasi Digital di Bilik Darjah',
-    excerpt: 'Bagaimana teknologi mudah seperti Chrome Extension boleh mengubah landskap pendidikan di Malaysia.',
-    date: '05 Jan 2025',
-    link: 'https://www.cikguaime.com/'
+    title: 'Contoh Ulasan Guru Untuk Pelaporan Murid (Kemaskini 2025)',
+    excerpt: 'Sejak UPSR dimansuhkan, Pentaksiran Bilik Darjah (PBD) telah menjadi instrumen utama untuk mengukur tahap pencapaian murid.',
+    date: '01 Nov 2025',
+    link: 'https://www.cikguaime.com/2022/09/contoh-ulasan-pbd.html'
   },
   {
     id: 3,
-    title: 'Tips Pengurusan Masa untuk Guru',
-    excerpt: 'Kurangkan beban kerja perkeranian dengan automasi supaya anda boleh fokus kepada pengajaran.',
-    date: '28 Dec 2024',
-    link: 'https://www.cikguaime.com/'
+    title: 'Soalan Sejarah Tahun 6 (Kuiz Interaktif)',
+    excerpt: 'Kuiz interaktif Sejarah Tahun 6 untuk membantu murid mengulangkaji silibus dengan cara yang menyeronokkan dan efektif.',
+    date: '30 Okt 2025',
+    link: 'https://www.cikguaime.com/2025/10/soalan-sejarah-tahun-6-kuiz-interaktif.html'
   }
 ];
