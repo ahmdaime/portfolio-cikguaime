@@ -20,6 +20,7 @@ const Navbar: React.FC = () => {
     { name: 'Tentang', href: '#about' },
     { name: 'Projek', href: '#projects' },
     { name: 'Blog', href: '#blog' },
+    { name: 'Media', href: '#media' },
   ];
 
   return (

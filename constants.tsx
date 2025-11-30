@@ -18,7 +18,7 @@ import {
   History,
   Languages
 } from 'lucide-react';
-import { Extension, StatItem, Testimonial, SocialLink, Achievement } from './types';
+import { Extension, StatItem, Testimonial, SocialLink, Achievement, MediaChannel } from './types';
 
 // Using a custom TikTok icon component as it's not in the default lucide set used in this context
 const TikTokIcon = () => (
@@ -292,5 +292,39 @@ export const ACHIEVEMENTS: Achievement[] = [
     ],
     link: 'https://www.cikguaime.com/2025/01/refleksi-cikgu-aime-tahun-2024.html',
     color: 'from-green-500 to-emerald-500'
+  }
+];
+
+// Media channels for video editing and content creation
+export const MEDIA_CHANNELS: MediaChannel[] = [
+  {
+    id: 'tvpss-youtube',
+    platform: 'youtube',
+    title: 'TVPSS FiveOne',
+    handle: '@TVPSSFIVEONE',
+    description: 'Saluran rasmi TVPSS SK Putrajaya Presint 5(1). Video dokumentari, berita sekolah, dan program khas yang dihasilkan dengan kualiti profesional.',
+    link: 'https://www.youtube.com/@TVPSSFIVEONE',
+    gradient: 'from-red-500 via-red-600 to-red-700',
+    stats: 'Video Editor'
+  },
+  {
+    id: 'tvpss-tiktok',
+    platform: 'tiktok',
+    title: 'TVPSS FiveOne',
+    handle: '@tvpssfiveone',
+    description: 'Kandungan kreatif pendek untuk TVPSS. Klip trending, highlights, dan behind-the-scenes aktiviti sekolah.',
+    link: 'https://www.tiktok.com/@tvpssfiveone',
+    gradient: 'from-gray-900 via-black to-gray-800',
+    stats: 'Content Creator'
+  },
+  {
+    id: 'ahmdaime-tiktok',
+    platform: 'tiktok',
+    title: 'Cikgu Aime',
+    handle: '@ahmdaime',
+    description: 'Kandungan pendidikan yang kreatif dan informatif. Tips mengajar, perkongsian inovasi digital, dan inspirasi untuk pendidik.',
+    link: 'https://www.tiktok.com/@ahmdaime',
+    gradient: 'from-cyan-400 via-pink-500 to-purple-600',
+    stats: 'Edu Creator'
   }
 ];

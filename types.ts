@@ -43,3 +43,14 @@ export interface Achievement {
   link: string;
   color: string; // Tailwind gradient color
 }
+
+export interface MediaChannel {
+  id: string;
+  platform: 'youtube' | 'tiktok';
+  title: string;
+  handle: string;
+  description: string;
+  link: string;
+  gradient: string;
+  stats?: string;
+}

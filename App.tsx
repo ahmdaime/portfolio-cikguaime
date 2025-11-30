@@ -10,6 +10,7 @@ import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Blog from './components/Blog';
+import MediaContent from './components/MediaContent';
 import BuyMeCoffee from './components/BuyMeCoffee';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <About />
         <Showcase />
         <Blog />
+        <MediaContent />
         <Journey />
         <Testimonials />
         <Contact />
