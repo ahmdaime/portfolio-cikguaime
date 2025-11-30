@@ -18,7 +18,7 @@ import {
   History,
   Languages
 } from 'lucide-react';
-import { Extension, StatItem, Testimonial, SocialLink } from './types';
+import { Extension, StatItem, Testimonial, SocialLink, Achievement } from './types';
 
 // Using a custom TikTok icon component as it's not in the default lucide set used in this context
 const TikTokIcon = () => (
@@ -244,5 +244,53 @@ export const BLOG_POSTS = [
     excerpt: 'Kuiz interaktif Sejarah Tahun 6 untuk membantu murid mengulangkaji silibus dengan cara yang menyeronokkan dan efektif.',
     date: '30 Okt 2025',
     link: 'https://www.cikguaime.com/2025/10/soalan-sejarah-tahun-6-kuiz-interaktif.html'
+  }
+];
+
+// Teaching journey achievements (2021-2024)
+export const ACHIEVEMENTS: Achievement[] = [
+  {
+    year: '2021',
+    title: 'Permulaan Kerjaya',
+    highlights: [
+      'Dilantik sebagai pendidik di SK Putrajaya Presint 5(1)',
+      'Mula mengajar di tengah pandemik COVID-19',
+      'Transisi dari pelajar kepada pendidik profesional'
+    ],
+    link: 'https://www.cikguaime.com/2022/11/refleksi-cikgu-aime-tahun-2021.html',
+    color: 'from-blue-500 to-cyan-500'
+  },
+  {
+    year: '2022',
+    title: 'Tanggungjawab Baru',
+    highlights: [
+      'Dilantik sebagai Penyelaras TVPSS Sekolah',
+      'Berkongsi ilmu melalui penulisan blog',
+      'Pembangunan profesional dalam bidang pendidikan'
+    ],
+    link: 'https://www.cikguaime.com/2022/11/refleksi-cikgu-aime-tahun-2022.html',
+    color: 'from-purple-500 to-pink-500'
+  },
+  {
+    year: '2023',
+    title: 'Pengiktirafan Digital',
+    highlights: [
+      'Tersenarai TOP 150 Cikgu Juara Digital (Ranking #112)',
+      'Menghasilkan video Raya pertama sekolah dengan kualiti profesional',
+      'Tahun ketiga perkhidmatan sebagai pendidik'
+    ],
+    link: 'https://www.cikguaime.com/2024/12/refleksi-cikgu-aime-tahun-2023.html',
+    color: 'from-orange-500 to-red-500'
+  },
+  {
+    year: '2024',
+    title: 'Kepimpinan Komuniti',
+    highlights: [
+      'Sertai "Perkongsian Kisah Digital" dengan hampir 1,000 pendidik',
+      'Penulisan refleksi tahunan selama 4 tahun berturut-turut',
+      'Aktif dalam kumpulan Edufluencer Putrajaya'
+    ],
+    link: 'https://www.cikguaime.com/2025/01/refleksi-cikgu-aime-tahun-2024.html',
+    color: 'from-green-500 to-emerald-500'
   }
 ];

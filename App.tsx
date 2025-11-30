@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import About from './components/About';
 import Showcase from './components/Showcase';
 import Stats from './components/Stats';
+import Journey from './components/Journey';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -21,6 +22,7 @@ function App() {
         <About />
         <Showcase />
         <Blog />
+        <Journey />
         <Testimonials />
         <Contact />
       </main>

@@ -35,3 +35,11 @@ export interface SocialLink {
   url: string;
   icon: ReactNode;
 }
+
+export interface Achievement {
+  year: string;
+  title: string;
+  highlights: string[];
+  link: string;
+  color: string; // Tailwind gradient color
+}
