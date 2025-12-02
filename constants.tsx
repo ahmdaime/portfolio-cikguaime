@@ -68,7 +68,7 @@ export const EXTENSIONS: Extension[] = [
     description: 'Tukar laporan berbilang halaman kepada satu halaman padat untuk penjimatan kertas dan dakwat.',
     features: ['Jimat Kertas', 'Tandatangan Digital', 'Batch Processing'],
     stats: 'Paperless',
-    link: 'https://www.cikguaime.com/', 
+    link: 'https://chromewebstore.google.com/detail/pbd-onepage-laporan-satu/lbefimcackfpdklimoiclkklookickjl',
     gradient: 'from-orange-500 via-amber-500 to-yellow-500',
     icon: <FileText className="w-6 h-6 text-white" />,
     tags: ['Eco-Friendly', 'Printing'],
