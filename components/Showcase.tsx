@@ -106,7 +106,7 @@ const Showcase: React.FC = () => {
                         rel="noreferrer"
                         className="flex items-center text-sm font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors"
                       >
-                        Lihat <span className="hidden sm:inline">&nbsp;Extension</span> <ArrowUpRight className="w-4 h-4 ml-1" />
+                        Pasang Percuma <ArrowUpRight className="w-4 h-4 ml-1" />
                       </a>
                     </div>
                   </div>
