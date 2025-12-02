@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Download } from 'lucide-react';
+import { ArrowRight, Download, Chrome } from 'lucide-react';
 import { motion } from 'framer-motion';
 import FloatingShapes from './FloatingShapes';
 
@@ -40,7 +40,7 @@ const Hero: React.FC = () => {
             >
               <div className="absolute inset-0 bg-white/20 group-hover:translate-x-full transition-transform duration-500 ease-out -skew-x-12 origin-left" />
               <span className="relative flex items-center">
-                Lihat Extension Saya <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <Chrome className="mr-2 w-5 h-5" /> Pasang Percuma <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </span>
             </a>
             <a
@@ -51,6 +51,23 @@ const Hero: React.FC = () => {
             >
               Baca Blog <span className="ml-2">📖</span>
             </a>
+          </div>
+
+          {/* Social Proof */}
+          <div className="mt-8 flex items-center justify-center gap-6 text-sm text-gray-400">
+            <div className="flex items-center gap-2">
+              <div className="flex -space-x-2">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 border-2 border-dark flex items-center justify-center text-xs font-bold">G</div>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 border-2 border-dark flex items-center justify-center text-xs font-bold">S</div>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 border-2 border-dark flex items-center justify-center text-xs font-bold">A</div>
+              </div>
+              <span><strong className="text-white">2,400+</strong> guru aktif</span>
+            </div>
+            <div className="hidden sm:block w-px h-4 bg-white/20"></div>
+            <div className="hidden sm:flex items-center gap-1">
+              <span className="text-yellow-400">★★★★★</span>
+              <span>Dipercayai guru seluruh Malaysia</span>
+            </div>
           </div>
         </motion.div>
       </div>
