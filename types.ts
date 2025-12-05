@@ -10,7 +10,9 @@ export interface Extension {
   gradient: string;
   icon: ReactNode;
   tags: string[];
-  image?: string; // Added optional image property
+  image?: string;
+  isInternal?: boolean; // For internal routes (react-router)
+  isFeatured?: boolean; // For featured/highlighted card
 }
 
 export interface StatItem {

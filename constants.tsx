@@ -1,13 +1,13 @@
 
 import React from 'react';
-import { 
-  Chrome, 
-  Users, 
-  Eye, 
-  FileCheck, 
-  Zap, 
-  FileText, 
-  Facebook, 
+import {
+  Chrome,
+  Users,
+  Eye,
+  FileCheck,
+  Zap,
+  FileText,
+  Facebook,
   Globe,
   Palette,
   Hourglass,
@@ -16,7 +16,8 @@ import {
   GraduationCap,
   ScrollText,
   History,
-  Languages
+  Languages,
+  FileSpreadsheet
 } from 'lucide-react';
 import { Extension, StatItem, Testimonial, SocialLink, Achievement, MediaChannel } from './types';
 
@@ -49,6 +50,20 @@ export const EXTENSIONS: Extension[] = [
     icon: <Zap className="w-6 h-6 text-white" />,
     tags: ['Best Seller', 'Produktiviti'],
     image: 'https://i.imgur.com/aPBQ26s.png'
+  },
+  {
+    id: 'auto-erph',
+    title: 'Auto eRPH',
+    description: 'Sistem automasi RPH Google Sheets yang dibina 100% custom mengikut struktur sekolah anda. Siap dalam 5 minit!',
+    features: ['Full Custom', 'Sidebar UI', 'Lifetime Support'],
+    stats: '50+ Guru',
+    link: '/auto-erph',
+    gradient: 'from-purple-500 via-pink-500 to-rose-500',
+    icon: <FileSpreadsheet className="w-6 h-6 text-white" />,
+    tags: ['Terbaru', 'Apps Script'],
+    image: 'https://i.imgur.com/qRnZNoL.jpeg',
+    isInternal: true,
+    isFeatured: true
   },
   {
     id: 'moies',

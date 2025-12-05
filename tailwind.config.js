@@ -7,6 +7,7 @@ module.exports = {
     "./constants.tsx",
     "./types.ts",
     "./components/**/*.{js,ts,jsx,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -19,6 +20,14 @@ module.exports = {
         secondary: '#8b5cf6',
         dark: '#0f172a',
         bmc: '#FFDD00', // Buy Me a Coffee Yellow
+        // Auto eRPH colors
+        navy: {
+          700: '#1e3a5f',
+          800: '#0d1f3c',
+          900: '#060d1f',
+        },
+        'accent-purple': '#8b5cf6',
+        'accent-pink': '#ec4899',
       },
       animation: {
         'blob': 'blob 7s infinite',

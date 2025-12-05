@@ -1,36 +1,14 @@
-
 import React from 'react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import About from './components/About';
-import Showcase from './components/Showcase';
-import Stats from './components/Stats';
-import Journey from './components/Journey';
-import Testimonials from './components/Testimonials';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
-import Blog from './components/Blog';
-import MediaContent from './components/MediaContent';
-import BuyMeCoffee from './components/BuyMeCoffee';
+import { Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import AutoErphPage from './pages/AutoErphPage';
 
 function App() {
   return (
-    <div className="font-sans antialiased text-white selection:bg-indigo-500 selection:text-white">
-      <Navbar />
-      <main>
-        <Hero />
-        <Stats />
-        <About />
-        <Showcase />
-        <Blog />
-        <MediaContent />
-        <Journey />
-        <Testimonials />
-        <Contact />
-      </main>
-      <Footer />
-      <BuyMeCoffee />
-    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/auto-erph" element={<AutoErphPage />} />
+    </Routes>
   );
 }
 

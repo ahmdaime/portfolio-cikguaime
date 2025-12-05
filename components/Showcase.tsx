@@ -1,29 +1,124 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ExternalLink, ArrowUpRight } from 'lucide-react';
+import { ExternalLink, ArrowUpRight, Sparkles } from 'lucide-react';
 import { EXTENSIONS, STUDENT_INNOVATIONS } from '../constants';
 
 const Showcase: React.FC = () => {
+  // Separate featured and regular extensions
+  const featuredExtension = EXTENSIONS.find(ext => ext.isFeatured);
+  const regularExtensions = EXTENSIONS.filter(ext => !ext.isFeatured);
+
   return (
     <section id="projects" className="py-24 relative overflow-hidden">
       <div className="absolute top-1/2 left-0 w-full h-full bg-gradient-to-b from-dark via-indigo-900/10 to-dark pointer-events-none" />
-      
+
       <div className="container mx-auto px-6 relative z-10">
-        
+
         {/* Teachers Extensions Section */}
         <div className="mb-24">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-              Koleksi <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-400">Extension</span>
+              Koleksi <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-400">Inovasi Digital</span>
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Alat bantu digital yang direka khusus untuk menyelesaikan masalah harian guru.
+              Alat bantu digital yang direka khas untuk memudahkan tugas harian guru-guru di Malaysia.
             </p>
           </div>
 
+          {/* Featured Card - Large Horizontal Layout */}
+          {featuredExtension && (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="mb-8"
+            >
+              <div className="group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden transition-colors hover:bg-white/10 hover:border-purple-500/30">
+                <div className="grid md:grid-cols-2 gap-0">
+                  {/* Image Side */}
+                  <div className="relative h-64 md:h-auto md:min-h-[400px] overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/80 z-10 hidden md:block" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 md:hidden" />
+                    <div className={`absolute inset-0 bg-gradient-to-br ${featuredExtension.gradient} opacity-20 mix-blend-overlay z-10`}></div>
+                    <img
+                      src={featuredExtension.image}
+                      alt={featuredExtension.title}
+                      className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                    />
+                    {/* Badge */}
+                    <div className="absolute top-4 left-4 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-semibold shadow-lg">
+                      <Sparkles className="w-4 h-4" />
+                      Terbaru
+                    </div>
+                  </div>
+
+                  {/* Content Side */}
+                  <div className="p-8 md:p-10 flex flex-col justify-center">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className={`p-3 rounded-xl bg-gradient-to-br ${featuredExtension.gradient} shadow-lg`}>
+                        {featuredExtension.icon}
+                      </div>
+                      <div>
+                        <h3 className="text-3xl md:text-4xl font-bold">{featuredExtension.title}</h3>
+                      </div>
+                    </div>
+
+                    <div className="mb-4 flex flex-wrap gap-2">
+                      {featuredExtension.tags.map(tag => (
+                        <span key={tag} className="px-3 py-1 text-xs font-medium rounded-full bg-white/10 border border-white/10 text-gray-300">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <p className="text-gray-300 text-lg mb-6 leading-relaxed">
+                      {featuredExtension.description}
+                    </p>
+
+                    <div className="grid grid-cols-3 gap-4 mb-8">
+                      {featuredExtension.features.map((feature, idx) => (
+                        <div key={idx} className="flex items-center text-sm text-gray-300">
+                          <div className={`w-2 h-2 rounded-full mr-2 bg-gradient-to-r ${featuredExtension.gradient}`}></div>
+                          {feature}
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center justify-between pt-6 border-t border-white/10">
+                      <div>
+                        <span className="text-xs text-gray-500 uppercase tracking-wider block mb-1">Impak</span>
+                        <span className="font-bold text-xl text-white">{featuredExtension.stats}</span>
+                      </div>
+                      {featuredExtension.isInternal ? (
+                        <Link
+                          to={featuredExtension.link}
+                          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] hover:scale-105 transition-all duration-300"
+                        >
+                          Lihat Lanjut <ArrowUpRight className="w-5 h-5" />
+                        </Link>
+                      ) : (
+                        <a
+                          href={featuredExtension.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] hover:scale-105 transition-all duration-300"
+                        >
+                          Pasang Percuma <ArrowUpRight className="w-5 h-5" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Regular Cards - 3 Column Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {EXTENSIONS.map((ext, index) => (
+            {regularExtensions.map((ext, index) => (
               <motion.div
                 key={ext.id}
                 initial={{ opacity: 0, y: 50 }}
@@ -35,15 +130,15 @@ const Showcase: React.FC = () => {
               >
                 {/* Glass Card */}
                 <div className="relative h-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden transition-colors hover:bg-white/10 hover:border-white/20 flex flex-col">
-                  
+
                   {/* Image Header Area */}
                   {ext.image ? (
                     <div className="relative w-full h-48 overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
                       <div className={`absolute top-0 right-0 w-full h-full bg-gradient-to-br ${ext.gradient} opacity-20 mix-blend-overlay z-10`}></div>
-                      <img 
-                        src={ext.image} 
-                        alt={ext.title} 
+                      <img
+                        src={ext.image}
+                        alt={ext.title}
                         className="w-full h-full object-cover object-top transform group-hover:scale-110 transition-transform duration-700 ease-in-out"
                       />
                       {/* Floating Icon over Image */}
@@ -64,14 +159,23 @@ const Showcase: React.FC = () => {
                   <div className="p-6 pt-4 flex flex-col flex-grow">
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="text-2xl font-bold">{ext.title}</h3>
-                       <a 
-                        href={ext.link} 
-                        target="_blank" 
-                        rel="noreferrer"
-                        className="p-2 rounded-full bg-white/5 hover:bg-white/20 transition-colors"
-                      >
-                        <ExternalLink className="w-5 h-5 text-gray-300" />
-                      </a>
+                      {ext.isInternal ? (
+                        <Link
+                          to={ext.link}
+                          className="p-2 rounded-full bg-white/5 hover:bg-white/20 transition-colors"
+                        >
+                          <ArrowUpRight className="w-5 h-5 text-gray-300" />
+                        </Link>
+                      ) : (
+                        <a
+                          href={ext.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="p-2 rounded-full bg-white/5 hover:bg-white/20 transition-colors"
+                        >
+                          <ExternalLink className="w-5 h-5 text-gray-300" />
+                        </a>
+                      )}
                     </div>
 
                     <div className="mb-4 flex flex-wrap gap-2">
@@ -100,14 +204,23 @@ const Showcase: React.FC = () => {
                         <span className="text-xs text-gray-500 uppercase tracking-wider block mb-1">Impak</span>
                         <span className="font-semibold text-white">{ext.stats}</span>
                       </div>
-                      <a
-                        href={ext.link}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center text-sm font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors"
-                      >
-                        Pasang Percuma <ArrowUpRight className="w-4 h-4 ml-1" />
-                      </a>
+                      {ext.isInternal ? (
+                        <Link
+                          to={ext.link}
+                          className="flex items-center text-sm font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors"
+                        >
+                          Lihat Lanjut <ArrowUpRight className="w-4 h-4 ml-1" />
+                        </Link>
+                      ) : (
+                        <a
+                          href={ext.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center text-sm font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors"
+                        >
+                          Pasang Percuma <ArrowUpRight className="w-4 h-4 ml-1" />
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -143,7 +256,7 @@ const Showcase: React.FC = () => {
               >
                 <a href={item.link} target="_blank" rel="noreferrer" className="block h-full">
                   <div className="relative h-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 overflow-hidden transition-colors hover:bg-white/10 hover:border-pink-500/30 flex flex-col">
-                    
+
                     <div className="flex items-center justify-between mb-4">
                       <div className={`p-3 rounded-xl bg-gradient-to-br ${item.gradient} shadow-lg`}>
                         {item.icon}
