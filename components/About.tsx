@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Code, BookOpen, CheckCircle } from 'lucide-react';
+import LazyImage from './LazyImage';
 
 const About: React.FC = () => {
   return (
@@ -25,9 +26,9 @@ const About: React.FC = () => {
               <div className="absolute top-10 left-10 right-10 bottom-0 bg-gradient-to-t from-purple-600 via-indigo-600 to-blue-600 blur-[80px] opacity-50 rounded-full"></div>
               
               {/* The Image */}
-              <img 
-                src="https://i.imgur.com/9zglLn9.png" 
-                alt="Cikgu Aime" 
+              <LazyImage
+                src="https://i.imgur.com/9zglLn9.png"
+                alt="Cikgu Aime - EdTech Innovator & Pendidik Digital Malaysia"
                 className="relative z-10 w-full drop-shadow-2xl hover:scale-[1.02] transition-transform duration-500 ease-in-out"
               />
 

@@ -11,12 +11,14 @@ import Footer from '../components/Footer';
 import Blog from '../components/Blog';
 import MediaContent from '../components/MediaContent';
 import BuyMeCoffee from '../components/BuyMeCoffee';
+import SkipLink from '../components/SkipLink';
 
 function HomePage() {
   return (
     <div className="font-sans antialiased text-white selection:bg-indigo-500 selection:text-white">
+      <SkipLink />
       <Navbar />
-      <main>
+      <main id="main-content" role="main">
         <Hero />
         <Stats />
         <About />

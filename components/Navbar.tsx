@@ -25,6 +25,8 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
+      role="navigation"
+      aria-label="Menu utama"
       className={`fixed w-full z-50 transition-all duration-300 ${
         isScrolled
           ? 'bg-dark/80 backdrop-blur-lg border-b border-white/10 py-3 shadow-lg'
@@ -53,10 +55,10 @@ const Navbar: React.FC = () => {
               href="https://buymeacoffee.com/cikguaime"
               target="_blank"
               rel="noreferrer"
-              className="p-2 rounded-full bg-[#FFDD00]/10 text-[#FFDD00] hover:bg-[#FFDD00] hover:text-black transition-all border border-[#FFDD00]/50"
-              title="Sokong Saya"
+              className="p-2 rounded-full bg-[#FFDD00]/10 text-[#FFDD00] hover:bg-[#FFDD00] hover:text-black transition-all border border-[#FFDD00]/50 focus:outline-none focus:ring-2 focus:ring-[#FFDD00]"
+              aria-label="Sokong saya di Buy Me a Coffee"
             >
-              <Coffee size={18} />
+              <Coffee size={18} aria-hidden="true" />
             </a>
             <a
               href="#contact"
@@ -69,16 +71,22 @@ const Navbar: React.FC = () => {
 
         {/* Mobile Toggle */}
         <button
-          className="md:hidden text-white"
+          className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-menu"
+          aria-label={mobileMenuOpen ? 'Tutup menu' : 'Buka menu'}
         >
-          {mobileMenuOpen ? <X /> : <Menu />}
+          {mobileMenuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
         </button>
       </div>
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-dark/95 backdrop-blur-xl border-b border-white/10 py-8 px-6 flex flex-col space-y-6">
+        <div
+          id="mobile-menu"
+          className="md:hidden absolute top-full left-0 w-full bg-dark/95 backdrop-blur-xl border-b border-white/10 py-8 px-6 flex flex-col space-y-6"
+        >
           {navLinks.map((link) => (
             <a
               key={link.name}

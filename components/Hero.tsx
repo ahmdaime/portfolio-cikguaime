@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { ArrowRight, Download, Chrome } from 'lucide-react';
 import { motion } from 'framer-motion';
-import FloatingShapes from './FloatingShapes';
+
+// Lazy load Three.js component to reduce initial bundle size
+const FloatingShapes = lazy(() => import('./FloatingShapes'));
 
 const Hero: React.FC = () => {
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* 3D Background */}
-      <FloatingShapes />
+      {/* 3D Background - Lazy loaded */}
+      <Suspense fallback={<div className="absolute inset-0 z-0" aria-hidden="true" />}>
+        <FloatingShapes />
+      </Suspense>
       
       {/* Decorative Gradients */}
       <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>

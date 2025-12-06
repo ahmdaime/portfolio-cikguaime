@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ExternalLink, ArrowUpRight, Sparkles } from 'lucide-react';
 import { EXTENSIONS, STUDENT_INNOVATIONS } from '../constants';
+import LazyImage from './LazyImage';
 
 const Showcase: React.FC = () => {
   // Separate featured and regular extensions
@@ -43,7 +44,7 @@ const Showcase: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/80 z-10 hidden md:block" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 md:hidden" />
                     <div className={`absolute inset-0 bg-gradient-to-br ${featuredExtension.gradient} opacity-20 mix-blend-overlay z-10`}></div>
-                    <img
+                    <LazyImage
                       src={featuredExtension.image}
                       alt={featuredExtension.title}
                       className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-in-out"
@@ -136,7 +137,7 @@ const Showcase: React.FC = () => {
                     <div className="relative w-full h-48 overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
                       <div className={`absolute top-0 right-0 w-full h-full bg-gradient-to-br ${ext.gradient} opacity-20 mix-blend-overlay z-10`}></div>
-                      <img
+                      <LazyImage
                         src={ext.image}
                         alt={ext.title}
                         className="w-full h-full object-cover object-top transform group-hover:scale-110 transition-transform duration-700 ease-in-out"

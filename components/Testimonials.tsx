@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { TESTIMONIALS } from '../constants';
 import { Quote } from 'lucide-react';
+import LazyImage from './LazyImage';
 
 const Testimonials: React.FC = () => {
   return (
@@ -25,10 +26,12 @@ const Testimonials: React.FC = () => {
               <Quote className="w-10 h-10 text-indigo-500/30 mb-6" />
               <p className="text-gray-300 text-lg mb-6 italic">"{t.text}"</p>
               <div className="flex items-center">
-                <img 
-                  src={t.avatar} 
-                  alt={t.name} 
-                  className="w-12 h-12 rounded-full border-2 border-indigo-500/50 mr-4"
+                <LazyImage
+                  src={t.avatar}
+                  alt={t.name}
+                  className="w-12 h-12 rounded-full border-2 border-indigo-500/50 mr-4 object-cover"
+                  width={48}
+                  height={48}
                 />
                 <div>
                   <h4 className="font-bold text-white">{t.name}</h4>

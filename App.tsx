@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import AutoErphPage from './pages/AutoErphPage';
+import ErrorBoundary from './components/ErrorBoundary';
+import LoadingSpinner from './components/LoadingSpinner';
+
+// Lazy load pages for code splitting
+const HomePage = lazy(() => import('./pages/HomePage'));
+const AutoErphPage = lazy(() => import('./pages/AutoErphPage'));
+
+// Page loading fallback
+const PageLoader = () => (
+  <div className="min-h-screen bg-dark flex items-center justify-center">
+    <LoadingSpinner size="lg" text="Memuatkan halaman..." />
+  </div>
+);
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/auto-erph" element={<AutoErphPage />} />
-    </Routes>
+    <ErrorBoundary>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/auto-erph" element={<AutoErphPage />} />
+        </Routes>
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 
