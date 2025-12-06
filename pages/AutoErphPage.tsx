@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 // --- Constants ---
-const TELEGRAM_LINK = "https://t.me/+w2Ri8NTkpyZhOTU9";
+const TELEGRAM_LINK = "https://t.me/cikguaimedotcom";
 
 // --- Components ---
 
