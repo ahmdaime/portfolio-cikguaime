@@ -6,6 +6,7 @@ interface LazyImageProps {
   className?: string;
   width?: number;
   height?: number;
+  priority?: boolean;
 }
 
 const LazyImage: React.FC<LazyImageProps> = ({
@@ -13,13 +14,20 @@ const LazyImage: React.FC<LazyImageProps> = ({
   alt,
   className = '',
   width,
-  height
+  height,
+  priority = false
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
+    // If priority, load immediately
+    if (priority) {
+      setIsInView(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -38,7 +46,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [priority]);
 
   return (
     <div
@@ -62,8 +70,9 @@ const LazyImage: React.FC<LazyImageProps> = ({
           height={height}
           onLoad={() => setIsLoaded(true)}
           className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className}`}
-          loading="lazy"
+          loading={priority ? "eager" : "lazy"}
           decoding="async"
+          fetchPriority={priority ? "high" : "auto"}
         />
       )}
     </div>

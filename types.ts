@@ -1,5 +1,12 @@
 import { ReactNode } from "react";
 
+// Extend HTMLImageElement to include fetchPriority
+declare module 'react' {
+  interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
+    fetchPriority?: 'high' | 'low' | 'auto';
+  }
+}
+
 export interface Extension {
   id: string;
   title: string;
@@ -13,6 +20,9 @@ export interface Extension {
   image?: string;
   isInternal?: boolean; // For internal routes (react-router)
   isFeatured?: boolean; // For featured/highlighted card
+  rating?: number; // Rating out of 5
+  users?: string; // User count string e.g. "2,400+"
+  category?: string; // Category label
 }
 
 export interface StatItem {
@@ -55,4 +65,12 @@ export interface MediaChannel {
   link: string;
   gradient: string;
   stats?: string;
+}
+
+export interface BlogPost {
+  id: number;
+  title: string;
+  excerpt: string;
+  date: string;
+  link: string;
 }

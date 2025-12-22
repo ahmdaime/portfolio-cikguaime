@@ -1,14 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Send, Sparkles } from 'lucide-react';
+import { Mail, Send, Sparkles, ArrowRight } from 'lucide-react';
 import { SOCIALS } from '../constants';
 
 const Contact: React.FC = () => {
   return (
-    <section id="contact" className="py-24 relative overflow-hidden border-t border-white/5">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-dark via-indigo-950/20 to-dark pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl opacity-30" />
+    <section id="contact" className="py-24 bg-premium bg-noise relative overflow-hidden border-t border-white/5">
+      {/* Gradient Orbs */}
+      <div className="gradient-orb gradient-orb-purple w-[500px] h-[500px] top-1/3 -right-48 opacity-40" />
+      <div className="gradient-orb gradient-orb-blue w-[400px] h-[400px] bottom-1/4 -left-32 opacity-30" />
 
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
@@ -16,19 +16,22 @@ const Contact: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="max-w-4xl mx-auto text-center"
+          className="max-w-4xl mx-auto"
         >
           {/* Header */}
-          <div className="mb-12">
-            <span className="inline-flex items-center gap-2 py-1 px-3 rounded-full bg-white/5 border border-white/10 text-purple-300 text-sm font-medium mb-6 backdrop-blur-sm">
-              <Sparkles className="w-4 h-4" />
-              Mari Berhubung
-            </span>
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-              Jom <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">Berbincang</span>
+          <div className="mb-16 text-center">
+            <div className="inline-block px-3 py-1 mb-6 rounded-full border border-white/10 bg-surface/50 backdrop-blur-sm">
+              <span className="text-xs font-semibold tracking-widest text-white uppercase flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                Hubungi Saya
+              </span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-display font-bold text-white mb-6 tracking-tight">
+              Ada idea? <br />
+              <span className="text-gray-400">Jom bincang.</span>
             </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Ada soalan tentang extension atau nak berkongsi idea? Saya sedia membantu komuniti pendidik Malaysia.
+            <p className="text-gray-400 text-lg max-w-xl mx-auto font-light leading-relaxed">
+              Nak request feature baru? Atau sekadar nak tanya pasal tools? Boleh je DM atau email.
             </p>
           </div>
 
@@ -38,75 +41,58 @@ const Contact: React.FC = () => {
             {/* Email Card */}
             <motion.a
               href="mailto:aimansic97@gmail.com"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              whileHover={{ y: -5 }}
-              className="group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-purple-500/30 transition-all"
+              whileHover={{ scale: 1.02 }}
+              className="group relative p-8 rounded-3xl bg-surface border border-white/10 hover:border-white/20 transition-all cursor-pointer overflow-hidden"
             >
-              <div className="flex items-start gap-4">
-                <div className="p-4 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg">
-                  <Mail className="w-6 h-6 text-white" />
+              <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-2 group-hover:-translate-y-2">
+                <ArrowRight className="w-6 h-6 text-white" />
+              </div>
+
+              <div className="flex flex-col h-full justify-between">
+                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-white group-hover:bg-white group-hover:text-black transition-colors">
+                  <Mail className="w-6 h-6" />
                 </div>
-                <div className="text-left flex-1">
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-blue-300 transition-colors">Email Saya</h3>
-                  <p className="text-gray-400 text-sm mb-3">Untuk pertanyaan atau kerjasama</p>
-                  <p className="text-blue-400 font-medium break-all">aimansic97@gmail.com</p>
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-2">Email</h3>
+                  <p className="text-gray-400 mb-4 text-sm">aimansic97@gmail.com</p>
+                  <span className="text-sm font-medium text-white border-b border-white/20 pb-0.5 group-hover:border-white transition-colors">Hantar mesej</span>
                 </div>
-                <Send className="w-5 h-5 text-gray-500 group-hover:text-blue-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
               </div>
             </motion.a>
 
             {/* Social Links Card */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
-            >
-              <div className="text-left mb-6">
-                <h3 className="text-xl font-bold mb-2">Ikuti Saya</h3>
-                <p className="text-gray-400 text-sm">Konten pendidikan & tips EdTech</p>
+            <div className="relative p-8 rounded-3xl bg-surface border border-white/10">
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold text-white mb-2">Media Sosial</h3>
+                <p className="text-gray-400 text-sm">Ikuti update terkini</p>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 {SOCIALS.map((social) => (
                   <a
                     key={social.name}
                     href={social.url}
                     target="_blank"
-                    rel="noreferrer"
-                    className="group flex flex-col items-center gap-2 p-4 bg-white/5 rounded-xl hover:bg-white/10 border border-white/5 hover:border-white/20 transition-all"
-                    title={social.name}
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all group"
                   >
-                    <div className="text-gray-400 group-hover:text-white transition-colors">
+                    <span className="text-gray-400 group-hover:text-white transition-colors">
                       {social.icon}
-                    </div>
-                    <span className="text-xs text-gray-500 group-hover:text-gray-300 transition-colors">{social.name}</span>
+                    </span>
+                    <span className="text-sm font-medium text-gray-300 group-hover:text-white">{social.name}</span>
                   </a>
                 ))}
               </div>
-            </motion.div>
+            </div>
 
           </div>
 
-          {/* CTA Message */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10 border border-white/10 rounded-2xl p-8 backdrop-blur-sm"
-          >
-            <p className="text-gray-300 text-lg mb-4">
-              💡 <strong className="text-white">Tip:</strong> Untuk sokongan teknikal extension, sila email dengan screenshot masalah yang dihadapi.
+          {/* Response Time Note */}
+          <div className="text-center">
+            <p className="text-gray-400 text-sm font-medium">
+              Biasanya reply dalam 24 jam
             </p>
-            <p className="text-gray-400 text-sm">
-              Biasanya saya reply dalam masa 24-48 jam. Terima kasih atas kesabaran anda! 🙏
-            </p>
-          </motion.div>
+          </div>
 
         </motion.div>
       </div>

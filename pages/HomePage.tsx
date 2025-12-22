@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
-import About from '../components/About';
-import Showcase from '../components/Showcase';
-import Stats from '../components/Stats';
-import Journey from '../components/Journey';
-import Testimonials from '../components/Testimonials';
-import Contact from '../components/Contact';
-import Footer from '../components/Footer';
-import Blog from '../components/Blog';
-import MediaContent from '../components/MediaContent';
-import BuyMeCoffee from '../components/BuyMeCoffee';
 import SkipLink from '../components/SkipLink';
+
+// Lazy load below-the-fold components for better performance
+const Services = lazy(() => import('../components/Services'));
+const Showcase = lazy(() => import('../components/Showcase'));
+const About = lazy(() => import('../components/About'));
+const Blog = lazy(() => import('../components/Blog'));
+const MediaContent = lazy(() => import('../components/MediaContent'));
+const Journey = lazy(() => import('../components/Journey'));
+const TestimonialCarousel = lazy(() => import('../components/TestimonialCarousel'));
+const Contact = lazy(() => import('../components/Contact'));
+const Footer = lazy(() => import('../components/Footer'));
+const BuyMeCoffee = lazy(() => import('../components/BuyMeCoffee'));
+
+// Minimal loading fallback
+const SectionLoader = () => (
+  <div className="py-24 flex justify-center">
+    <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+  </div>
+);
 
 function HomePage() {
   return (
@@ -20,17 +29,21 @@ function HomePage() {
       <Navbar />
       <main id="main-content" role="main">
         <Hero />
-        <Stats />
-        <About />
-        <Showcase />
-        <Blog />
-        <MediaContent />
-        <Journey />
-        <Testimonials />
-        <Contact />
+        <Suspense fallback={<SectionLoader />}>
+          <Services />
+          <Showcase />
+          <About />
+          <Blog />
+          <MediaContent />
+          <Journey />
+          <TestimonialCarousel />
+          <Contact />
+        </Suspense>
       </main>
-      <Footer />
-      <BuyMeCoffee />
+      <Suspense fallback={null}>
+        <Footer />
+        <BuyMeCoffee />
+      </Suspense>
     </div>
   );
 }

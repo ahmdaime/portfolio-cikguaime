@@ -13,7 +13,6 @@ const BuyMeCoffee: React.FC = () => {
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 1, type: "spring", stiffness: 260, damping: 20 }}
       className="fixed bottom-6 right-6 z-50 group"
-      aria-label="Belanja Cikgu Kopi"
     >
       <div className="absolute inset-0 bg-[#FFDD00] rounded-full blur opacity-40 group-hover:opacity-60 transition-opacity duration-300 animate-pulse"></div>
       

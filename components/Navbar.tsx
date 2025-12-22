@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Coffee } from 'lucide-react';
+import { Menu, X, Coffee, ArrowRight } from 'lucide-react';
 import { SOCIALS } from '../constants';
 
 const Navbar: React.FC = () => {
@@ -16,103 +16,120 @@ const Navbar: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Utama', href: '#home' },
-    { name: 'Tentang', href: '#about' },
-    { name: 'Projek', href: '#projects' },
+    { name: 'Home', href: '#home' },
+    { name: 'Work', href: '#projects' },
+    { name: 'Process', href: '#services' },
+    { name: 'About', href: '#about' },
     { name: 'Blog', href: '#blog' },
-    { name: 'Media', href: '#media' },
   ];
 
   return (
-    <nav
-      role="navigation"
-      aria-label="Menu utama"
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-dark/80 backdrop-blur-lg border-b border-white/10 py-3 shadow-lg'
-          : 'bg-transparent py-6'
-      }`}
-    >
-      <div className="container mx-auto px-6 flex justify-between items-center">
-        <a href="#" className="text-2xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-          Cikgu Aime<span className="text-white">.</span>
-        </a>
+    <>
+      <nav
+        role="navigation"
+        aria-label="Main menu"
+        className={`fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-300 ${isScrolled ? 'py-4' : 'py-6'
+          }`}
+      >
+        <div
+          className={`
+            flex items-center justify-between px-6 py-3 rounded-full 
+            transition-all duration-300 w-[95%] max-w-5xl
+            ${isScrolled
+              ? 'bg-black/60 backdrop-blur-xl border border-white/10 shadow-lg shadow-black/20'
+              : 'bg-transparent border border-transparent'
+            }
+          `}
+        >
+          {/* Logo */}
+          <a href="#home" className="flex items-center gap-2 group" aria-label="Cikgu Aime - Halaman utama">
+            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black font-bold font-display text-sm group-hover:scale-110 transition-transform">
+              C
+            </div>
+            <span className="font-display font-bold text-white tracking-tight hidden sm:block group-hover:text-gray-300 transition-colors">
+              Cikgu Aime
+            </span>
+          </a>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-8">
-          {navLinks.map((link) => (
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center gap-1 bg-white/5 rounded-full px-2 py-1 border border-white/5">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="px-4 py-1.5 rounded-full text-sm font-medium text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* Buy Me A Coffee (Icon only on desktop for minimalism) */}
             <a
-              key={link.name}
-              href={link.href}
-              className="text-gray-300 hover:text-white transition-colors text-sm font-medium tracking-wide"
-            >
-              {link.name}
-            </a>
-          ))}
-          
-          <div className="flex items-center gap-3 ml-4">
-             <a
               href="https://buymeacoffee.com/cikguaime"
               target="_blank"
               rel="noreferrer"
-              className="p-2 rounded-full bg-[#FFDD00]/10 text-[#FFDD00] hover:bg-[#FFDD00] hover:text-black transition-all border border-[#FFDD00]/50 focus:outline-none focus:ring-2 focus:ring-[#FFDD00]"
-              aria-label="Sokong saya di Buy Me a Coffee"
+              className="hidden sm:flex items-center justify-center w-10 h-10 rounded-full bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black transition-all border border-yellow-500/20"
+              aria-label="Support me"
             >
-              <Coffee size={18} aria-hidden="true" />
+              <Coffee size={18} />
             </a>
+
+            {/* Contact Button */}
             <a
               href="#contact"
-              className="px-5 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 transition-all text-sm font-semibold"
+              className="px-5 py-2.5 rounded-full bg-white text-black hover:bg-gray-200 transition-all text-xs font-bold uppercase tracking-wide flex items-center gap-2"
             >
               Hubungi
             </a>
+
+            {/* Mobile Toggle */}
+            <button
+              className="md:hidden text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
           </div>
         </div>
+      </nav>
 
-        {/* Mobile Toggle */}
-        <button
-          className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-expanded={mobileMenuOpen}
-          aria-controls="mobile-menu"
-          aria-label={mobileMenuOpen ? 'Tutup menu' : 'Buka menu'}
-        >
-          {mobileMenuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div
-          id="mobile-menu"
-          className="md:hidden absolute top-full left-0 w-full bg-dark/95 backdrop-blur-xl border-b border-white/10 py-8 px-6 flex flex-col space-y-6"
-        >
-          {navLinks.map((link) => (
+        <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl pt-24 px-6 md:hidden animate-fade-in">
+          <div className="flex flex-col space-y-4">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-2xl font-display font-bold text-white border-b border-white/10 pb-4"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.name}
+              </a>
+            ))}
             <a
-              key={link.name}
-              href={link.href}
-              className="text-lg text-gray-200"
+              href="https://buymeacoffee.com/cikguaime"
+              target="_blank"
+              rel="noreferrer"
+              className="text-lg text-yellow-500 font-medium pt-2 flex items-center gap-2"
               onClick={() => setMobileMenuOpen(false)}
             >
-              {link.name}
+              <Coffee size={20} /> Support My Work
             </a>
-          ))}
-          <a
-            href="https://buymeacoffee.com/cikguaime"
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center text-[#FFDD00] font-semibold"
-          >
-            <Coffee className="mr-2" size={18} /> Sokong Saya
-          </a>
-          <div className="flex space-x-4 pt-4 border-t border-white/10">
+          </div>
+
+          <div className="mt-8 flex gap-4">
             {SOCIALS.map((social) => (
               <a
                 key={social.name}
                 href={social.url}
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 bg-white/5 rounded-full text-gray-400 hover:text-white hover:bg-white/10"
+                className="p-3 bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors"
+                aria-label={social.name}
               >
                 {social.icon}
               </a>
@@ -120,7 +137,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       )}
-    </nav>
+    </>
   );
 };
 

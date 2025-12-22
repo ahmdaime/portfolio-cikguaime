@@ -3,24 +3,24 @@ import { SOCIALS } from '../constants';
 
 const Footer: React.FC = () => {
   return (
-    <footer id="contact" className="bg-black py-12 border-t border-white/10">
+    <footer className="bg-black py-16 border-t border-white/10">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-12">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-8">
           <div className="mb-8 md:mb-0 text-center md:text-left">
-            <h2 className="text-3xl font-display font-bold mb-2">Jom Berkolaborasi!</h2>
-            <p className="text-gray-400">Ada idea untuk mudahkan kerja guru? Hubungi saya.</p>
+            <h2 className="text-4xl font-display font-bold text-white mb-3">Nak tools baru?</h2>
+            <p className="text-gray-400 text-lg font-light">Kalau ada idea, boleh share. Mana tahu jadi projek seterusnya.</p>
           </div>
           <a
-            href="mailto:cikguaime@example.com"
-            className="px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors shadow-lg shadow-white/10"
+            href="mailto:aimansic97@gmail.com"
+            className="px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105"
           >
             Hubungi Saya
           </a>
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/10">
-          <p className="text-gray-500 text-sm mb-4 md:mb-0">
-            © {new Date().getFullYear()} Cikgu Aime. Dibina untuk Guru Malaysia.
+          <p className="text-gray-400 text-sm mb-4 md:mb-0 font-medium">
+            © {new Date().getFullYear()} Cikgu Aime. Dibina untuk guru Malaysia.
           </p>
           <div className="flex space-x-6">
             {SOCIALS.map((social) => (
@@ -28,8 +28,8 @@ const Footer: React.FC = () => {
                 key={social.name}
                 href={social.url}
                 target="_blank"
-                rel="noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors hover:scale-110 transform duration-200"
                 aria-label={social.name}
               >
                 {social.icon}

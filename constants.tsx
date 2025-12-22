@@ -19,7 +19,7 @@ import {
   Languages,
   FileSpreadsheet
 } from 'lucide-react';
-import { Extension, StatItem, Testimonial, SocialLink, Achievement, MediaChannel } from './types';
+import { Extension, StatItem, Testimonial, SocialLink, Achievement, MediaChannel, BlogPost } from './types';
 
 // Using a custom TikTok icon component as it's not in the default lucide set used in this context
 const TikTokIcon = () => (
@@ -44,52 +44,65 @@ export const EXTENSIONS: Extension[] = [
     title: 'IDME PBD Helper',
     description: 'Automasi pengurusan data IDME PBD untuk guru. Jimatkan masa memasukkan markah dan data pentaksiran.',
     features: ['Auto-fill Data', 'Analisis Cepat', 'Mesra Pengguna'],
-    stats: '2,400+ Guru',
+    stats: '3,000+ Guru',
     link: 'https://ahmdaime.github.io/cikguaime/landing-page.html',
     gradient: 'from-blue-500 via-indigo-500 to-purple-500',
     icon: <Zap className="w-6 h-6 text-white" />,
     tags: ['Best Seller', 'Produktiviti'],
-    image: 'https://i.imgur.com/aPBQ26s.png'
-  },
-  {
-    id: 'auto-erph',
-    title: 'Auto eRPH',
-    description: 'Sistem automasi RPH Google Sheets yang dibina 100% custom mengikut struktur sekolah anda. Siap dalam 5 minit!',
-    features: ['Full Custom', 'Sidebar UI', 'Lifetime Support'],
-    stats: '50+ Guru',
-    link: '/auto-erph',
-    gradient: 'from-purple-500 via-pink-500 to-rose-500',
-    icon: <FileSpreadsheet className="w-6 h-6 text-white" />,
-    tags: ['Terbaru', 'Apps Script'],
-    image: 'https://i.imgur.com/qRnZNoL.jpeg',
-    isInternal: true,
-    isFeatured: true
+    image: 'https://i.imgur.com/aPBQ26s.png',
+    rating: 5.0,
+    users: '3,000+',
+    category: 'Produktiviti'
   },
   {
     id: 'moies',
     title: 'MOIES Kehadiran Helper',
     description: 'Sistem automasi untuk pengurusan kehadiran guru dan murid dalam platform MOIES.',
     features: ['Satu Klik Siap', 'Laporan Automatik', 'Data Tepat'],
-    stats: 'Jimat 5 jam/minggu',
+    stats: '3,000+ Guru',
     link: 'https://landing-page-moies.vercel.app/',
     gradient: 'from-emerald-500 via-teal-500 to-cyan-500',
     icon: <FileCheck className="w-6 h-6 text-white" />,
     tags: ['Automasi', 'Kehadiran'],
-    image: 'https://i.imgur.com/RODLmhS.png'
+    image: 'https://i.imgur.com/RODLmhS.png',
+    rating: 5.0,
+    users: '3,000+',
+    category: 'Kehadiran'
   },
   {
     id: 'onepage',
     title: 'PBD OnePage',
     description: 'Tukar laporan berbilang halaman kepada satu halaman padat untuk penjimatan kertas dan dakwat.',
     features: ['Jimat Kertas', 'Tandatangan Digital', 'Batch Processing'],
-    stats: 'Paperless',
+    stats: '4,000+ Guru',
     link: 'https://chromewebstore.google.com/detail/pbd-onepage-laporan-satu/lbefimcackfpdklimoiclkklookickjl',
     gradient: 'from-orange-500 via-amber-500 to-yellow-500',
     icon: <FileText className="w-6 h-6 text-white" />,
     tags: ['Eco-Friendly', 'Printing'],
-    image: 'https://i.imgur.com/JV01XFT.png'
+    image: 'https://i.imgur.com/JV01XFT.png',
+    rating: 5.0,
+    users: '4,000+',
+    category: 'Utiliti'
   }
 ];
+
+// Auto eRPH - Apps Script (separate from Chrome extensions)
+export const AUTO_ERPH = {
+  id: 'auto-erph',
+  title: 'Auto eRPH',
+  description: 'Sistem automasi RPH Google Sheets yang dibina 100% custom mengikut struktur sekolah anda. Siap dalam 5 minit!',
+  features: ['Full Custom', 'Sidebar UI', 'Lifetime Support'],
+  stats: '50+ Guru',
+  link: '/auto-erph',
+  gradient: 'from-purple-500 via-pink-500 to-rose-500',
+  icon: <FileSpreadsheet className="w-6 h-6 text-white" />,
+  tags: ['Terbaru', 'Apps Script'],
+  image: 'https://i.imgur.com/qRnZNoL.jpeg',
+  isInternal: true,
+  isFeatured: true,
+  users: '50+',
+  category: 'Apps Script'
+};
 
 export const STUDENT_INNOVATIONS: Extension[] = [
   {
@@ -238,7 +251,7 @@ export const SOCIALS: SocialLink[] = [
 ];
 
 // Latest blog posts (manually curated)
-export const BLOG_POSTS = [
+export const BLOG_POSTS: BlogPost[] = [
   {
     id: 1,
     title: 'IDME PBD Helper: Memudahkan Guru Mengisi PBD di IDME',
