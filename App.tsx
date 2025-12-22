@@ -6,6 +6,7 @@ import LoadingSpinner from './components/LoadingSpinner';
 // Lazy load pages for code splitting
 const HomePage = lazy(() => import('./pages/HomePage'));
 const AutoErphPage = lazy(() => import('./pages/AutoErphPage'));
+const ExtensionsLanding = lazy(() => import('./pages/ExtensionsLanding'));
 
 // Page loading fallback
 const PageLoader = () => (
@@ -21,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/auto-erph" element={<AutoErphPage />} />
+          <Route path="/extensions" element={<ExtensionsLanding />} />
         </Routes>
       </Suspense>
     </ErrorBoundary>

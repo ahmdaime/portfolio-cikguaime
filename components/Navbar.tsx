@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Coffee, ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { SOCIALS } from '../constants';
 
 const Navbar: React.FC = () => {
@@ -30,6 +31,7 @@ const Navbar: React.FC = () => {
 
   const navLinks = [
     { name: 'Utama', href: '#home' },
+    { name: 'Inovasi', href: '/extensions' },
     { name: 'Projek', href: '#projects' },
     { name: 'Proses Kerja', href: '#services' },
     { name: 'Tentang Saya', href: '#about' },
@@ -67,13 +69,23 @@ const Navbar: React.FC = () => {
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-1 bg-white/5 rounded-full px-2 py-1 border border-white/5">
             {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="px-4 py-1.5 rounded-full text-sm font-medium text-gray-400 hover:text-white hover:bg-white/10 transition-all"
-              >
-                {link.name}
-              </a>
+              link.href.startsWith('/') ? (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  className="px-4 py-1.5 rounded-full text-sm font-medium text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+                >
+                  {link.name}
+                </Link>
+              ) : (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="px-4 py-1.5 rounded-full text-sm font-medium text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+                >
+                  {link.name}
+                </a>
+              )
             ))}
           </div>
 

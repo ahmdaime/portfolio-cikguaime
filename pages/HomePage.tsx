@@ -4,6 +4,7 @@ import Hero from '../components/Hero';
 import SkipLink from '../components/SkipLink';
 
 // Lazy load below-the-fold components for better performance
+const FeaturedInnovation = lazy(() => import('../components/FeaturedInnovation'));
 const Services = lazy(() => import('../components/Services'));
 const Showcase = lazy(() => import('../components/Showcase'));
 const About = lazy(() => import('../components/About'));
@@ -30,6 +31,7 @@ function HomePage() {
       <main id="main-content" role="main">
         <Hero />
         <Suspense fallback={<SectionLoader />}>
+          <FeaturedInnovation />
           <Services />
           <Showcase />
           <About />
