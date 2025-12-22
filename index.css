@@ -82,6 +82,23 @@ body {
   background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
 }
 
+/* Infinite Scroll Testimonials Animation */
+@keyframes scroll-testimonials {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(var(--scroll-width, 1356px) * -1));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 /* Premium Selection */
 ::selection {
   background-color: rgba(255, 255, 255, 0.2);

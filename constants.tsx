@@ -187,22 +187,22 @@ export const STUDENT_INNOVATIONS: Extension[] = [
 export const STATS: StatItem[] = [
   {
     id: 1,
-    label: 'Guru Menggunakan Extension',
-    value: '2,400',
+    label: 'Guru Guna Extension',
+    value: '10,000',
     suffix: '+',
     icon: <Users className="w-6 h-6" />
   },
   {
     id: 2,
     label: 'Murid Dibantu',
-    value: '200',
+    value: '300',
     suffix: 'k+',
     icon: <GraduationCap className="w-6 h-6" />
   },
   {
     id: 3,
     label: 'Inovasi Digital',
-    value: '7',
+    value: '10',
     suffix: '+',
     icon: <Zap className="w-6 h-6" />
   }
@@ -255,23 +255,37 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: 1,
     title: 'IDME PBD Helper: Memudahkan Guru Mengisi PBD di IDME',
-    excerpt: 'Extension Chrome yang direka khas untuk membantu guru-guru mengisi data PBD dengan lebih pantas dan efisien.',
+    excerpt: 'Extension Chrome yang direka khas untuk membantu guru-guru mengisi data PBD dengan lebih pantas dan efisien. Kerja yang biasanya ambil 3 hari, sekarang boleh siap dalam 3 jam.',
     date: '09 Nov 2025',
-    link: 'https://www.cikguaime.com/2025/11/idme-pbd-helper-memudahkan-guru-mengisi.html'
+    link: 'https://www.cikguaime.com/2025/11/idme-pbd-helper-memudahkan-guru-mengisi.html',
+    category: 'Extension',
+    readTime: '5 min',
+    thumbnail: '',
+    views: '2.4K',
+    isPopular: true
   },
   {
     id: 2,
     title: 'Contoh Ulasan Guru Untuk Pelaporan Murid (Kemaskini 2025)',
-    excerpt: 'Sejak UPSR dimansuhkan, Pentaksiran Bilik Darjah (PBD) telah menjadi instrumen utama untuk mengukur tahap pencapaian murid.',
+    excerpt: 'Sejak UPSR dimansuhkan, Pentaksiran Bilik Darjah (PBD) telah menjadi instrumen utama untuk mengukur tahap pencapaian murid. Artikel ini mengumpulkan contoh-contoh ulasan yang boleh digunakan.',
     date: '01 Nov 2025',
-    link: 'https://www.cikguaime.com/2022/09/contoh-ulasan-pbd.html'
+    link: 'https://www.cikguaime.com/2022/09/contoh-ulasan-pbd.html',
+    category: 'Tips',
+    readTime: '8 min',
+    thumbnail: '',
+    views: '5.1K',
+    isPopular: true
   },
   {
     id: 3,
     title: 'Soalan Sejarah Tahun 6 (Kuiz Interaktif)',
     excerpt: 'Kuiz interaktif Sejarah Tahun 6 untuk membantu murid mengulangkaji silibus dengan cara yang menyeronokkan dan efektif.',
     date: '30 Okt 2025',
-    link: 'https://www.cikguaime.com/2025/10/soalan-sejarah-tahun-6-kuiz-interaktif.html'
+    link: 'https://www.cikguaime.com/2025/10/soalan-sejarah-tahun-6-kuiz-interaktif.html',
+    category: 'Inovasi',
+    readTime: '3 min',
+    thumbnail: '',
+    views: '1.8K'
   }
 ];
 

@@ -73,4 +73,9 @@ export interface BlogPost {
   excerpt: string;
   date: string;
   link: string;
+  category: 'Tutorial' | 'Tips' | 'Extension' | 'Inovasi' | 'Perkongsian';
+  readTime: string;
+  thumbnail: string;
+  views: string;
+  isPopular?: boolean;
 }
