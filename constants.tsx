@@ -260,7 +260,7 @@ export const BLOG_POSTS: BlogPost[] = [
     link: 'https://www.cikguaime.com/2025/11/idme-pbd-helper-memudahkan-guru-mengisi.html',
     category: 'Extension',
     readTime: '5 min',
-    thumbnail: '',
+    thumbnail: 'https://i.imgur.com/59tQPnV.jpeg',
     views: '2.4K',
     isPopular: true
   },
@@ -272,7 +272,7 @@ export const BLOG_POSTS: BlogPost[] = [
     link: 'https://www.cikguaime.com/2022/09/contoh-ulasan-pbd.html',
     category: 'Tips',
     readTime: '8 min',
-    thumbnail: '',
+    thumbnail: 'https://i.imgur.com/prnjU3k.jpeg',
     views: '5.1K',
     isPopular: true
   },
@@ -284,7 +284,7 @@ export const BLOG_POSTS: BlogPost[] = [
     link: 'https://www.cikguaime.com/2025/10/soalan-sejarah-tahun-6-kuiz-interaktif.html',
     category: 'Inovasi',
     readTime: '3 min',
-    thumbnail: '',
+    thumbnail: 'https://i.imgur.com/VM7y7Tv.jpeg',
     views: '1.8K'
   }
 ];

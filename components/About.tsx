@@ -97,7 +97,9 @@ const About: React.FC = () => {
             {/* Main heading */}
             <h2 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-5 leading-tight">
               Cikgu Siang Hari,{' '}
-              <span className="text-gray-500">Developer Malam Hari.</span>
+              <span className="text-gray-500 line-through decoration-2">Developer</span>{' '}
+              <span className="text-primary">Vibe Coder</span>
+              <span className="text-gray-500"> Malam Hari.</span>
             </h2>
 
             {/* Description */}
@@ -111,7 +113,7 @@ const About: React.FC = () => {
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300">
                   <Code className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-400" />
                 </div>
-                <h3 className="font-bold text-white text-sm sm:text-base mb-1">Developer</h3>
+                <h3 className="font-bold text-white text-sm sm:text-base mb-1">Builder</h3>
                 <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">Dah bina 7+ extension & tools untuk guru.</p>
               </div>
 

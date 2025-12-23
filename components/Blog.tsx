@@ -280,7 +280,7 @@ const Blog: React.FC = () => {
               Penulisan & Perkongsian
             </span>
             <h2 className="text-4xl md:text-5xl font-display font-bold text-white max-w-xl">
-              Insights EdTech & Pendidikan
+              Koleksi Artikel CikguAime.Com
             </h2>
           </div>
           <EmptyState />
@@ -313,7 +313,7 @@ const Blog: React.FC = () => {
               <span className="text-[10px] sm:text-xs font-medium text-purple-400 uppercase tracking-wider">Penulisan & Perkongsian</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-3 md:mb-4">
-              Insights EdTech & Pendidikan
+              Koleksi Artikel CikguAime.Com
             </h2>
             <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-xl font-light">
               Perkongsian pengalaman, tips dan tutorial untuk guru-guru Malaysia yang ingin maju ke hadapan dalam bidang pendidikan digital.
