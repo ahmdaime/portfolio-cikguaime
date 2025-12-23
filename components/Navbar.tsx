@@ -43,7 +43,7 @@ const Navbar: React.FC = () => {
       <nav
         role="navigation"
         aria-label="Main menu"
-        className={`fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-300 ${isScrolled ? 'py-4' : 'py-6'
+        className={`fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-300 ${isScrolled ? 'py-4' : 'py-4 md:py-6'
           }`}
       >
         <div
@@ -158,25 +158,50 @@ const Navbar: React.FC = () => {
 
                 {/* Navigation Links */}
                 <div className="flex-1 py-6">
-                  {navLinks.map((link, index) => (
-                    <motion.a
-                      key={link.name}
-                      href={link.href}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      className="group flex items-center justify-between px-6 py-4 hover:bg-white/5 transition-colors"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <div className="flex items-center gap-4">
-                        <span className="text-xs font-mono text-gray-600">0{index + 1}</span>
-                        <span className="text-lg font-display font-semibold text-white group-hover:text-purple-400 transition-colors">
-                          {link.name}
-                        </span>
-                      </div>
-                      <ArrowUpRight className="w-4 h-4 text-gray-600 group-hover:text-purple-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                    </motion.a>
-                  ))}
+                  {navLinks.map((link, index) => {
+                    const isInternal = link.href.startsWith('/');
+                    const linkClass = "group flex items-center justify-between px-6 py-4 hover:bg-white/5 transition-colors";
+                    const content = (
+                      <>
+                        <div className="flex items-center gap-4">
+                          <span className="text-xs font-mono text-gray-600">0{index + 1}</span>
+                          <span className="text-lg font-display font-semibold text-white group-hover:text-purple-400 transition-colors">
+                            {link.name}
+                          </span>
+                        </div>
+                        <ArrowUpRight className="w-4 h-4 text-gray-600 group-hover:text-purple-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                      </>
+                    );
+
+                    return isInternal ? (
+                      <motion.div
+                        key={link.name}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                      >
+                        <Link
+                          to={link.href}
+                          className={linkClass}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {content}
+                        </Link>
+                      </motion.div>
+                    ) : (
+                      <motion.a
+                        key={link.name}
+                        href={link.href}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        className={linkClass}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {content}
+                      </motion.a>
+                    );
+                  })}
                 </div>
 
                 {/* Footer */}

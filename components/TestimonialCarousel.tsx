@@ -9,9 +9,8 @@ const AUTOPLAY_DELAY = 5000; // 5 seconds
 
 const TestimonialCarousel: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const progressRef = useRef<NodeJS.Timeout | null>(null);
-  const startTimeRef = useRef<number>(Date.now());
+  const [progressKey, setProgressKey] = useState(0); // Key to restart CSS animation
+  const autoplayRef = useRef<NodeJS.Timeout | null>(null);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
@@ -23,8 +22,6 @@ const TestimonialCarousel: React.FC = () => {
     (index: number) => {
       if (!emblaApi) return;
       emblaApi.scrollTo(index);
-      setProgress(0);
-      startTimeRef.current = Date.now();
     },
     [emblaApi]
   );
@@ -32,6 +29,7 @@ const TestimonialCarousel: React.FC = () => {
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
+    setProgressKey(prev => prev + 1); // Restart CSS animation
   }, [emblaApi]);
 
   useEffect(() => {
@@ -45,41 +43,23 @@ const TestimonialCarousel: React.FC = () => {
     };
   }, [emblaApi, onSelect]);
 
-  // Progress bar and auto-scroll - always running
-  useEffect(() => {
-    const animate = () => {
-      const elapsed = Date.now() - startTimeRef.current;
-      const newProgress = Math.min((elapsed / AUTOPLAY_DELAY) * 100, 100);
-      setProgress(newProgress);
+  // Auto-scroll - temporarily disabled for debugging
+  // useEffect(() => {
+  //   if (!emblaApi) return;
 
-      if (newProgress >= 100) {
-        if (emblaApi) {
-          emblaApi.scrollNext();
-          setProgress(0);
-          startTimeRef.current = Date.now();
-        }
-      }
+  //   autoplayRef.current = setInterval(() => {
+  //     emblaApi.scrollNext();
+  //   }, AUTOPLAY_DELAY);
 
-      progressRef.current = setTimeout(animate, 16);
-    };
-
-    progressRef.current = setTimeout(animate, 16);
-
-    return () => {
-      if (progressRef.current) {
-        clearTimeout(progressRef.current);
-      }
-    };
-  }, [emblaApi, selectedIndex]);
-
-  // Reset progress when slide changes
-  useEffect(() => {
-    setProgress(0);
-    startTimeRef.current = Date.now();
-  }, [selectedIndex]);
+  //   return () => {
+  //     if (autoplayRef.current) {
+  //       clearInterval(autoplayRef.current);
+  //     }
+  //   };
+  // }, [emblaApi]);
 
   return (
-    <section id="testimonials" className="min-h-screen flex flex-col bg-[#0a0a0a] relative overflow-hidden">
+    <section id="testimonials" className="min-h-[100svh] flex flex-col bg-[#0a0a0a] relative overflow-hidden">
       {/* Subtle grid background */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px]" />
 
@@ -101,7 +81,7 @@ const TestimonialCarousel: React.FC = () => {
         </motion.div>
 
         {/* Testimonial Content */}
-        <div className="max-w-4xl mx-auto" ref={emblaRef}>
+        <div className="max-w-4xl mx-auto overflow-hidden" ref={emblaRef}>
           <div className="embla__container">
             {TESTIMONIALS.map((testimonial, index) => (
               <div
@@ -160,15 +140,16 @@ const TestimonialCarousel: React.FC = () => {
                     ${index === selectedIndex ? 'text-white' : 'text-gray-600 hover:text-gray-400'}
                   `}
                 >
-                  {/* Progress Bar */}
+                  {/* Progress Bar - CSS Animation - Removed to prevent confusion
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/5 overflow-hidden">
                     {index === selectedIndex && (
                       <div
-                        className="h-full bg-indigo-500 transition-none"
-                        style={{ width: `${progress}%` }}
+                        key={progressKey}
+                        className="h-full bg-indigo-500 animate-progress-bar"
                       />
                     )}
                   </div>
+                  */}
 
                   {/* Tab Content */}
                   <span className={`

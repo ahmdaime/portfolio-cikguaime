@@ -9,7 +9,7 @@ const Journey: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <section id="journey" className="min-h-screen flex flex-col bg-premium bg-noise relative overflow-hidden border-t border-white/5">
+    <section id="journey" className="min-h-[100svh] flex flex-col bg-premium bg-noise relative overflow-hidden border-t border-white/5">
       {/* Gradient Orbs */}
       <div className="gradient-orb gradient-orb-blue w-[600px] h-[600px] -top-48 -left-48 opacity-35" />
       <div className="gradient-orb gradient-orb-indigo w-[450px] h-[450px] bottom-1/4 -right-48 opacity-30" />

@@ -12,12 +12,9 @@ const TypewriterText: React.FC<{
   className?: string;
 }> = ({ text, delay = 0, className = '' }) => {
   const [displayedText, setDisplayedText] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [showCursor, setShowCursor] = useState(true);
 
   useEffect(() => {
     const startDelay = setTimeout(() => {
-      setIsTyping(true);
       let currentIndex = 0;
 
       const typingInterval = setInterval(() => {
@@ -26,7 +23,6 @@ const TypewriterText: React.FC<{
           currentIndex++;
         } else {
           clearInterval(typingInterval);
-          setIsTyping(false);
         }
       }, 80);
 
@@ -36,21 +32,11 @@ const TypewriterText: React.FC<{
     return () => clearTimeout(startDelay);
   }, [text, delay]);
 
-  // Blinking cursor
-  useEffect(() => {
-    const cursorInterval = setInterval(() => {
-      setShowCursor(prev => !prev);
-    }, 530);
-    return () => clearInterval(cursorInterval);
-  }, []);
-
   return (
     <span className={className}>
       {displayedText}
       <span
-        className={`inline-block w-[3px] h-[0.9em] bg-indigo-500 ml-1 align-middle ${
-          showCursor ? 'opacity-100' : 'opacity-0'
-        } transition-opacity duration-100`}
+        className="inline-block w-[3px] h-[0.9em] bg-indigo-500 ml-1 align-middle animate-cursor-blink"
         aria-hidden="true"
       />
     </span>
@@ -94,7 +80,7 @@ const AnimatedCounter: React.FC<{ value: string; suffix: string }> = ({ value, s
 
 const Hero: React.FC = () => {
   return (
-    <section id="home" className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden bg-black text-white py-20">
+    <section id="home" className="relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden bg-black text-white py-20">
 
       {/* Background */}
       <div className="absolute inset-0 z-0">

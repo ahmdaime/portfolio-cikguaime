@@ -20,12 +20,27 @@
   background: #6366f1;
 }
 
+html {
+  overflow-x: hidden;
+  overflow-x: clip; /* Stronger than hidden, prevents scroll bounce */
+  max-width: 100vw;
+}
+
 body {
   background-color: #030303;
   color: #ededed;
   overflow-x: hidden;
+  overflow-x: clip;
+  position: relative;
+  max-width: 100vw;
   font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   -webkit-font-smoothing: antialiased;
+}
+
+/* Prevent any horizontal overflow globally */
+#root {
+  overflow-x: clip;
+  max-width: 100vw;
 }
 
 /* Premium Background Effects */
@@ -64,6 +79,7 @@ body {
   filter: blur(100px);
   pointer-events: none;
   z-index: 0;
+  contain: strict;
 }
 
 .gradient-orb-purple {
@@ -90,6 +106,45 @@ body {
   100% {
     transform: translateX(calc(var(--scroll-width, 1356px) * -1));
   }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+/* Progress bar animation for testimonial carousel */
+@keyframes progress-bar {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.animate-progress-bar {
+  animation: progress-bar 5s linear forwards;
+}
+
+/* Cursor blink animation for typewriter */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-cursor-blink {
+  animation: cursor-blink 1s step-end infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -441,6 +496,7 @@ button:focus-visible {
   height: auto;
   border-radius: 0.75em;
   margin: 0 auto;
+  overflow: hidden;
 }
 
 @media (min-width: 640px) {
@@ -705,10 +761,11 @@ button:focus-visible {
 
 .rc-backdrop {
   position: absolute;
-  inset: -100%;
+  inset: 0;
   background: radial-gradient(circle at 50% 50%, #0000 0, #0000 20%, #111111aa 50%);
   background-size: 3px 3px;
   z-index: -1;
+  overflow: hidden;
 }
 
 .rc-spin {
@@ -726,6 +783,7 @@ button:focus-visible {
   inset: -0.125em;
   filter: blur(0.5em) url(#unopaq2);
   border-radius: 0.75em;
+  overflow: hidden;
 }
 
 .rc-spin-inside {
@@ -733,6 +791,7 @@ button:focus-visible {
   border-radius: inherit;
   filter: blur(2px) url(#unopaq3);
   z-index: 0;
+  overflow: hidden;
 }
 
 .rc-spin::before {
@@ -898,13 +957,17 @@ button:focus-visible {
 /* Marquee Animation */
 .marquee-container {
   overflow: hidden;
+  overflow-x: clip;
   width: 100%;
+  max-width: 100%;
+  contain: content;
 }
 
 .marquee-track {
   display: flex;
   animation: marquee var(--duration, 40s) linear infinite;
   width: max-content;
+  will-change: transform;
 }
 
 .marquee-track:hover {
@@ -930,18 +993,22 @@ button:focus-visible {
 /* Embla Carousel - Testimonials */
 .embla {
   overflow: hidden;
+  overflow-x: clip;
 }
 
 .embla__container {
   display: flex;
   touch-action: pan-y pinch-zoom;
-  margin-left: calc(-1rem * -1);
+  margin-left: 0;
+  backface-visibility: hidden;
 }
 
 .embla__slide {
   transform: translate3d(0, 0, 0);
   min-width: 0;
   padding-left: 0;
+  flex: 0 0 100%;
+  overflow: hidden;
 }
 
 /* Testimonial Card Animations */

@@ -5,7 +5,7 @@ import { SOCIALS } from '../constants';
 
 const Contact: React.FC = () => {
   return (
-    <section id="contact" className="min-h-screen flex flex-col bg-premium bg-noise relative overflow-hidden border-t border-white/5">
+    <section id="contact" className="min-h-[100svh] flex flex-col bg-premium bg-noise relative overflow-hidden border-t border-white/5">
       {/* Gradient Orbs */}
       <div className="gradient-orb gradient-orb-purple w-[500px] h-[500px] top-1/3 -right-48 opacity-40" />
       <div className="gradient-orb gradient-orb-blue w-[400px] h-[400px] bottom-1/4 -left-32 opacity-30" />

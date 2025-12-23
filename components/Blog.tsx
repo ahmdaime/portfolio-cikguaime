@@ -293,12 +293,12 @@ const Blog: React.FC = () => {
   const otherPosts = BLOG_POSTS.slice(1);
 
   return (
-    <section id="blog" className="min-h-screen flex flex-col bg-premium bg-noise relative overflow-hidden border-t border-white/5">
+    <section id="blog" className="py-20 md:py-28 bg-premium bg-noise relative overflow-hidden border-t border-white/5">
       {/* Gradient Orbs */}
       <div className="gradient-orb gradient-orb-purple w-[500px] h-[500px] -top-32 -right-32 opacity-40" />
       <div className="gradient-orb gradient-orb-indigo w-[400px] h-[400px] bottom-1/4 -left-48 opacity-30" />
 
-      <div className="container mx-auto px-4 sm:px-6 relative z-10 flex-1 flex flex-col justify-center py-12 md:py-16">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
 
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16 gap-4 md:gap-6">
@@ -343,11 +343,9 @@ const Blog: React.FC = () => {
         <div className="mt-8 sm:mt-12 text-center md:hidden">
           <ViewAllButton />
         </div>
-      </div>
 
-      {/* Scroll Indicator - Fixed at bottom */}
-      <div className="pb-6 md:pb-8">
-        <ScrollIndicator href="#media" />
+        {/* Scroll Indicator */}
+        <ScrollIndicator href="#media" className="mt-16 md:mt-20" />
       </div>
     </section>
   );

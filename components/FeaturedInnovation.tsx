@@ -28,7 +28,7 @@ const FeaturedInnovation = () => {
     ];
 
     return (
-        <section id="featured" className="min-h-screen flex flex-col bg-black overflow-hidden border-y border-white/5">
+        <section id="featured" className="min-h-[100svh] flex flex-col bg-black overflow-hidden border-y border-white/5">
             {/* Dynamic Background */}
             <div className="absolute inset-0">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] opacity-20 animate-blob"></div>

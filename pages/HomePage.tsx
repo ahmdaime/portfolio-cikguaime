@@ -25,10 +25,10 @@ const SectionLoader = () => (
 
 function HomePage() {
   return (
-    <div className="font-sans antialiased text-white selection:bg-indigo-500 selection:text-white">
+    <div className="font-sans antialiased text-white selection:bg-indigo-500 selection:text-white overflow-x-hidden">
       <SkipLink />
       <Navbar />
-      <main id="main-content" role="main">
+      <main id="main-content" role="main" className="overflow-x-hidden">
         <Hero />
         <Suspense fallback={<SectionLoader />}>
           <About />

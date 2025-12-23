@@ -1,20 +1,80 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 👨‍🏫 Portfolio Cikgu Aime
 
-# Run and deploy your AI Studio app
+Portfolio peribadi Cikgu Aime - Pendidik inovatif yang membangunkan Chrome Extensions untuk 10,000+ guru Malaysia.
 
-This contains everything you need to run your app locally.
+![Preview](https://i.imgur.com/9zglLn9.png)
 
-View your app in AI Studio: https://ai.studio/apps/drive/1jWFllhvOKchCS7WJ-bCu54OHljVj29v9
+## 🛠️ Tech Stack
 
-## Run Locally
+- **React 19** + TypeScript
+- **Vite 6** - Lightning fast build
+- **Tailwind CSS 3** - Utility-first styling
+- **Framer Motion** - Smooth animations
+- **React Router DOM 7** - Client-side routing
+- **Embla Carousel** - Touch-friendly carousels
+- **Lucide React** - Beautiful icons
 
-**Prerequisites:**  Node.js
+## 🚀 Mula Pantas
 
+### Prerequisites
+- Node.js 18+
+- npm atau pnpm
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## 📁 Struktur Projek
+
+```
+├── components/       # React components
+├── pages/           # Page components (routes)
+├── index.tsx        # Entry point
+├── App.tsx          # Main app with routing
+├── constants.tsx    # Data & content
+├── types.ts         # TypeScript interfaces
+├── index.css        # Global styles + Tailwind
+└── index.html       # HTML template with meta tags
+```
+
+## 🌐 Deployment
+
+Projek ini ready untuk deploy di **Vercel**:
+
+1. Push ke GitHub
+2. Import ke Vercel
+3. Deploy secara automatik
+
+`vercel.json` sudah dikonfigurasi untuk SPA routing.
+
+## 📝 Features
+
+- ✅ Responsive design (mobile-first)
+- ✅ Dark mode only (premium look)
+- ✅ Lazy loading components
+- ✅ SEO optimized (meta tags, OG, Twitter)
+- ✅ Accessibility (skip link, focus states, semantic HTML)
+- ✅ Performance optimized (code splitting, preload)
+
+## 👤 Author
+
+**Cikgu Aime (Aiman Salleh)**
+- Website: [cikguaime.com](https://www.cikguaime.com/)
+- Facebook: [@aimansic](https://www.facebook.com/aimansic/)
+- TikTok: [@ahmdaime](https://www.tiktok.com/@ahmdaime)
+
+## 📄 License
+
+MIT

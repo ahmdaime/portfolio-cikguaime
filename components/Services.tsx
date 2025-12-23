@@ -203,7 +203,7 @@ const services = [
 
 const Services: React.FC = () => {
     return (
-        <section id="services" className="min-h-screen flex flex-col bg-premium bg-noise relative overflow-hidden">
+        <section id="services" className="min-h-[100svh] flex flex-col bg-premium bg-noise relative overflow-hidden">
             {/* Gradient Orbs */}
             <div className="gradient-orb gradient-orb-blue w-[500px] h-[500px] top-1/4 -left-64 opacity-40" />
             <div className="gradient-orb gradient-orb-purple w-[400px] h-[400px] top-1/2 -right-48 opacity-30" />
