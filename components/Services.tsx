@@ -281,7 +281,7 @@ const Services: React.FC = () => {
                 </div>
 
                 {/* Scroll Indicator */}
-                <ScrollIndicator href="#projects" className="mt-12 md:mt-16" />
+                <ScrollIndicator href="#featured" className="mt-12 md:mt-16" />
             </div>
         </section>
     );

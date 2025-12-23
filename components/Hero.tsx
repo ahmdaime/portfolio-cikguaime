@@ -258,7 +258,7 @@ const Hero: React.FC = () => {
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-6 md:bottom-8 left-0 right-0 z-10">
-        <ScrollIndicator href="#services" />
+        <ScrollIndicator href="#about" />
       </div>
     </section>
   );

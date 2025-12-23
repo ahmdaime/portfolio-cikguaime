@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Users, Clock, MousePointerClick, Chrome, Puzzle, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ScrollIndicator from './ScrollIndicator';
 
 const FeaturedInnovation = () => {
     // Extension data
@@ -27,7 +28,7 @@ const FeaturedInnovation = () => {
     ];
 
     return (
-        <section className="relative py-20 bg-black overflow-hidden border-y border-white/5">
+        <section id="featured" className="relative py-20 bg-black overflow-hidden border-y border-white/5">
             {/* Dynamic Background */}
             <div className="absolute inset-0">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] opacity-20 animate-blob"></div>
@@ -187,6 +188,9 @@ const FeaturedInnovation = () => {
                     </div>
 
                 </div>
+
+                {/* Scroll Indicator */}
+                <ScrollIndicator href="#projects" className="mt-12 md:mt-16" />
             </div>
         </section>
     );

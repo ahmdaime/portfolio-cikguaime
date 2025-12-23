@@ -31,10 +31,10 @@ function HomePage() {
       <main id="main-content" role="main">
         <Hero />
         <Suspense fallback={<SectionLoader />}>
-          <Services />
-          <Showcase />
           <About />
+          <Services />
           <FeaturedInnovation />
+          <Showcase />
           <Blog />
           <MediaContent />
           <Journey />
