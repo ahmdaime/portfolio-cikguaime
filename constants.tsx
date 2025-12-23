@@ -17,7 +17,8 @@ import {
   ScrollText,
   History,
   Languages,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Gamepad2
 } from 'lucide-react';
 import { Extension, StatItem, Testimonial, SocialLink, Achievement, MediaChannel, BlogPost } from './types';
 
@@ -105,6 +106,17 @@ export const AUTO_ERPH = {
 };
 
 export const STUDENT_INNOVATIONS: Extension[] = [
+  {
+    id: 'relief-hub',
+    title: 'Relief Activity Hub',
+    description: 'Koleksi permainan dan kuiz interaktif untuk guru gunakan semasa kelas relief. Pelbagai aktiviti menarik dalam satu platform.',
+    features: ['Pelbagai Permainan', 'Kuiz Interaktif', 'Mesra Mobile'],
+    stats: 'Web App',
+    link: 'https://ahmdaime.github.io/relief-activity-hub/',
+    gradient: 'from-cyan-500 via-blue-500 to-purple-600',
+    icon: <Gamepad2 className="w-8 h-8 text-white" />,
+    tags: ['Gamifikasi', 'Kelas Relief']
+  },
   {
     id: 'ai-sejarah',
     title: 'AI Tutor Sejarah Thn 6',
