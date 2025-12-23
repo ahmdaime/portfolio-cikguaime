@@ -23,12 +23,12 @@ const otherChannels = MEDIA_CHANNELS.filter(c => c.id !== 'ahmdaime-tiktok');
 
 const MediaContent: React.FC = () => {
   return (
-    <section id="media" className="py-24 bg-premium bg-noise relative overflow-hidden border-t border-white/5">
+    <section id="media" className="min-h-screen flex flex-col bg-premium bg-noise relative overflow-hidden border-t border-white/5">
       {/* Gradient Orbs */}
       <div className="gradient-orb gradient-orb-pink w-[500px] h-[500px] -top-32 -right-48 opacity-40" />
       <div className="gradient-orb gradient-orb-purple w-[400px] h-[400px] bottom-1/4 -left-32 opacity-30" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 relative z-10 flex-1 flex flex-col justify-center py-12 md:py-16">
 
         {/* Section Header */}
         <div className="mb-10 md:mb-16">
@@ -192,9 +192,11 @@ const MediaContent: React.FC = () => {
             </motion.a>
           ))}
         </div>
+      </div>
 
-        {/* Scroll Indicator */}
-        <ScrollIndicator href="#journey" className="mt-12 md:mt-16" />
+      {/* Scroll Indicator - Fixed at bottom */}
+      <div className="pb-6 md:pb-8">
+        <ScrollIndicator href="#journey" />
       </div>
     </section>
   );
