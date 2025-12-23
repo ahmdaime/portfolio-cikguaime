@@ -18,7 +18,8 @@ import {
   History,
   Languages,
   FileSpreadsheet,
-  Gamepad2
+  Gamepad2,
+  Tv
 } from 'lucide-react';
 import { Extension, StatItem, Testimonial, SocialLink, Achievement, MediaChannel, BlogPost } from './types';
 
@@ -103,6 +104,24 @@ export const AUTO_ERPH = {
   isFeatured: true,
   users: '50+',
   category: 'Apps Script'
+};
+
+// Sistem Tempahan TVPSS - Web App untuk pengurusan studio sekolah
+export const TVPSS_BOOKING = {
+  id: 'tvpss-booking',
+  title: 'Sistem Tempahan TVPSS',
+  description: 'Sistem tempahan studio TVPSS lengkap dengan pengurusan peralatan, pengesanan konflik automatik, dan dashboard admin real-time.',
+  features: ['Tempahan Studio', 'Pinjaman Peralatan', 'Dashboard Admin'],
+  stats: 'Web App',
+  link: 'https://ahmdaime.github.io/sistem-tempahan-tvpss/',
+  gradient: 'from-red-500 via-rose-500 to-pink-500',
+  icon: <Tv className="w-6 h-6 text-white" />,
+  tags: ['TVPSS', 'Pengurusan'],
+  image: '',
+  isInternal: false,
+  isFeatured: true,
+  users: 'Sekolah',
+  category: 'Web App'
 };
 
 export const STUDENT_INNOVATIONS: Extension[] = [
