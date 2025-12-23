@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Award, ExternalLink, CheckCircle2, ArrowRight } from 'lucide-react';
 import { ACHIEVEMENTS } from '../constants';
 import ScrollIndicator from './ScrollIndicator';
+import Journey2025Modal from './Journey2025Modal';
 
 const Journey: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <section id="journey" className="py-24 bg-premium bg-noise relative overflow-hidden border-t border-white/5">
       {/* Gradient Orbs */}
@@ -16,7 +19,7 @@ const Journey: React.FC = () => {
         <div className="mb-10 md:mb-20">
           <span className="text-blue-500 font-medium tracking-wider text-sm uppercase mb-4 block">Perjalanan</span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-4 md:mb-6">
-            4 Tahun Mengajar
+            5 Tahun Mengajar
           </h2>
           <p className="text-gray-400 text-base md:text-lg max-w-2xl font-light">
             Dari cikgu baru masa COVID sampai jadi developer tools pendidikan. Ini cerita saya.
@@ -52,9 +55,18 @@ const Journey: React.FC = () => {
                     </div>
                     <h3 className="text-xl md:text-2xl font-bold text-white">{achievement.title}</h3>
                   </div>
-                  <a href={achievement.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs md:text-sm font-medium text-gray-400 group-hover:text-white transition-colors">
-                    Baca Refleksi <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                  </a>
+                  {achievement.link === 'modal' ? (
+                    <button
+                      onClick={() => setIsModalOpen(true)}
+                      className="flex items-center gap-2 text-xs md:text-sm font-medium text-yellow-400 group-hover:text-yellow-300 transition-colors"
+                    >
+                      Lihat Refleksi <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                    </button>
+                  ) : (
+                    <a href={achievement.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs md:text-sm font-medium text-gray-400 group-hover:text-white transition-colors">
+                      Baca Refleksi <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                    </a>
+                  )}
                 </div>
 
                 <ul className="grid sm:grid-cols-2 gap-3 md:gap-4">
@@ -73,6 +85,9 @@ const Journey: React.FC = () => {
         {/* Scroll Indicator */}
         <ScrollIndicator href="#testimonials" className="mt-12 md:mt-16" />
       </div>
+
+      {/* 2025 Modal */}
+      <Journey2025Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </section>
   );
 };

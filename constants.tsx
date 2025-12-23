@@ -334,6 +334,18 @@ export const ACHIEVEMENTS: Achievement[] = [
     ],
     link: 'https://www.cikguaime.com/2025/01/refleksi-cikgu-aime-tahun-2024.html',
     color: 'from-green-500 to-emerald-500'
+  },
+  {
+    year: '2025',
+    title: 'Tahun Kreativiti & Pencapaian',
+    highlights: [
+      'Juara kategori di Festival Lakon Layar WP Putrajaya 2025',
+      'Naib Johan Video Kreatif TVPSS 2025',
+      'Video "Lewat" viral dengan 136,000+ tontonan',
+      'Jumlah tontonan YouTube melebihi 200,000'
+    ],
+    link: 'modal',
+    color: 'from-yellow-500 to-orange-500'
   }
 ];
 
