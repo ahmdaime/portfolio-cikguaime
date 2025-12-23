@@ -26,7 +26,7 @@ const FeaturedInnovation = () => {
                         </div>
 
                         <h2 className="text-3xl md:text-5xl font-bold leading-tight">
-                            Ekosistem <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Chrome Extension</span> Pendidikan
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Extension Hub:</span> Koleksi Extension Yang Memudahkan Kerja Guru
                         </h2>
 
                         <p className="text-gray-400 text-lg leading-relaxed">

@@ -6,6 +6,7 @@ import EcosystemOverview from '../components/extensions/EcosystemOverview';
 import ExtensionLibrary from '../components/extensions/ExtensionLibrary';
 import DemoSection from '../components/extensions/DemoSection';
 import EvidenceSection from '../components/extensions/EvidenceSection';
+import ImpactSection from '../components/extensions/ImpactSection';
 import UniquenessSection from '../components/extensions/UniquenessSection';
 import PrivacySection from '../components/extensions/PrivacySection';
 import CostSection from '../components/extensions/CostSection';
@@ -43,6 +44,7 @@ const ExtensionsLanding = () => {
                 <ExtensionLibrary />
                 <DemoSection />
                 <EvidenceSection />
+                <ImpactSection />
                 <UniquenessSection />
                 <PrivacySection />
                 <CostSection />

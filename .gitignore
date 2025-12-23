@@ -1,6 +1,12 @@
 # Logs
 logs
 *.log
+
+# Lighthouse reports
+lighthouse*.json
+
+# Temporary files
+nul
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
