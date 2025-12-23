@@ -194,7 +194,9 @@ const MediaContent: React.FC = () => {
         </div>
 
         {/* Scroll Indicator */}
-        <ScrollIndicator href="#journey" className="mt-16 md:mt-20" />
+        <div className="relative z-10">
+          <ScrollIndicator href="#journey" className="mt-16 md:mt-20" />
+        </div>
       </div>
     </section>
   );

@@ -191,7 +191,7 @@ const FeaturedInnovation = () => {
             </div>
 
             {/* Scroll Indicator - Fixed at bottom */}
-            <div className="pb-6 md:pb-8">
+            <div className="pb-6 md:pb-8 relative z-10">
                 <ScrollIndicator href="#projects" />
             </div>
         </section>

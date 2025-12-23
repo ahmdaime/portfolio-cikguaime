@@ -345,7 +345,9 @@ const Blog: React.FC = () => {
         </div>
 
         {/* Scroll Indicator */}
-        <ScrollIndicator href="#media" className="mt-16 md:mt-20" />
+        <div className="relative z-10">
+          <ScrollIndicator href="#media" className="mt-16 md:mt-20" />
+        </div>
       </div>
     </section>
   );

@@ -604,7 +604,9 @@ const Showcase: React.FC = () => {
         </div>
 
         {/* Scroll Indicator */}
-        <ScrollIndicator href="#blog" className="mt-16" />
+        <div className="relative z-10">
+          <ScrollIndicator href="#blog" className="mt-16" />
+        </div>
       </div>
     </section>
   );

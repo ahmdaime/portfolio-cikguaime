@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Coffee, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -38,18 +39,19 @@ const Navbar: React.FC = () => {
     { name: 'Penulisan', href: '#blog' },
   ];
 
-  return (
+  // Render navbar via portal to isolate from parent layout shifts
+  return createPortal(
     <>
       <nav
         role="navigation"
         aria-label="Main menu"
-        className={`fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-300 ${isScrolled ? 'py-4' : 'py-4 md:py-6'
+        className={`fixed top-0 left-0 right-0 z-50 flex justify-center transition-[padding] duration-300 ${isScrolled ? 'py-4' : 'py-4 md:py-6'
           }`}
       >
         <div
           className={`
             flex items-center justify-between px-4 sm:px-6 py-3 rounded-full
-            transition-all duration-300 w-[95%] max-w-5xl
+            transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 w-[95%] max-w-5xl
             ${isScrolled
               ? 'bg-black/60 backdrop-blur-xl border border-white/10 shadow-lg shadow-black/20'
               : 'bg-transparent border border-transparent'
@@ -247,7 +249,8 @@ const Navbar: React.FC = () => {
           </>
         )}
       </AnimatePresence>
-    </>
+    </>,
+    document.body
   );
 };
 

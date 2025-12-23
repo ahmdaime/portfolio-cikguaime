@@ -30,7 +30,10 @@ const Journey: React.FC = () => {
         <div className="grid gap-6 md:gap-12 relative">
           <div className="absolute left-[27px] top-4 bottom-4 w-[1px] bg-white/10 hidden md:block"></div>
 
-          {ACHIEVEMENTS.map((achievement, index) => (
+          {ACHIEVEMENTS.map((achievement, index) => {
+            const isLatest = achievement.year === '2025';
+
+            return (
             <motion.div
               key={achievement.year}
               initial={{ opacity: 0, y: 20 }}
@@ -41,19 +44,38 @@ const Journey: React.FC = () => {
             >
               {/* Year Bubble */}
               <div className="hidden md:flex flex-col items-center">
-                <div className="w-14 h-14 rounded-full bg-surface border border-white/10 flex items-center justify-center text-white font-bold z-10">
+                <div className={`w-14 h-14 rounded-full flex items-center justify-center font-bold z-10 ${
+                  isLatest
+                    ? 'bg-gradient-to-br from-yellow-500 to-orange-500 text-black shadow-lg shadow-yellow-500/30'
+                    : 'bg-surface border border-white/10 text-white'
+                }`}>
                   {achievement.year}
                 </div>
               </div>
 
               {/* Content Card */}
-              <div className="bg-surface border border-white/10 rounded-2xl md:rounded-3xl p-5 sm:p-6 md:p-8 hover:border-white/20 transition-all group">
+              <div className={`rounded-2xl md:rounded-3xl p-5 sm:p-6 md:p-8 transition-all group relative ${
+                isLatest
+                  ? 'bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-2 border-yellow-500/50 hover:border-yellow-500/70 shadow-lg shadow-yellow-500/10'
+                  : 'bg-surface border border-white/10 hover:border-white/20'
+              }`}>
+                {/* TERBARU Badge for 2025 */}
+                {isLatest && (
+                  <div className="absolute -top-3 right-4 md:right-6 px-3 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full text-[10px] font-bold text-black uppercase tracking-wider shadow-lg">
+                    Terbaru
+                  </div>
+                )}
+
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4 mb-4 md:mb-6">
                   <div>
-                    <div className="md:hidden inline-block px-2.5 py-1 bg-white/5 rounded-full text-[10px] sm:text-xs font-bold text-gray-300 mb-2 sm:mb-3 border border-white/10">
+                    <div className={`md:hidden inline-block px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold mb-2 sm:mb-3 ${
+                      isLatest
+                        ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-black'
+                        : 'bg-white/5 text-gray-300 border border-white/10'
+                    }`}>
                       {achievement.year}
                     </div>
-                    <h3 className="text-xl md:text-2xl font-bold text-white">{achievement.title}</h3>
+                    <h3 className={`text-xl md:text-2xl font-bold ${isLatest ? 'text-yellow-400' : 'text-white'}`}>{achievement.title}</h3>
                   </div>
                   {achievement.link === 'modal' ? (
                     <button
@@ -79,13 +101,14 @@ const Journey: React.FC = () => {
                 </ul>
               </div>
             </motion.div>
-          ))}
+          );
+          })}
         </div>
 
       </div>
 
       {/* Scroll Indicator - Fixed at bottom */}
-      <div className="pb-6 md:pb-8">
+      <div className="pb-6 md:pb-8 relative z-10">
         <ScrollIndicator href="#testimonials" />
       </div>
 
