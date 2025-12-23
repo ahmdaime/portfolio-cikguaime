@@ -28,7 +28,7 @@ const FeaturedInnovation = () => {
     ];
 
     return (
-        <section id="featured" className="relative py-20 bg-black overflow-hidden border-y border-white/5">
+        <section id="featured" className="min-h-screen flex flex-col bg-black overflow-hidden border-y border-white/5">
             {/* Dynamic Background */}
             <div className="absolute inset-0">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] opacity-20 animate-blob"></div>
@@ -36,7 +36,7 @@ const FeaturedInnovation = () => {
                 <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5"></div>
             </div>
 
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col justify-center py-12 md:py-16">
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
 
                     {/* Left Content */}
@@ -188,9 +188,11 @@ const FeaturedInnovation = () => {
                     </div>
 
                 </div>
+            </div>
 
-                {/* Scroll Indicator */}
-                <ScrollIndicator href="#projects" className="mt-12 md:mt-16" />
+            {/* Scroll Indicator - Fixed at bottom */}
+            <div className="pb-6 md:pb-8">
+                <ScrollIndicator href="#projects" />
             </div>
         </section>
     );

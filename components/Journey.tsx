@@ -9,12 +9,12 @@ const Journey: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <section id="journey" className="py-24 bg-premium bg-noise relative overflow-hidden border-t border-white/5">
+    <section id="journey" className="min-h-screen flex flex-col bg-premium bg-noise relative overflow-hidden border-t border-white/5">
       {/* Gradient Orbs */}
       <div className="gradient-orb gradient-orb-blue w-[600px] h-[600px] -top-48 -left-48 opacity-35" />
       <div className="gradient-orb gradient-orb-indigo w-[450px] h-[450px] bottom-1/4 -right-48 opacity-30" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 relative z-10 flex-1 flex flex-col justify-center py-12 md:py-16">
         {/* Header */}
         <div className="mb-10 md:mb-20">
           <span className="text-blue-500 font-medium tracking-wider text-sm uppercase mb-4 block">Perjalanan</span>
@@ -82,8 +82,11 @@ const Journey: React.FC = () => {
           ))}
         </div>
 
-        {/* Scroll Indicator */}
-        <ScrollIndicator href="#testimonials" className="mt-12 md:mt-16" />
+      </div>
+
+      {/* Scroll Indicator - Fixed at bottom */}
+      <div className="pb-6 md:pb-8">
+        <ScrollIndicator href="#testimonials" />
       </div>
 
       {/* 2025 Modal */}

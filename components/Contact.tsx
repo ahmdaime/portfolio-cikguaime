@@ -5,12 +5,12 @@ import { SOCIALS } from '../constants';
 
 const Contact: React.FC = () => {
   return (
-    <section id="contact" className="py-24 bg-premium bg-noise relative overflow-hidden border-t border-white/5">
+    <section id="contact" className="min-h-screen flex flex-col bg-premium bg-noise relative overflow-hidden border-t border-white/5">
       {/* Gradient Orbs */}
       <div className="gradient-orb gradient-orb-purple w-[500px] h-[500px] top-1/3 -right-48 opacity-40" />
       <div className="gradient-orb gradient-orb-blue w-[400px] h-[400px] bottom-1/4 -left-32 opacity-30" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 relative z-10 flex-1 flex flex-col justify-center py-12 md:py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

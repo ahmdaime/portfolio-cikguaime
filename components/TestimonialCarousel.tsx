@@ -79,11 +79,11 @@ const TestimonialCarousel: React.FC = () => {
   }, [selectedIndex]);
 
   return (
-    <section id="testimonials" className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+    <section id="testimonials" className="min-h-screen flex flex-col bg-[#0a0a0a] relative overflow-hidden">
       {/* Subtle grid background */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px]" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 relative z-10 flex-1 flex flex-col justify-center py-12 md:py-16">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -183,8 +183,11 @@ const TestimonialCarousel: React.FC = () => {
           </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <ScrollIndicator href="#contact" className="mt-12 md:mt-16" />
+      </div>
+
+      {/* Scroll Indicator - Fixed at bottom */}
+      <div className="pb-6 md:pb-8">
+        <ScrollIndicator href="#contact" />
       </div>
     </section>
   );

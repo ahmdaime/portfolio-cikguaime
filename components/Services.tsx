@@ -203,13 +203,13 @@ const services = [
 
 const Services: React.FC = () => {
     return (
-        <section id="services" className="py-16 md:py-24 bg-premium bg-noise relative overflow-hidden">
+        <section id="services" className="min-h-screen flex flex-col bg-premium bg-noise relative overflow-hidden">
             {/* Gradient Orbs */}
             <div className="gradient-orb gradient-orb-blue w-[500px] h-[500px] top-1/4 -left-64 opacity-40" />
             <div className="gradient-orb gradient-orb-purple w-[400px] h-[400px] top-1/2 -right-48 opacity-30" />
             <div className="gradient-orb gradient-orb-pink w-[350px] h-[350px] bottom-1/4 left-1/3 opacity-25" />
 
-            <div className="container mx-auto px-4 md:px-6 relative z-10">
+            <div className="container mx-auto px-4 md:px-6 relative z-10 flex-1 flex flex-col justify-center py-12 md:py-16">
                 {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -280,8 +280,11 @@ const Services: React.FC = () => {
                     ))}
                 </div>
 
-                {/* Scroll Indicator */}
-                <ScrollIndicator href="#featured" className="mt-12 md:mt-16" />
+            </div>
+
+            {/* Scroll Indicator - Fixed at bottom */}
+            <div className="pb-6 md:pb-8">
+                <ScrollIndicator href="#featured" />
             </div>
         </section>
     );
