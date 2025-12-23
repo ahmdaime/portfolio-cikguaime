@@ -266,7 +266,7 @@ const Journey2025Modal: React.FC<Journey2025ModalProps> = ({ isOpen, onClose }) 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4"
+                    className="fixed inset-0 z-[60] flex items-center justify-center p-2 sm:p-4"
                     onClick={onClose}
                 >
                     <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" />

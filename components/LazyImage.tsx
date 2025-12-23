@@ -52,12 +52,11 @@ const LazyImage: React.FC<LazyImageProps> = ({
     <div
       ref={imgRef}
       className={`relative overflow-hidden ${className}`}
-      style={{ width, height }}
     >
       {/* Placeholder skeleton */}
       {!isLoaded && (
         <div
-          className="absolute inset-0 bg-gray-800 animate-pulse"
+          className="absolute inset-0 bg-gray-800 animate-pulse rounded-[inherit]"
           aria-hidden="true"
         />
       )}
@@ -69,7 +68,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
           width={width}
           height={height}
           onLoad={() => setIsLoaded(true)}
-          className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className}`}
+          className={`w-full h-full transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} object-cover`}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
           fetchPriority={priority ? "high" : "auto"}

@@ -245,21 +245,21 @@ export const TESTIMONIALS: Testimonial[] = [
     name: "Cikgu Sarah",
     role: "Guru SK di Selangor",
     text: "IDME PBD Helper sangat membantu! Kerja yang biasanya ambil masa 3 hari, sekarang siap dalam 3 jam sahaja.",
-    avatar: "https://picsum.photos/100/100?random=1"
+    avatar: "https://ui-avatars.com/api/?name=Cikgu+Sarah&background=6366f1&color=fff&size=100"
   },
   {
     id: 2,
     name: "Cikgu Azlan",
     role: "Guru Besar",
     text: "Inovasi yang sangat diperlukan dalam sistem pendidikan kita. PBD OnePage menjimatkan kos kertas sekolah kami.",
-    avatar: "https://picsum.photos/100/100?random=2"
+    avatar: "https://ui-avatars.com/api/?name=Cikgu+Azlan&background=8b5cf6&color=fff&size=100"
   },
   {
     id: 3,
     name: "Adik Faris",
     role: "Murid Tahun 6",
     text: "Kuiz Sejarah Cikgu Aime best! Saya boleh buat ulangkaji guna phone je masa dalam kereta.",
-    avatar: "https://picsum.photos/100/100?random=4"
+    avatar: "https://ui-avatars.com/api/?name=Adik+Faris&background=ec4899&color=fff&size=100"
   }
 ];
 

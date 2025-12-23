@@ -70,12 +70,12 @@ const TestimonialCarousel: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="text-center mb-8 md:mb-16"
         >
-          <p className="text-indigo-400 text-sm font-medium tracking-widest uppercase mb-4">
+          <p className="text-indigo-400 text-xs sm:text-sm font-medium tracking-widest uppercase mb-3 md:mb-4">
             Testimoni
           </p>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-white">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold text-white">
             Apa Kata Mereka
           </h2>
         </motion.div>
@@ -92,11 +92,11 @@ const TestimonialCarousel: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: index === selectedIndex ? 1 : 0.3 }}
                   transition={{ duration: 0.5 }}
-                  className="px-4 md:px-8"
+                  className="px-2 sm:px-4 md:px-8"
                 >
                   {/* Quote */}
-                  <blockquote className="text-center mb-10">
-                    <p className="text-xl md:text-3xl lg:text-4xl text-white leading-relaxed font-light">
+                  <blockquote className="text-center mb-6 sm:mb-10">
+                    <p className="text-base sm:text-xl md:text-3xl lg:text-4xl text-white leading-relaxed font-light">
                       <span className="text-indigo-400">"</span>
                       {testimonial.text}
                       <span className="text-indigo-400">"</span>
@@ -104,19 +104,19 @@ const TestimonialCarousel: React.FC = () => {
                   </blockquote>
 
                   {/* Author */}
-                  <div className="flex flex-col items-center gap-4">
+                  <div className="flex flex-col items-center gap-3 sm:gap-4">
                     <LazyImage
                       src={testimonial.avatar}
                       alt={testimonial.name}
-                      className="w-16 h-16 rounded-full border-2 border-white/20 object-cover"
+                      className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-2 border-white/20 object-cover"
                       width={64}
                       height={64}
                     />
                     <div className="text-center">
-                      <h3 className="font-semibold text-white text-lg">
+                      <h3 className="font-semibold text-white text-base sm:text-lg">
                         {testimonial.name}
                       </h3>
-                      <p className="text-gray-400 text-sm">
+                      <p className="text-gray-400 text-xs sm:text-sm">
                         {testimonial.role}
                       </p>
                     </div>
@@ -127,33 +127,27 @@ const TestimonialCarousel: React.FC = () => {
           </div>
         </div>
 
-        {/* Navigation Tabs with Progress Bar */}
-        <div className="max-w-2xl mx-auto mt-16">
+        {/* Navigation Tabs */}
+        <div className="max-w-2xl mx-auto mt-8 sm:mt-12 md:mt-16">
           <div className="flex justify-center">
-            <div className="inline-flex border-t border-white/10">
+            <div className="inline-flex border-t border-white/10 overflow-x-auto max-w-full">
               {TESTIMONIALS.map((testimonial, index) => (
                 <button
                   key={testimonial.id}
                   onClick={() => scrollTo(index)}
                   className={`
-                    relative py-5 px-6 md:px-10 text-center transition-all duration-300
+                    relative py-3 sm:py-5 px-4 sm:px-6 md:px-10 text-center transition-all duration-300
                     ${index === selectedIndex ? 'text-white' : 'text-gray-600 hover:text-gray-400'}
                   `}
                 >
-                  {/* Progress Bar - CSS Animation - Removed to prevent confusion
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/5 overflow-hidden">
-                    {index === selectedIndex && (
-                      <div
-                        key={progressKey}
-                        className="h-full bg-indigo-500 animate-progress-bar"
-                      />
-                    )}
-                  </div>
-                  */}
+                  {/* Active indicator */}
+                  {index === selectedIndex && (
+                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-indigo-500" />
+                  )}
 
                   {/* Tab Content */}
                   <span className={`
-                    text-sm md:text-base font-medium whitespace-nowrap
+                    text-xs sm:text-sm md:text-base font-medium whitespace-nowrap
                     ${index === selectedIndex ? 'text-white' : ''}
                   `}>
                     {testimonial.name}
