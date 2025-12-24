@@ -9,8 +9,13 @@ const AutoErphPage = lazy(() => import('./pages/AutoErphPage'));
 const ExtensionsLanding = lazy(() => import('./pages/ExtensionsLanding'));
 const ExtensionsComingSoon = lazy(() => import('./pages/ExtensionsComingSoon'));
 
-// Set to true to enable Extensions Landing page (for competition)
-const EXTENSIONS_PAGE_ENABLED = false;
+// Check if user has preview access via sessionStorage
+const hasPreviewAccess = () => {
+  if (typeof window !== 'undefined') {
+    return sessionStorage.getItem('extensions_access') === 'granted';
+  }
+  return false;
+};
 
 function App() {
   return (
@@ -19,7 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/auto-erph" element={<AutoErphPage />} />
-          <Route path="/extensions" element={EXTENSIONS_PAGE_ENABLED ? <ExtensionsLanding /> : <ExtensionsComingSoon />} />
+          <Route path="/extensions" element={hasPreviewAccess() ? <ExtensionsLanding /> : <ExtensionsComingSoon />} />
         </Routes>
       </Suspense>
     </ErrorBoundary>

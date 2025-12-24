@@ -162,7 +162,7 @@ const ImpactSection = () => {
                         DATA IMPAK SEBENAR
                     </div>
                     <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-3 sm:mb-4">
-                        Impak Yang <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Boleh Diukur</span>
+                        Impak Yang <span className="text-primary">Boleh Diukur</span>
                     </h2>
                     <p className="text-gray-400 text-sm sm:text-lg max-w-2xl mx-auto px-2">
                         Bukan sekadar dakwaan - ini adalah pengiraan sebenar berdasarkan jumlah pengguna dan penjimatan masa.

@@ -17,7 +17,7 @@ const EvidenceSection = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 text-center">
                     {impactStats.map((stat, index) => (
                         <div key={index} className="p-8 rounded-2xl bg-white/5 border border-white/5">
-                            <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-2">
+                            <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
                                 {stat.value}
                             </div>
                             <div className="text-lg font-semibold text-white mb-1">{stat.label}</div>

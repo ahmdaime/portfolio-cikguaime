@@ -24,10 +24,6 @@ const otherChannels = MEDIA_CHANNELS.filter(c => c.id !== 'ahmdaime-tiktok');
 const MediaContent: React.FC = () => {
   return (
     <section id="media" className="py-20 md:py-28 bg-premium bg-noise relative overflow-hidden border-t border-white/5">
-      {/* Gradient Orbs */}
-      <div className="gradient-orb gradient-orb-pink w-[500px] h-[500px] -top-32 -right-48 opacity-40" />
-      <div className="gradient-orb gradient-orb-purple w-[400px] h-[400px] bottom-1/4 -left-32 opacity-30" />
-
       <div className="container mx-auto px-6 relative z-10">
 
         {/* Section Header */}

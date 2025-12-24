@@ -16,10 +16,6 @@ const floatingBadges = [
 const About: React.FC = () => {
   return (
     <section id="about" className="min-h-[100svh] flex flex-col bg-premium bg-noise relative overflow-hidden">
-      {/* Gradient Orbs */}
-      <div className="gradient-orb gradient-orb-indigo w-[500px] h-[500px] top-1/4 -right-32 opacity-40" />
-      <div className="gradient-orb gradient-orb-purple w-[400px] h-[400px] bottom-1/4 -left-32 opacity-30" />
-
       <div className="container mx-auto px-4 md:px-6 relative z-10 flex-1 flex flex-col justify-center py-12 md:py-16">
         <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center max-w-5xl mx-auto">
           {/* Left Column: Image */}

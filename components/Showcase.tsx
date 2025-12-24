@@ -399,12 +399,6 @@ const AutoErphCard: React.FC = () => {
 const Showcase: React.FC = () => {
   return (
     <section id="projects" className="py-16 sm:py-24 relative bg-premium bg-noise overflow-hidden">
-
-      {/* Gradient Orbs */}
-      <div className="gradient-orb gradient-orb-purple w-[600px] h-[600px] -top-48 -right-48 opacity-50" />
-      <div className="gradient-orb gradient-orb-blue w-[500px] h-[500px] top-1/3 -left-64 opacity-40" />
-      <div className="gradient-orb gradient-orb-pink w-[400px] h-[400px] bottom-1/4 right-1/4 opacity-30" />
-
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
 
         {/* Section Header */}

@@ -67,7 +67,7 @@ const Hero = () => {
 
         <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight leading-tight">
           Auto eRPH <br/>
-          <span className="bg-gradient-to-r from-accent-purple to-accent-pink bg-clip-text text-transparent">Full Custom</span>
+          <span className="text-accent-purple">Full Custom</span>
         </h1>
 
         <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
@@ -108,7 +108,7 @@ const ProblemSolution = () => {
     <section className="py-20 bg-navy-900/50">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-          Masalah Biasa vs <span className="bg-gradient-to-r from-accent-purple to-accent-pink bg-clip-text text-transparent">Penyelesaian Kami</span>
+          Masalah Biasa vs <span className="text-accent-purple">Penyelesaian Kami</span>
         </h2>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -217,7 +217,7 @@ const Process = () => {
     <section className="py-20 bg-navy-900/50">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-          Bagaimana Ia <span className="bg-gradient-to-r from-accent-purple to-accent-pink bg-clip-text text-transparent">Berfungsi?</span>
+          Bagaimana Ia <span className="text-accent-purple">Berfungsi?</span>
         </h2>
 
         <div className="relative max-w-4xl mx-auto">

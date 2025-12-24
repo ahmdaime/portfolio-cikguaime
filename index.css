@@ -55,10 +55,11 @@ body {
   content: "";
   position: absolute;
   inset: 0;
+  --grid-color: rgba(255, 255, 255, 0.03);
   background-image:
-    linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 48px 48px;
+    linear-gradient(0deg, transparent 24%, var(--grid-color) 25%, var(--grid-color) 26%, transparent 27%, transparent 74%, var(--grid-color) 75%, var(--grid-color) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, var(--grid-color) 25%, var(--grid-color) 26%, transparent 27%, transparent 74%, var(--grid-color) 75%, var(--grid-color) 76%, transparent 77%, transparent);
+  background-size: 55px 55px;
   pointer-events: none;
   z-index: 0;
 }
@@ -72,42 +73,6 @@ body {
   opacity: 0.03;
   pointer-events: none;
   z-index: 1;
-}
-
-/* Gradient Orb - Reusable */
-.gradient-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  pointer-events: none;
-  z-index: 0;
-  contain: strict;
-}
-
-.gradient-orb-purple {
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
-}
-
-.gradient-orb-blue {
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
-}
-
-.gradient-orb-pink {
-  background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
-}
-
-.gradient-orb-indigo {
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
-}
-
-/* Infinite Scroll Testimonials Animation */
-@keyframes scroll-testimonials {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(calc(var(--scroll-width, 1356px) * -1));
-  }
 }
 
 @keyframes fade-in-up {
@@ -1026,12 +991,6 @@ button:focus-visible {
 /* iOS PERFORMANCE FIX: Reduce heavy effects that cause lagging on iOS Safari */
 /* Uses -webkit-touch-callout which is iOS Safari specific */
 @supports (-webkit-touch-callout: none) {
-  /* Reduce blur on gradient orbs - blur(100px) is very heavy on iOS */
-  .gradient-orb {
-    filter: blur(40px) !important;
-    opacity: 0.15 !important;
-  }
-
   /* Simplify backdrop-filter - use lighter blur or solid bg */
   .card-loader {
     backdrop-filter: blur(2px) !important;

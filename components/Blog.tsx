@@ -294,10 +294,6 @@ const Blog: React.FC = () => {
 
   return (
     <section id="blog" className="py-20 md:py-28 bg-premium bg-noise relative overflow-hidden border-t border-white/5">
-      {/* Gradient Orbs */}
-      <div className="gradient-orb gradient-orb-purple w-[500px] h-[500px] -top-32 -right-32 opacity-40" />
-      <div className="gradient-orb gradient-orb-indigo w-[400px] h-[400px] bottom-1/4 -left-48 opacity-30" />
-
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
 
         {/* Header */}

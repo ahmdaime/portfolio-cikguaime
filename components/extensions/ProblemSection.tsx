@@ -7,22 +7,22 @@ const ProblemSection = () => {
 
     const painPoints = [
         {
-            icon: <Clock className="w-6 h-6 text-red-400" />,
+            icon: <Clock className="w-6 h-6 text-secondary" />,
             title: 'Kehadiran MOIES Lambat',
             desc: 'Guru perlu klik sebab dan kategori ketidakhadiran satu persatu untuk setiap murid. Kalau 10 murid tak hadir, 20+ klik diperlukan.'
         },
         {
-            icon: <MousePointer2 className="w-6 h-6 text-orange-400" />,
+            icon: <MousePointer2 className="w-6 h-6 text-primary" />,
             title: 'PBD IDME Memenatkan',
             desc: 'Guru yang mengajar banyak kelas perlu mengisi markah PBD beratus murid. Setiap murid memerlukan beberapa klik.'
         },
         {
-            icon: <FileText className="w-6 h-6 text-yellow-400" />,
+            icon: <FileText className="w-6 h-6 text-blue-400" />,
             title: 'Laporan PBD Banyak Mukasurat',
             desc: 'Laporan PBD standard mengambil 5-6 mukasurat. Bayangkan cetak untuk 30+ murid - beratus helai kertas terbuang.'
         },
         {
-            icon: <AlertTriangle className="w-6 h-6 text-pink-400" />,
+            icon: <AlertTriangle className="w-6 h-6 text-secondary" />,
             title: 'Masa Terbuang Sia-sia',
             desc: 'Kerja perkeranian berulang ini mengambil masa berharga yang sepatutnya digunakan untuk mengajar dan membimbing murid.'
         }
@@ -166,23 +166,82 @@ const ProblemSection = () => {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-                    {painPoints.map((point, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                            className="p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors"
-                        >
-                            <div className="mb-4 bg-white/5 w-12 h-12 rounded-lg flex items-center justify-center">
-                                {point.icon}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+                    {/* Item 1: Large Featured Card (Span 2) */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="md:col-span-2 p-8 rounded-3xl bg-secondary/5 border border-secondary/10 hover:border-secondary/20 transition-all relative overflow-hidden group"
+                    >
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/10 rounded-full blur-[50px] -mr-10 -mt-10 transition-all group-hover:bg-secondary/20"></div>
+
+                        <div className="relative z-10 flex flex-col sm:flex-row gap-6 items-start sm:items-center h-full">
+                            <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center shrink-0 border border-secondary/20 shadow-lg shadow-secondary/5 rotate-[-3deg] group-hover:rotate-0 transition-transform duration-300">
+                                {painPoints[3].icon}
                             </div>
-                            <h3 className="text-xl font-semibold mb-2">{point.title}</h3>
-                            <p className="text-gray-400 text-sm leading-relaxed">{point.desc}</p>
-                        </motion.div>
-                    ))}
+                            <div>
+                                <h3 className="text-2xl font-bold mb-3 text-white">{painPoints[3].title}</h3>
+                                <p className="text-gray-400 text-base leading-relaxed max-w-lg">
+                                    {painPoints[3].desc}
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* Item 2: Vertical Stack Card */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="md:row-span-2 p-8 rounded-3xl bg-primary/5 border border-primary/10 hover:border-primary/20 transition-all flex flex-col justify-center relative overflow-hidden group"
+                    >
+                        <div className="absolute bottom-0 right-0 w-40 h-40 bg-primary/10 rounded-full blur-[60px] translate-x-10 translate-y-10"></div>
+
+                        <div className="mb-6 w-14 h-14 rounded-[20px] bg-primary/10 flex items-center justify-center border border-primary/20 rotate-[6deg] group-hover:rotate-0 transition-transform duration-300 shadow-lg shadow-primary/5">
+                            {painPoints[0].icon}
+                        </div>
+                        <h3 className="text-xl font-bold mb-3 text-white">{painPoints[0].title}</h3>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                            {painPoints[0].desc}
+                        </p>
+                    </motion.div>
+
+                    {/* Item 3: Standard Card */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.3 }}
+                        className="p-6 rounded-3xl bg-white/5 border border-white/5 hover:border-white/10 transition-all group"
+                    >
+                        <div className="mb-4 w-12 h-12 rounded-[14px] bg-white/5 flex items-center justify-center border border-white/10 rotate-[-2deg] group-hover:rotate-0 transition-transform">
+                            {painPoints[1].icon}
+                        </div>
+                        <h3 className="text-lg font-bold mb-2 text-white">{painPoints[1].title}</h3>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                            {painPoints[1].desc}
+                        </p>
+                    </motion.div>
+
+                    {/* Item 4: Standard Card */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.4 }}
+                        className="p-6 rounded-3xl bg-white/5 border border-white/5 hover:border-white/10 transition-all group"
+                    >
+                        <div className="mb-4 w-12 h-12 rounded-[14px] bg-white/5 flex items-center justify-center border border-white/10 rotate-[3deg] group-hover:rotate-0 transition-transform">
+                            {painPoints[2].icon}
+                        </div>
+                        <h3 className="text-lg font-bold mb-2 text-white">{painPoints[2].title}</h3>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                            {painPoints[2].desc}
+                        </p>
+                    </motion.div>
                 </div>
 
                 {/* Extension-specific Comparison */}
@@ -197,11 +256,10 @@ const ProblemSection = () => {
                             <button
                                 key={index}
                                 onClick={() => setActiveExtension(index)}
-                                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-medium transition-all ${
-                                    activeExtension === index
-                                        ? `${colorClasses[ext.color as keyof typeof colorClasses].bg} text-white shadow-lg`
-                                        : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
-                                }`}
+                                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-medium transition-all ${activeExtension === index
+                                    ? `${colorClasses[ext.color as keyof typeof colorClasses].bg} text-white shadow-lg`
+                                    : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
+                                    }`}
                             >
                                 {ext.icon}
                                 <span className="hidden sm:inline">{ext.name}</span>
@@ -279,11 +337,10 @@ const ProblemSection = () => {
                                         const isLast = i === currentExt.with.steps.length - 1;
                                         return (
                                             <li key={i} className={`text-sm relative ${isLast ? 'text-white font-semibold' : 'text-gray-300'}`}>
-                                                <span className={`absolute -left-[30px] w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${
-                                                    isLast
-                                                        ? 'bg-green-500 text-black font-bold'
-                                                        : 'bg-green-900/50 border border-green-500/50 text-green-400'
-                                                }`}>
+                                                <span className={`absolute -left-[30px] w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${isLast
+                                                    ? 'bg-green-500 text-black font-bold'
+                                                    : 'bg-green-900/50 border border-green-500/50 text-green-400'
+                                                    }`}>
                                                     {isLast ? '✓' : i + 1}
                                                 </span>
                                                 {step}

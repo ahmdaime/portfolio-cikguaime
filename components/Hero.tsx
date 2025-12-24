@@ -36,7 +36,7 @@ const TypewriterText: React.FC<{
     <span className={className}>
       {displayedText}
       <span
-        className="inline-block w-[3px] h-[0.9em] bg-indigo-500 ml-1 align-middle animate-cursor-blink"
+        className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 align-middle animate-cursor-blink"
         aria-hidden="true"
       />
     </span>
@@ -73,7 +73,7 @@ const AnimatedCounter: React.FC<{ value: string; suffix: string }> = ({ value, s
 
   return (
     <span ref={ref}>
-      {count.toLocaleString()}<span className="text-indigo-500">{suffix}</span>
+      {count.toLocaleString()}<span className="text-secondary">{suffix}</span>
     </span>
   );
 };
@@ -102,7 +102,7 @@ const Hero: React.FC = () => {
             className="mb-4 sm:mb-6 flex items-center justify-center gap-2 sm:gap-3"
           >
             <div className="relative">
-              <div className="w-10 h-10 md:w-11 md:h-11 rounded-full overflow-hidden border-2 border-white/20 shadow-lg shadow-indigo-500/20">
+              <div className="w-10 h-10 md:w-11 md:h-11 rounded-full overflow-hidden border-2 border-white/20 shadow-lg shadow-primary/20">
                 <img
                   src="/images/cikguaime-hero.webp"
                   alt="Cikgu Aime"
@@ -163,7 +163,7 @@ const Hero: React.FC = () => {
             <Magnetic strength={0.4}>
               <a
                 href="#projects"
-                className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-white text-black rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-white/10 text-sm sm:text-base"
+                className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-primary text-white rounded-full font-semibold hover:bg-primary/90 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-primary/25 text-sm sm:text-base"
               >
                 Lihat Tools
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

@@ -12,14 +12,15 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        display: ['Cal Sans', 'Inter', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+        display: ['Outfit', 'sans-serif'],
       },
       colors: {
-        primary: '#4f46e5',
-        secondary: '#8b5cf6',
-        dark: '#0f172a',
-        bmc: '#FFDD00', // Buy Me a Coffee Yellow
+        // New De-AI-fied Palette
+        primary: '#0d9488', // Teal-600
+        secondary: '#f59e0b', // Amber-500
+        dark: '#020617', // Slate-950 (Richer dark)
+        bmc: '#FFDD00',
         // Auto eRPH colors
         navy: {
           700: '#1e3a5f',

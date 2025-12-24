@@ -10,10 +10,6 @@ const Journey: React.FC = () => {
 
   return (
     <section id="journey" className="min-h-[100svh] flex flex-col bg-premium bg-noise relative overflow-hidden border-t border-white/5">
-      {/* Gradient Orbs */}
-      <div className="gradient-orb gradient-orb-blue w-[600px] h-[600px] -top-48 -left-48 opacity-35" />
-      <div className="gradient-orb gradient-orb-indigo w-[450px] h-[450px] bottom-1/4 -right-48 opacity-30" />
-
       <div className="container mx-auto px-6 relative z-10 flex-1 flex flex-col justify-center py-12 md:py-16">
         {/* Header */}
         <div className="mb-10 md:mb-20">

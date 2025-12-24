@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Code2, Rocket, Paperclip, Globe, Send } from 'lucide-react';
-import SpotlightCard from './SpotlightCard';
 import ScrollIndicator from './ScrollIndicator';
 
 // Terminal Card with Auto-typing
@@ -169,11 +168,7 @@ const services = [
         description: "Saya selami apa yang cikgu-cikgu betul-betul perlukan. Bukan ikut trend, tapi selesaikan masalah sebenar.",
         tag: "Kajian",
         step: "01",
-        color: "blue",
-        gradient: "from-blue-500/20 via-blue-500/10 to-transparent",
-        borderColor: "border-blue-500/20 group-hover:border-blue-500/40",
-        accentColor: "text-blue-400",
-        bgAccent: "bg-blue-500/10"
+        statusColor: "bg-blue-500"
     },
     {
         icon: <Code2 className="w-5 h-5" />,
@@ -181,11 +176,7 @@ const services = [
         description: "Develop Chrome Extension dan Web App guna teknologi moden seperti React, TypeScript, dan Google Cloud.",
         tag: "Pembangunan",
         step: "02",
-        color: "purple",
-        gradient: "from-purple-500/20 via-purple-500/10 to-transparent",
-        borderColor: "border-purple-500/20 group-hover:border-purple-500/40",
-        accentColor: "text-purple-400",
-        bgAccent: "bg-purple-500/10"
+        statusColor: "bg-purple-500"
     },
     {
         icon: <Rocket className="w-5 h-5" />,
@@ -193,22 +184,13 @@ const services = [
         description: "Pastikan ribuan pengguna boleh guna tanpa masalah. Fokus pada prestasi, aksesibiliti, dan kegunaan sebenar.",
         tag: "Pelancaran",
         step: "03",
-        color: "pink",
-        gradient: "from-pink-500/20 via-pink-500/10 to-transparent",
-        borderColor: "border-pink-500/20 group-hover:border-pink-500/40",
-        accentColor: "text-pink-400",
-        bgAccent: "bg-pink-500/10"
+        statusColor: "bg-primary"
     }
 ];
 
 const Services: React.FC = () => {
     return (
         <section id="services" className="min-h-[100svh] flex flex-col bg-premium bg-noise relative overflow-hidden">
-            {/* Gradient Orbs */}
-            <div className="gradient-orb gradient-orb-blue w-[500px] h-[500px] top-1/4 -left-64 opacity-40" />
-            <div className="gradient-orb gradient-orb-purple w-[400px] h-[400px] top-1/2 -right-48 opacity-30" />
-            <div className="gradient-orb gradient-orb-pink w-[350px] h-[350px] bottom-1/4 left-1/3 opacity-25" />
-
             <div className="container mx-auto px-4 md:px-6 relative z-10 flex-1 flex flex-col justify-center py-12 md:py-16">
                 {/* Section Header */}
                 <motion.div
@@ -241,41 +223,47 @@ const Services: React.FC = () => {
                             transition={{ delay: index * 0.15, duration: 0.5, ease: "easeOut" }}
                             className="group"
                         >
-                            <SpotlightCard
-                                className={`h-full rounded-2xl md:rounded-3xl border ${item.borderColor} bg-gradient-to-b ${item.gradient} backdrop-blur-sm transition-all duration-500`}
-                                spotlightColor={`rgba(${item.color === 'blue' ? '59, 130, 246' : item.color === 'purple' ? '168, 85, 247' : '236, 72, 153'}, 0.1)`}
-                            >
-                                <div className="p-5 md:p-6 lg:p-8 h-full flex flex-col">
-                                    {/* Step number - positioned at top */}
-                                    <div className="flex items-center justify-between mb-4 md:mb-6">
-                                        <div className={`flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-xl ${item.bgAccent} border border-white/5 transition-transform duration-300 group-hover:scale-110`}>
-                                            <span className={`text-sm md:text-base font-bold ${item.accentColor}`}>{item.step}</span>
-                                        </div>
-                                        <span className={`text-[10px] md:text-xs font-semibold uppercase tracking-wider ${item.accentColor} opacity-60`}>
-                                            {item.tag}
-                                        </span>
+                            {/* New Card Style */}
+                            <div className="h-full bg-[#1e1e1e] rounded-2xl cursor-pointer transition-all duration-200 border-[1.5px] border-[#2a2a2a] hover:bg-[#2a2a2a] hover:border-primary shadow-[1em_1em_1em_rgba(0,0,0,0.2),-0.5em_-0.5em_1em_rgba(255,255,255,0.02)]">
+                                <div className="p-5 md:p-6 lg:p-8 flex flex-row gap-4">
+                                    {/* Left - Status Indicator */}
+                                    <div className="flex-shrink-0 pt-1">
+                                        <div className={`w-2.5 h-2.5 rounded-full ${item.statusColor}`}></div>
                                     </div>
 
-                                    {/* UI Element */}
-                                    {item.title === 'Kenal Pasti Masalah' ? (
-                                        <AISearchInput />
-                                    ) : item.title === 'Bina Penyelesaian' ? (
-                                        <TerminalCard />
-                                    ) : item.title === 'Lancar & Impak' ? (
-                                        <PlatformIconsCard />
-                                    ) : null}
+                                    {/* Right - Content */}
+                                    <div className="flex flex-col gap-4 flex-1">
+                                        {/* Header */}
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Langkah {item.step}
+                                            </span>
+                                            <span className="text-xs font-semibold text-gray-400">
+                                                {item.tag}
+                                            </span>
+                                        </div>
 
-                                    {/* Content */}
-                                    <div className="flex-grow">
-                                        <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-white mb-2 md:mb-3 group-hover:text-white/90 transition-colors">
-                                            {item.title}
-                                        </h3>
-                                        <p className="text-gray-400 text-sm md:text-base leading-relaxed font-light">
-                                            {item.description}
-                                        </p>
+                                        {/* UI Element */}
+                                        {item.title === 'Kenal Pasti Masalah' ? (
+                                            <AISearchInput />
+                                        ) : item.title === 'Bina Penyelesaian' ? (
+                                            <TerminalCard />
+                                        ) : item.title === 'Lancar & Impak' ? (
+                                            <PlatformIconsCard />
+                                        ) : null}
+
+                                        {/* Text Content */}
+                                        <div>
+                                            <h3 className="text-lg md:text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">
+                                                {item.title}
+                                            </h3>
+                                            <p className="text-gray-400 text-sm leading-relaxed">
+                                                {item.description}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </SpotlightCard>
+                            </div>
                         </motion.div>
                     ))}
                 </div>
