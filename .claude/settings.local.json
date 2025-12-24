@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(npm run dev)",
+      "Bash(npx lighthouse:*)",
+      "Bash(npm run preview:*)",
+      "Bash(node -e:*)",
+      "Bash(cat:*)",
+      "Bash(npm install:*)",
+      "Bash(powershell -Command \"\\(Get-Content lighthouse-check.json -Raw | ConvertFrom-Json\\).categories | ForEach-Object { $_PSObject.Properties } | ForEach-Object { Write-Host $_Name'': '' \\([math]::Round\\($_Value.score * 100\\)\\) }\")",
+      "Bash(powershell:*)",
+      "Bash(npm run dev:*)",
+      "Bash(git checkout:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "WebFetch(domain:i.imgur.com)",
+      "WebFetch(domain:chromewebstore.google.com)",
+      "Bash(timeout /t 3 /nobreak)",
+      "Bash(rm:*)",
+      "Bash(ls:*)",
+      "Bash(npx tsc:*)",
+      "Bash(git push:*)",
+      "Bash(find:*)",
+      "Bash(git push)",
+      "Bash(timeout 5:*)",
+      "Bash(timeout:*)",
+      "Bash(ping:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nrefactor: Improve code quality with security fixes and reusable components\n\n- Move Gemini API key to Vercel serverless function for security\n- Remove dead code from TestimonialCarousel \\(autoplay, progressKey\\)\n- Extract 230+ lines of data from Journey2025Modal to data/journey2025.ts\n- Create reusable Badge component with 15 variants and pulse animation\n- Update FeaturedInnovation browser mockup with Chrome-style UI\n- Add @vercel/node dependency for serverless functions\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(tail:*)"
+    ]
+  }
+}

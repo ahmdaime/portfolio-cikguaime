@@ -16,7 +16,7 @@ const ScrollIndicator: React.FC<ScrollIndicatorProps> = ({ href, className = '' 
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.3, duration: 0.5 }}
-        className="flex flex-col items-center gap-2 text-gray-500 hover:text-white transition-colors cursor-pointer"
+        className="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors cursor-pointer px-4 py-2 min-h-[44px] min-w-[44px]"
         aria-label="Scroll ke bawah"
       >
         <span className="text-[10px] md:text-xs uppercase tracking-widest">Scroll</span>
@@ -24,7 +24,7 @@ const ScrollIndicator: React.FC<ScrollIndicatorProps> = ({ href, className = '' 
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
         >
-          <ChevronDown className="w-4 h-4 md:w-5 md:h-5" />
+          <ChevronDown className="w-5 h-5 md:w-6 md:h-6" />
         </motion.div>
       </motion.a>
     </div>

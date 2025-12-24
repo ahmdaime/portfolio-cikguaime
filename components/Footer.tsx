@@ -22,14 +22,14 @@ const Footer: React.FC = () => {
           <p className="text-gray-400 text-sm mb-4 md:mb-0 font-medium">
             © {new Date().getFullYear()} Cikgu Aime. Dibina untuk guru Malaysia.
           </p>
-          <div className="flex space-x-6">
+          <div className="flex space-x-2">
             {SOCIALS.map((social) => (
               <a
                 key={social.name}
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors hover:scale-110 transform duration-200"
+                className="text-gray-400 hover:text-white transition-colors hover:scale-110 transform duration-200 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label={social.name}
               >
                 {social.icon}

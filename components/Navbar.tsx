@@ -55,9 +55,9 @@ const Navbar: React.FC = () => {
             }
           `}
         >
-          {/* Logo */}
-          <a href="#home" className="flex items-center gap-2 group" aria-label="Cikgu Aime - Halaman utama">
-            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black font-bold font-display text-sm group-hover:scale-110 transition-transform">
+          {/* Logo - min 44px touch target */}
+          <a href="#home" className="flex items-center gap-2 group min-h-[44px] min-w-[44px] -ml-2 pl-2" aria-label="Cikgu Aime - Halaman utama">
+            <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-black font-bold font-display text-sm group-hover:scale-110 transition-transform">
               C
             </div>
             <span className="font-display font-bold text-white tracking-tight hidden sm:block group-hover:text-gray-300 transition-colors">
@@ -65,11 +65,11 @@ const Navbar: React.FC = () => {
             </span>
           </a>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-1 bg-white/5 rounded-full px-2 py-1 border border-white/5">
+          {/* Desktop Menu - min 44px touch targets */}
+          <div className="hidden md:flex items-center gap-1 bg-white/5 rounded-full px-1.5 py-1 border border-white/5">
             {navLinks.map((link) => {
               const active = isLinkActive(link.section);
-              const baseClass = "px-4 py-1.5 rounded-full text-sm font-medium transition-all";
+              const baseClass = "px-4 py-2.5 rounded-full text-sm font-medium transition-all min-h-[44px] flex items-center";
               const activeClass = active
                 ? "text-white bg-white/10"
                 : "text-gray-400 hover:text-white hover:bg-white/10";
@@ -114,13 +114,13 @@ const Navbar: React.FC = () => {
               Hubungi
             </a>
 
-            {/* Mobile Toggle */}
+            {/* Mobile Toggle - min 44px touch target */}
             <button
-              className="md:hidden text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+              className="md:hidden text-white p-2.5 -mr-1 rounded-full hover:bg-white/10 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? 'Tutup menu' : 'Buka menu'}
             >
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
@@ -154,10 +154,10 @@ const Navbar: React.FC = () => {
                   <span className="text-sm font-medium text-gray-400 uppercase tracking-wider">Menu</span>
                   <button
                     onClick={() => setMobileMenuOpen(false)}
-                    className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+                    className="p-2.5 rounded-full bg-white/5 hover:bg-white/10 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                     aria-label="Tutup menu"
                   >
-                    <X size={20} className="text-white" />
+                    <X size={22} className="text-white" />
                   </button>
                 </div>
 
@@ -240,7 +240,7 @@ const Navbar: React.FC = () => {
                         href={social.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex-1 p-3 bg-white/5 rounded-xl text-white hover:bg-white/10 transition-colors flex items-center justify-center"
+                        className="flex-1 p-3 bg-white/5 rounded-xl text-white hover:bg-white/10 transition-colors flex items-center justify-center min-h-[44px]"
                         aria-label={social.name}
                       >
                         {social.icon}
