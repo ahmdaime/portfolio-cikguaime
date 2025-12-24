@@ -18,6 +18,29 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
-      }
+      },
+      build: {
+        // Enable minification
+        minify: 'esbuild',
+        // Target modern browsers for smaller bundle
+        target: 'es2020',
+        // Chunk size warning limit
+        chunkSizeWarningLimit: 500,
+        rollupOptions: {
+          output: {
+            // Manual chunks for better code splitting
+            manualChunks: {
+              // Vendor chunks - separate heavy libraries
+              'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+              'vendor-framer': ['framer-motion'],
+              'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
+              // Separate lucide icons to allow tree-shaking
+              'vendor-icons': ['lucide-react'],
+              // Embla carousel
+              'vendor-carousel': ['embla-carousel-react', 'embla-carousel-autoplay'],
+            },
+          },
+        },
+      },
     };
 });

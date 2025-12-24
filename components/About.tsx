@@ -61,7 +61,7 @@ const About: React.FC = () => {
               <div className="absolute inset-4 rounded-full overflow-hidden border-2 border-white/10 bg-gradient-to-br from-white/10 to-transparent p-1.5 shadow-2xl">
                 <div className="w-full h-full rounded-full overflow-hidden">
                   <img
-                    src="https://i.imgur.com/NCiizgG.png"
+                    src="/images/cikguaime-about.webp"
                     alt="Cikgu Aime"
                     className="w-full h-full object-cover object-top scale-105"
                     width={400}

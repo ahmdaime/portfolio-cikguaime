@@ -104,7 +104,7 @@ const Hero: React.FC = () => {
             <div className="relative">
               <div className="w-10 h-10 md:w-11 md:h-11 rounded-full overflow-hidden border-2 border-white/20 shadow-lg shadow-indigo-500/20">
                 <img
-                  src="https://i.imgur.com/yUCeKLg.jpeg"
+                  src="/images/cikguaime-hero.webp"
                   alt="Cikgu Aime"
                   className="w-full h-full object-cover"
                   width={44}
@@ -150,7 +150,7 @@ const Hero: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed font-light px-2 sm:px-0"
           >
-            Saya <span className="scan-loader text-base sm:text-lg md:text-xl lg:text-2xl align-middle mx-1">Cikgu Aime</span>, saya bina inovasi pendidikan yang berguna untuk murid dan tools yang memudahkan kerja cikgu. Cikgu pening kepala? Carilah <span className="line-through text-gray-600">panadol</span> <span className="text-white font-medium">Cikgu Aime</span>.
+            Saya <span className="scan-loader text-base sm:text-lg md:text-xl lg:text-2xl align-middle mx-1" data-text="Cikgu Aime">Cikgu Aime</span>, saya bina inovasi pendidikan yang berguna untuk murid dan tools yang memudahkan kerja cikgu. Cikgu pening kepala? Carilah <span className="line-through text-gray-600">panadol</span> <span className="text-white font-medium">Cikgu Aime</span>.
           </motion.p>
 
           {/* CTAs */}

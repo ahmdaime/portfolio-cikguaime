@@ -279,30 +279,39 @@ button:focus-visible {
 }
 
 /* Uiverse Scan Loader - Adapted from kat_2522 */
+/* Updated to use GPU-composited properties */
 .scan-loader {
   font-weight: 900;
   font-size: inherit;
   /* Inherit font size from parent */
-  color: transparent;
-  background: linear-gradient(to right, #4f46e5 50%, #ffffff 50%);
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: scan_text 2s linear infinite;
+  color: #ffffff;
   display: inline-block;
   letter-spacing: 1px;
+  position: relative;
   /* Prevent layout shift */
   contain: layout style;
-  will-change: background-position;
 }
 
-@keyframes scan_text {
-  0% {
-    background-position: 100% 0;
-  }
+.scan-loader::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #4f46e5;
+  overflow: hidden;
+  animation: scan_text_clip 2s linear infinite;
+  will-change: clip-path;
+}
 
+@keyframes scan_text_clip {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  50% {
+    clip-path: inset(0 0 0 0);
+  }
   100% {
-    background-position: 0 0;
+    clip-path: inset(0 0 0 100%);
   }
 }
 
@@ -450,7 +459,9 @@ button:focus-visible {
   white-space: nowrap;
   overflow: hidden;
   background-color: transparent;
+  /* Use clip-path instead of width for GPU-composited animation */
   animation: term-inputs 8s steps(22) infinite;
+  will-change: clip-path;
 }
 
 .term-cmd::after {
@@ -462,17 +473,16 @@ button:focus-visible {
   background-color: transparent;
   border-right: 0.15em solid #a855f7;
   animation: term-cursor 0.5s step-end infinite alternate, term-blinking 0.5s infinite;
+  will-change: transform, opacity;
 }
 
 @keyframes term-blinking {
-
   20%,
   80% {
-    transform: scaleY(1);
+    opacity: 1;
   }
-
   50% {
-    transform: scaleY(0);
+    opacity: 0;
   }
 }
 
@@ -482,22 +492,21 @@ button:focus-visible {
   }
 }
 
+/* Use clip-path for GPU-composited animation instead of width */
 @keyframes term-inputs {
-
   0%,
   100% {
-    width: 0;
+    clip-path: inset(0 100% 0 0);
   }
 
   10%,
   90% {
-    width: 58px;
+    clip-path: inset(0 73% 0 0);
   }
 
   30%,
   70% {
-    width: 215px;
-    max-width: max-content;
+    clip-path: inset(0 0 0 0);
   }
 }
 
