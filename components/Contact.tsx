@@ -3,8 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Send, ArrowRight, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { SOCIALS } from '../constants';
 
-// Replace with your Formspree form ID
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mzdpqryy';
 
 interface FormState {
   name: string;
