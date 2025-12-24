@@ -1,7 +1,14 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Sphere, Torus, MeshDistortMaterial } from '@react-three/drei';
 import * as THREE from 'three';
+
+// Detect iOS devices
+const isIOS = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+};
 
 const Geometries = () => {
   const groupRef = useRef<THREE.Group>(null);
@@ -53,6 +60,20 @@ const Geometries = () => {
 };
 
 const FloatingShapes: React.FC = () => {
+  const [shouldRender, setShouldRender] = useState(true);
+
+  useEffect(() => {
+    // Disable on iOS devices for better performance
+    if (isIOS()) {
+      setShouldRender(false);
+    }
+  }, []);
+
+  // Don't render on iOS to prevent lagging
+  if (!shouldRender) {
+    return null;
+  }
+
   return (
     <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
       <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
