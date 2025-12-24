@@ -1,16 +1,12 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
 import { TESTIMONIALS } from '../constants';
 import LazyImage from './LazyImage';
 import ScrollIndicator from './ScrollIndicator';
 
-const AUTOPLAY_DELAY = 5000; // 5 seconds
-
 const TestimonialCarousel: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [progressKey, setProgressKey] = useState(0); // Key to restart CSS animation
-  const autoplayRef = useRef<NodeJS.Timeout | null>(null);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
@@ -29,7 +25,6 @@ const TestimonialCarousel: React.FC = () => {
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
-    setProgressKey(prev => prev + 1); // Restart CSS animation
   }, [emblaApi]);
 
   useEffect(() => {
@@ -42,21 +37,6 @@ const TestimonialCarousel: React.FC = () => {
       emblaApi.off('reInit', onSelect);
     };
   }, [emblaApi, onSelect]);
-
-  // Auto-scroll - temporarily disabled for debugging
-  // useEffect(() => {
-  //   if (!emblaApi) return;
-
-  //   autoplayRef.current = setInterval(() => {
-  //     emblaApi.scrollNext();
-  //   }, AUTOPLAY_DELAY);
-
-  //   return () => {
-  //     if (autoplayRef.current) {
-  //       clearInterval(autoplayRef.current);
-  //     }
-  //   };
-  // }, [emblaApi]);
 
   return (
     <section id="testimonials" className="min-h-[100svh] flex flex-col bg-[#0a0a0a] relative overflow-hidden">

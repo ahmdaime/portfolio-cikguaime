@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Users, Clock, MousePointerClick, Chrome, Puzzle, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ScrollIndicator from './ScrollIndicator';
+import Badge from './ui/Badge';
 
 const FeaturedInnovation = () => {
     // Extension data
@@ -41,13 +42,9 @@ const FeaturedInnovation = () => {
 
                     {/* Left Content */}
                     <div className="w-full lg:w-1/2 space-y-6">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-semibold tracking-wide">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                            </span>
+                        <Badge variant="primary" size="md" pulse className="tracking-wide">
                             INOVASI TERBARU
-                        </div>
+                        </Badge>
 
                         <h2 className="text-3xl md:text-5xl font-bold leading-tight">
                             <span className="text-primary">Extension Hub:</span> Koleksi Extension Yang Memudahkan Kerja Guru
@@ -88,38 +85,66 @@ const FeaturedInnovation = () => {
                         </Link>
                     </div>
 
-                    {/* Right - Extension Mockup */}
+                    {/* Right - Extension Mockup - Chrome-style Browser */}
                     <div className="w-full lg:w-1/2">
                         <Link to="/extensions" className="block relative group cursor-pointer">
                             {/* Glow Effect */}
                             <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                            {/* Browser Extension Mockup */}
+                            {/* Chrome Browser Mockup */}
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 className="relative"
                             >
-                                {/* Browser Window */}
-                                <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-[#1a1a1a] shadow-2xl">
-                                    {/* Browser Header */}
-                                    <div className="flex items-center gap-2 px-4 py-3 bg-[#0d0d0d] border-b border-white/5">
-                                        <div className="flex gap-1.5">
-                                            <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
-                                            <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                                            <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-                                        </div>
-                                        <div className="flex-1 flex items-center justify-center">
-                                            <div className="flex items-center gap-2 px-4 py-1.5 bg-white/5 rounded-lg">
-                                                <Puzzle className="w-4 h-4 text-gray-400" />
-                                                <span className="text-xs text-gray-400 font-medium">Extension Hub</span>
+                                <div className="browser-mockup relative rounded-xl overflow-hidden shadow-2xl shadow-black/50">
+                                    {/* Chrome Tabs Header */}
+                                    <div className="bg-[#202124] h-10 flex justify-between items-end pl-2 sm:pl-4">
+                                        {/* Tab */}
+                                        <div className="relative">
+                                            <div className="tab-active bg-[#35363a] h-8 px-3 sm:px-4 rounded-t-lg flex items-center gap-2 relative">
+                                                {/* Left curve */}
+                                                <div className="absolute -left-2 bottom-0 w-2 h-2 bg-[#35363a]">
+                                                    <div className="w-full h-full bg-[#202124] rounded-br-lg"></div>
+                                                </div>
+                                                <Chrome className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+                                                <span className="text-[11px] sm:text-xs text-gray-300 font-medium truncate max-w-[80px] sm:max-w-[120px]">Extension Hub</span>
+                                                <button className="text-gray-500 hover:text-gray-300 hover:bg-white/10 rounded text-xs px-1 transition-colors flex-shrink-0">✕</button>
+                                                {/* Right curve */}
+                                                <div className="absolute -right-2 bottom-0 w-2 h-2 bg-[#35363a]">
+                                                    <div className="w-full h-full bg-[#202124] rounded-bl-lg"></div>
+                                                </div>
                                             </div>
+                                        </div>
+                                        {/* Window Controls */}
+                                        <div className="flex mb-2 mr-1">
+                                            <button className="w-8 h-6 text-gray-400 hover:bg-white/10 text-xs transition-colors">─</button>
+                                            <button className="w-8 h-6 text-gray-400 hover:bg-white/10 text-xs transition-colors">□</button>
+                                            <button className="w-8 h-6 text-gray-400 hover:bg-red-500 hover:text-white text-xs transition-colors rounded-tr-lg">✕</button>
                                         </div>
                                     </div>
 
-                                    {/* Extension Content */}
-                                    <div className="p-4 sm:p-6">
+                                    {/* Chrome Address Bar */}
+                                    <div className="bg-[#35363a] h-11 px-2 sm:px-3 flex items-center gap-2">
+                                        <button className="text-gray-400 hover:bg-white/10 p-1.5 rounded-full transition-colors">
+                                            <ArrowRight className="w-4 h-4 rotate-180" />
+                                        </button>
+                                        <button className="text-gray-500 p-1.5 opacity-50 cursor-not-allowed">
+                                            <ArrowRight className="w-4 h-4" />
+                                        </button>
+                                        {/* URL Bar */}
+                                        <div className="flex-1 flex items-center bg-[#202124] rounded-full px-3 sm:px-4 py-1.5 border border-transparent hover:border-white/10 focus-within:border-primary/50 transition-colors">
+                                            <Puzzle className="w-3.5 h-3.5 text-gray-500 mr-2 flex-shrink-0" />
+                                            <span className="text-xs sm:text-sm text-gray-300 truncate">chromewebstore.google.com/extension-hub</span>
+                                        </div>
+                                        <button className="text-gray-400 hover:bg-white/10 p-1.5 rounded-full transition-colors hidden sm:block">
+                                            <span className="text-lg">⋮</span>
+                                        </button>
+                                    </div>
+
+                                    {/* Browser Content - Extensions */}
+                                    <div className="bg-[#1a1a1a] p-4 sm:p-6">
                                         {/* Extension Grid */}
                                         <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
                                             {extensions.map((ext, index) => (
@@ -130,7 +155,7 @@ const FeaturedInnovation = () => {
                                                     viewport={{ once: true }}
                                                     transition={{ delay: index * 0.1 }}
                                                     whileHover={{ scale: 1.05, y: -5 }}
-                                                    className="flex flex-col items-center p-3 sm:p-4 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 transition-all"
+                                                    className="flex flex-col items-center p-3 sm:p-4 rounded-xl bg-white/5 border border-white/10 hover:border-primary/30 transition-all"
                                                 >
                                                     <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br ${ext.color} flex items-center justify-center text-2xl mb-2 shadow-lg`}>
                                                         {ext.icon}
@@ -150,7 +175,7 @@ const FeaturedInnovation = () => {
                                     </div>
                                 </div>
 
-                                {/* Floating Stats Badges - Hidden on very small screens, shown on sm+ */}
+                                {/* Floating Stats Badges */}
                                 <motion.div
                                     animate={{ y: [0, -8, 0] }}
                                     transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}

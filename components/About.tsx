@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Code, Award, CheckCircle, Sparkles, Zap, GraduationCap, Chrome, Lightbulb } from 'lucide-react';
 import ScrollIndicator from './ScrollIndicator';
+import Badge from './ui/Badge';
 
 // Floating badge data - positions adjusted for mobile
 const floatingBadges = [
@@ -85,10 +86,9 @@ const About: React.FC = () => {
             className="text-center md:text-left"
           >
             {/* Section badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 mb-6">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-              <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">Tentang Saya</span>
-            </div>
+            <Badge variant="default" size="lg" icon={<Sparkles className="w-3.5 h-3.5 text-indigo-400" />} className="mb-6 uppercase tracking-wider">
+              Tentang Saya
+            </Badge>
 
             {/* Main heading */}
             <h2 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-5 leading-tight">
