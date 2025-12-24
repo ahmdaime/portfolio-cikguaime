@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
             <p className="text-gray-400 text-lg font-light">Kalau ada idea, boleh share. Mana tahu jadi projek seterusnya.</p>
           </div>
           <a
-            href="mailto:aimansic97@gmail.com"
+            href="#contact"
             className="px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105"
           >
             Hubungi Saya

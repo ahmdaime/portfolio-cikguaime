@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Send, ArrowRight, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { SOCIALS } from '../constants';
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mzdpqryy';
@@ -203,7 +203,7 @@ const Contact: React.FC = () => {
               </div>
             </motion.form>
 
-            {/* Right Column - Email & Social */}
+            {/* Right Column - Social & Info */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -211,23 +211,6 @@ const Contact: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="lg:col-span-2 space-y-6"
             >
-              {/* Email Card */}
-              <a
-                href="mailto:aimansic97@gmail.com"
-                className="group block p-6 rounded-2xl bg-surface border border-white/10 hover:border-white/20 transition-all"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white group-hover:bg-white group-hover:text-black transition-colors flex-shrink-0">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-bold text-white mb-1">Email Terus</h3>
-                    <p className="text-gray-400 text-sm truncate">aimansic97@gmail.com</p>
-                  </div>
-                  <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-white group-hover:translate-x-1 transition-all flex-shrink-0" />
-                </div>
-              </a>
-
               {/* Social Links Card */}
               <div className="p-6 rounded-2xl bg-surface border border-white/10">
                 <h3 className="text-lg font-bold text-white mb-4">Media Sosial</h3>
