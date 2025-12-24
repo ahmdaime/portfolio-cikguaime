@@ -98,7 +98,7 @@ const FeaturedInnovation = () => {
                                 viewport={{ once: true }}
                                 className="relative"
                             >
-                                <div className="browser-mockup relative rounded-xl overflow-hidden shadow-2xl shadow-black/50">
+                                <div className="browser-mockup relative rounded-xl overflow-hidden shadow-2xl shadow-black/50 max-w-full">
                                     {/* Chrome Tabs Header */}
                                     <div className="bg-[#202124] h-10 flex justify-between items-end pl-2 sm:pl-4">
                                         {/* Tab */}
@@ -126,17 +126,17 @@ const FeaturedInnovation = () => {
                                     </div>
 
                                     {/* Chrome Address Bar */}
-                                    <div className="bg-[#35363a] h-11 px-2 sm:px-3 flex items-center gap-2">
-                                        <button className="text-gray-400 hover:bg-white/10 p-1.5 rounded-full transition-colors">
+                                    <div className="bg-[#35363a] h-11 px-2 sm:px-3 flex items-center gap-1 sm:gap-2">
+                                        <button className="text-gray-400 hover:bg-white/10 p-1 sm:p-1.5 rounded-full transition-colors hidden sm:block">
                                             <ArrowRight className="w-4 h-4 rotate-180" />
                                         </button>
-                                        <button className="text-gray-500 p-1.5 opacity-50 cursor-not-allowed">
+                                        <button className="text-gray-500 p-1.5 opacity-50 cursor-not-allowed hidden sm:block">
                                             <ArrowRight className="w-4 h-4" />
                                         </button>
                                         {/* URL Bar */}
-                                        <div className="flex-1 flex items-center bg-[#202124] rounded-full px-3 sm:px-4 py-1.5 border border-transparent hover:border-white/10 focus-within:border-primary/50 transition-colors">
+                                        <div className="flex-1 min-w-0 flex items-center bg-[#202124] rounded-full px-3 sm:px-4 py-1.5 border border-transparent hover:border-white/10 focus-within:border-primary/50 transition-colors overflow-hidden">
                                             <Puzzle className="w-3.5 h-3.5 text-gray-500 mr-2 flex-shrink-0" />
-                                            <span className="text-xs sm:text-sm text-gray-300 truncate">chromewebstore.google.com/extension-hub</span>
+                                            <span className="text-xs sm:text-sm text-gray-300 truncate">chrome://extensions</span>
                                         </div>
                                         <button className="text-gray-400 hover:bg-white/10 p-1.5 rounded-full transition-colors hidden sm:block">
                                             <span className="text-lg">⋮</span>
