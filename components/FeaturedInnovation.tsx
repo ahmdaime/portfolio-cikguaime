@@ -62,7 +62,7 @@ const FeaturedInnovation = () => {
                                 </div>
                                 <div>
                                     <div className="text-xl font-bold text-white">10,000+</div>
-                                    <div className="text-xs text-gray-500">Pengguna Aktif</div>
+                                    <div className="text-xs text-gray-400">Pengguna Aktif</div>
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
@@ -71,7 +71,7 @@ const FeaturedInnovation = () => {
                                 </div>
                                 <div>
                                     <div className="text-xl font-bold text-white">1,500+</div>
-                                    <div className="text-xs text-gray-500">Jam Dijimat/Hari</div>
+                                    <div className="text-xs text-gray-400">Jam Dijimat/Hari</div>
                                 </div>
                             </div>
                         </div>
@@ -86,10 +86,10 @@ const FeaturedInnovation = () => {
                     </div>
 
                     {/* Right - Extension Mockup - Chrome-style Browser */}
-                    <div className="w-full lg:w-1/2">
+                    <div className="w-full lg:w-1/2 px-2 sm:px-0">
                         <Link to="/extensions" className="block relative group cursor-pointer">
-                            {/* Glow Effect */}
-                            <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            {/* Glow Effect - Hidden on mobile to prevent overflow */}
+                            <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 hidden sm:block"></div>
 
                             {/* Chrome Browser Mockup */}
                             <motion.div
@@ -161,7 +161,7 @@ const FeaturedInnovation = () => {
                                                         {ext.icon}
                                                     </div>
                                                     <span className="text-[10px] sm:text-xs text-white font-medium text-center">{ext.name}</span>
-                                                    <span className="text-[9px] sm:text-[10px] text-gray-500">{ext.users} users</span>
+                                                    <span className="text-[9px] sm:text-[10px] text-gray-400">{ext.users} users</span>
                                                 </motion.div>
                                             ))}
                                         </div>

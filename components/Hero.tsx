@@ -138,8 +138,8 @@ const Hero: React.FC = () => {
               <TypewriterText text="Solution-Oriented," delay={300} />
             </span>
 
-            <span className="block text-gray-500">
-              <TypewriterText text="Not Award-Oriented." delay={1800} className="text-gray-500" />
+            <span className="block text-gray-400">
+              <TypewriterText text="Not Award-Oriented." delay={1800} className="text-gray-400" />
             </span>
           </h1>
 
@@ -150,7 +150,7 @@ const Hero: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed font-light px-2 sm:px-0"
           >
-            Saya <span className="text-shine text-base sm:text-lg md:text-xl lg:text-2xl align-middle mx-1">Cikgu Aime</span>, saya bina inovasi pendidikan yang berguna untuk murid dan tools yang memudahkan kerja cikgu. Cikgu pening kepala? Carilah <span className="line-through text-gray-600">panadol</span> <span className="text-white font-medium">Cikgu Aime</span>.
+            Saya <span className="text-shine text-base sm:text-lg md:text-xl lg:text-2xl align-middle mx-1">Cikgu Aime</span>, saya bina inovasi pendidikan yang berguna untuk murid dan tools yang memudahkan kerja cikgu. Cikgu pening kepala? Carilah <span className="line-through text-gray-500">panadol</span> <span className="text-white font-medium">Cikgu Aime</span>.
           </motion.p>
 
           {/* CTAs */}
@@ -201,7 +201,7 @@ const Hero: React.FC = () => {
                   <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-display font-bold text-white mb-0.5 sm:mb-1 tracking-tight">
                     <AnimatedCounter value={stat.value} suffix={stat.suffix} />
                   </p>
-                  <p className="text-gray-500 text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-wider leading-tight">
+                  <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-wider leading-tight">
                     {stat.label}
                   </p>
                 </motion.div>
@@ -217,7 +217,7 @@ const Hero: React.FC = () => {
           transition={{ delay: 1.4, duration: 0.8 }}
           className="mt-10 sm:mt-16 pt-6 sm:pt-8 border-t border-white/5"
         >
-          <p className="text-gray-500 text-[10px] sm:text-xs uppercase tracking-widest text-center mb-3 sm:mb-4">
+          <p className="text-gray-400 text-[10px] sm:text-xs uppercase tracking-widest text-center mb-3 sm:mb-4">
             Dipercayai guru-guru dari <span className="text-white font-semibold">16 negeri</span>
           </p>
           <div

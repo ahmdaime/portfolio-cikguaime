@@ -93,9 +93,9 @@ const About: React.FC = () => {
             {/* Main heading */}
             <h2 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-5 leading-tight">
               Cikgu Siang Hari,{' '}
-              <span className="text-gray-500 line-through decoration-2">Developer</span>{' '}
+              <span className="text-gray-400 line-through decoration-2">Developer</span>{' '}
               <span className="text-primary">Vibe Coder</span>
-              <span className="text-gray-500"> Malam Hari.</span>
+              <span className="text-gray-400"> Malam Hari.</span>
             </h2>
 
             {/* Description */}
@@ -110,7 +110,7 @@ const About: React.FC = () => {
                   <Code className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-400" />
                 </div>
                 <h3 className="font-bold text-white text-sm sm:text-base mb-1">Builder</h3>
-                <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">Dah bina 7+ extension & tools untuk guru.</p>
+                <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">Dah bina 7+ extension & tools untuk guru.</p>
               </div>
 
               <div className="group p-4 sm:p-5 lg:p-6 bg-gradient-to-br from-white/5 to-transparent border border-white/10 rounded-xl sm:rounded-2xl hover:border-purple-500/30 transition-all duration-300">
@@ -118,7 +118,7 @@ const About: React.FC = () => {
                   <Award className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" />
                 </div>
                 <h3 className="font-bold text-white text-sm sm:text-base mb-1">Pendidik</h3>
-                <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">Guru sekolah rendah sejak 2021.</p>
+                <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">Guru sekolah rendah sejak 2021.</p>
               </div>
             </div>
 

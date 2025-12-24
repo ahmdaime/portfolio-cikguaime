@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import SkipLink from '../components/SkipLink';
+import BackToTop from '../components/BackToTop';
 
 // Lazy load below-the-fold components for better performance
 const FeaturedInnovation = lazy(() => import('../components/FeaturedInnovation'));
@@ -46,6 +47,7 @@ function HomePage() {
         <Footer />
         <BuyMeCoffee />
       </Suspense>
+      <BackToTop />
     </div>
   );
 }

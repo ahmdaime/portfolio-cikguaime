@@ -25,7 +25,7 @@ const Showcase: React.FC = () => {
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-3 sm:mb-4 px-2">
             Bukan Sekadar Projek,{' '}
-            <span className="text-gray-500">Tapi Penyelesaian.</span>
+            <span className="text-gray-400">Tapi Penyelesaian.</span>
           </h2>
           <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">
             Tools yang dibina dari pengalaman sebenar mengajar. Setiap satu menyelesaikan masalah yang saya sendiri hadapi.

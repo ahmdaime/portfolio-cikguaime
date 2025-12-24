@@ -6,10 +6,12 @@ import { Menu, X, Coffee, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SOCIALS } from '../constants';
 import { useScrollPosition } from '../hooks/useScrollPosition';
+import { useActiveSection } from '../hooks/useActiveSection';
 
 const Navbar: React.FC = () => {
   const isScrolled = useScrollPosition({ threshold: 20 });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const activeSection = useActiveSection(['home', 'about', 'services', 'projects', 'blog', 'contact']);
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -24,13 +26,15 @@ const Navbar: React.FC = () => {
   }, [mobileMenuOpen]);
 
   const navLinks = [
-    { name: 'Utama', href: '#home' },
-    { name: 'Inovasi', href: '/extensions' },
-    { name: 'Projek', href: '#projects' },
-    { name: 'Proses Kerja', href: '#services' },
-    { name: 'Tentang Saya', href: '#about' },
-    { name: 'Penulisan', href: '#blog' },
+    { name: 'Utama', href: '#home', section: 'home' },
+    { name: 'Inovasi', href: '/extensions', section: null },
+    { name: 'Projek', href: '#projects', section: 'projects' },
+    { name: 'Proses Kerja', href: '#services', section: 'services' },
+    { name: 'Tentang Saya', href: '#about', section: 'about' },
+    { name: 'Penulisan', href: '#blog', section: 'blog' },
   ];
+
+  const isLinkActive = (section: string | null) => section && activeSection === section;
 
   // Render navbar via portal to isolate from parent layout shifts
   return createPortal(
@@ -63,12 +67,18 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-1 bg-white/5 rounded-full px-2 py-1 border border-white/5">
-            {navLinks.map((link) => (
-              link.href.startsWith('/') ? (
+            {navLinks.map((link) => {
+              const active = isLinkActive(link.section);
+              const baseClass = "px-4 py-1.5 rounded-full text-sm font-medium transition-all";
+              const activeClass = active
+                ? "text-white bg-white/10"
+                : "text-gray-400 hover:text-white hover:bg-white/10";
+
+              return link.href.startsWith('/') ? (
                 <Link
                   key={link.name}
                   to={link.href}
-                  className="px-4 py-1.5 rounded-full text-sm font-medium text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+                  className={`${baseClass} ${activeClass}`}
                 >
                   {link.name}
                 </Link>
@@ -76,12 +86,12 @@ const Navbar: React.FC = () => {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="px-4 py-1.5 rounded-full text-sm font-medium text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+                  className={`${baseClass} ${activeClass}`}
                 >
                   {link.name}
                 </a>
-              )
-            ))}
+              );
+            })}
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
@@ -155,16 +165,17 @@ const Navbar: React.FC = () => {
                 <div className="flex-1 py-6">
                   {navLinks.map((link, index) => {
                     const isInternal = link.href.startsWith('/');
-                    const linkClass = "group flex items-center justify-between px-6 py-4 hover:bg-white/5 transition-colors";
+                    const active = isLinkActive(link.section);
+                    const linkClass = `group flex items-center justify-between px-6 py-4 transition-colors ${active ? 'bg-white/5' : 'hover:bg-white/5'}`;
                     const content = (
                       <>
                         <div className="flex items-center gap-4">
-                          <span className="text-xs font-mono text-gray-600">0{index + 1}</span>
-                          <span className="text-lg font-display font-semibold text-white group-hover:text-purple-400 transition-colors">
+                          <span className={`text-xs font-mono ${active ? 'text-primary' : 'text-gray-600'}`}>0{index + 1}</span>
+                          <span className={`text-lg font-display font-semibold transition-colors ${active ? 'text-primary' : 'text-white group-hover:text-purple-400'}`}>
                             {link.name}
                           </span>
                         </div>
-                        <ArrowUpRight className="w-4 h-4 text-gray-600 group-hover:text-purple-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                        <ArrowUpRight className={`w-4 h-4 transition-all ${active ? 'text-primary' : 'text-gray-600 group-hover:text-purple-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5'}`} />
                       </>
                     );
 
