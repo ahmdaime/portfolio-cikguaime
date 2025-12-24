@@ -1,18 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Menu, X, Rocket, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useScrollPosition } from '../../hooks/useScrollPosition';
 
 const ExtensionsNavbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    const scrolled = useScrollPosition({ threshold: 20 });
 
     const navLinks = [
         { name: 'Utama', href: '#hero' },

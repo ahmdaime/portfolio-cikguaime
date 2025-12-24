@@ -5,18 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Coffee, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SOCIALS } from '../constants';
+import { useScrollPosition } from '../hooks/useScrollPosition';
 
 const Navbar: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const isScrolled = useScrollPosition({ threshold: 20 });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Prevent body scroll when menu is open
   useEffect(() => {
