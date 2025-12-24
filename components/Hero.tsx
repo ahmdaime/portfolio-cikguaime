@@ -5,16 +5,20 @@ import { STATS } from '../constants';
 import Magnetic from './Magnetic';
 import ScrollIndicator from './ScrollIndicator';
 
-// Typewriter Effect Component
+// Typewriter Effect Component - Optimized for LCP
 const TypewriterText: React.FC<{
   text: string;
   delay?: number;
   className?: string;
 }> = ({ text, delay = 0, className = '' }) => {
-  const [displayedText, setDisplayedText] = useState('');
+  const [displayedText, setDisplayedText] = useState(text); // Start with full text for LCP
+  const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
+    // Start typing animation after initial render (LCP already captured)
     const startDelay = setTimeout(() => {
+      setDisplayedText('');
+      setIsTyping(true);
       let currentIndex = 0;
 
       const typingInterval = setInterval(() => {
@@ -23,11 +27,12 @@ const TypewriterText: React.FC<{
           currentIndex++;
         } else {
           clearInterval(typingInterval);
+          setIsTyping(false);
         }
       }, 80);
 
       return () => clearInterval(typingInterval);
-    }, delay);
+    }, delay + 100); // Small delay to ensure LCP is captured first
 
     return () => clearTimeout(startDelay);
   }, [text, delay]);
@@ -35,10 +40,12 @@ const TypewriterText: React.FC<{
   return (
     <span className={className}>
       {displayedText}
-      <span
-        className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 align-middle animate-cursor-blink"
-        aria-hidden="true"
-      />
+      {isTyping && (
+        <span
+          className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 align-middle animate-cursor-blink"
+          aria-hidden="true"
+        />
+      )}
     </span>
   );
 };
@@ -94,12 +101,9 @@ const Hero: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
 
-          {/* Badge / Loader */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.5 }}
-            className="mb-4 sm:mb-6 flex items-center justify-center gap-2 sm:gap-3"
+          {/* Badge / Loader - No opacity animation for faster LCP */}
+          <div
+            className="mb-4 sm:mb-6 flex items-center justify-center gap-2 sm:gap-3 animate-fade-in"
           >
             <div className="relative">
               <div className="w-10 h-10 md:w-11 md:h-11 rounded-full overflow-hidden border-2 border-white/20 shadow-lg shadow-primary/20">
@@ -128,7 +132,7 @@ const Hero: React.FC = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Main Heading */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold mb-4 sm:mb-6 tracking-tight leading-[1.1]">
@@ -143,22 +147,16 @@ const Hero: React.FC = () => {
             </span>
           </h1>
 
-          {/* Subheading */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed font-light px-2 sm:px-0"
+          {/* Subheading - CSS animation for faster LCP */}
+          <p
+            className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed font-light px-2 sm:px-0 animate-fade-in-delayed"
           >
-            Saya <span className="text-shine text-base sm:text-lg md:text-xl lg:text-2xl align-middle mx-1">Cikgu Aime</span>, saya bina inovasi pendidikan yang berguna untuk murid dan tools yang memudahkan kerja cikgu. Cikgu pening kepala? Carilah <span className="line-through text-gray-500">panadol</span> <span className="text-white font-medium">Cikgu Aime</span>.
-          </motion.p>
+            Saya <span className="text-shine text-base sm:text-lg md:text-xl lg:text-2xl align-middle mx-1">Cikgu Aime</span>, saya bina inovasi pendidikan yang berguna untuk murid dan tools yang memudahkan kerja cikgu. Cikgu pening kepala? Carilah <span className="line-through text-gray-400">panadol</span> <span className="text-white font-medium">Cikgu Aime</span>.
+          </p>
 
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto"
+          {/* CTAs - CSS animation for faster LCP */}
+          <div
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto animate-fade-in-delayed-2"
           >
             <Magnetic strength={0.4}>
               <a
@@ -180,7 +178,7 @@ const Hero: React.FC = () => {
                 Baca Blog
               </a>
             </Magnetic>
-          </motion.div>
+          </div>
 
           {/* Stats */}
           <motion.div

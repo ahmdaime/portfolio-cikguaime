@@ -145,14 +145,35 @@
   <!-- Preload LCP image (Hero avatar) - optimized WebP -->
   <link rel="preload" href="/images/cikguaime-hero.webp" as="image" type="image/webp" fetchpriority="high">
 
-  <!-- Preload critical font -->
-  <!-- Preload critical fonts -->
-  <link rel="preload"
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-    as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <!-- Preload critical font files directly for faster FCP -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/outfit/v11/QGYyz_MVcBeNP4NjuGObqx1XmO1I4TC1O4a0Ew.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Critical inline CSS for immediate render -->
+  <style>
+    /* Critical CSS - Above the fold */
+    *,*::before,*::after{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%;overflow-x:clip}
+    body{margin:0;background:#030303;color:#ededed;font-family:Outfit,Plus Jakarta Sans,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+    #root{min-height:100vh}
+    /* Hero critical styles */
+    .min-h-\[100svh\]{min-height:100svh}
+    .flex{display:flex}
+    .flex-col{flex-direction:column}
+    .items-center{align-items:center}
+    .justify-center{justify-content:center}
+    .text-center{text-align:center}
+    .text-white{color:#fff}
+    .bg-black{background:#000}
+    .relative{position:relative}
+    .overflow-hidden{overflow:hidden}
+    /* Font face with swap for no FOIT */
+    @font-face{font-family:'Outfit';font-style:normal;font-weight:400 700;font-display:swap;src:url(https://fonts.gstatic.com/s/outfit/v11/QGYyz_MVcBeNP4NjuGObqx1XmO1I4TC1O4a0Ew.woff2) format('woff2')}
+  </style>
+
+  <!-- Load full fonts async (non-blocking) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
   <noscript>
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
   </noscript>
 
   <!-- Google Analytics (GA4) - Deferred -->
