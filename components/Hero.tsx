@@ -5,51 +5,6 @@ import { STATS } from '../constants';
 import Magnetic from './Magnetic';
 import ScrollIndicator from './ScrollIndicator';
 
-// Typewriter Effect Component - Optimized for LCP
-const TypewriterText: React.FC<{
-  text: string;
-  delay?: number;
-  className?: string;
-}> = ({ text, delay = 0, className = '' }) => {
-  const [displayedText, setDisplayedText] = useState(text); // Start with full text for LCP
-  const [isTyping, setIsTyping] = useState(false);
-
-  useEffect(() => {
-    // Start typing animation after initial render (LCP already captured)
-    const startDelay = setTimeout(() => {
-      setDisplayedText('');
-      setIsTyping(true);
-      let currentIndex = 0;
-
-      const typingInterval = setInterval(() => {
-        if (currentIndex < text.length) {
-          setDisplayedText(text.slice(0, currentIndex + 1));
-          currentIndex++;
-        } else {
-          clearInterval(typingInterval);
-          setIsTyping(false);
-        }
-      }, 80);
-
-      return () => clearInterval(typingInterval);
-    }, delay + 100); // Small delay to ensure LCP is captured first
-
-    return () => clearTimeout(startDelay);
-  }, [text, delay]);
-
-  return (
-    <span className={className}>
-      {displayedText}
-      {isTyping && (
-        <span
-          className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 align-middle animate-cursor-blink"
-          aria-hidden="true"
-        />
-      )}
-    </span>
-  );
-};
-
 // Animated Counter Component
 const AnimatedCounter: React.FC<{ value: string; suffix: string }> = ({ value, suffix }) => {
   const [count, setCount] = useState(0);
@@ -134,17 +89,10 @@ const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* Main Heading */}
+          {/* Main Heading - Static text for optimal LCP */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold mb-4 sm:mb-6 tracking-tight leading-[1.1]">
-            <span className="sr-only">Solution-Oriented, Not Award-Oriented.</span>
-
-            <span className="block">
-              <TypewriterText text="Solution-Oriented," delay={300} />
-            </span>
-
-            <span className="block text-gray-400">
-              <TypewriterText text="Not Award-Oriented." delay={1800} className="text-gray-400" />
-            </span>
+            <span className="block">Solution-Oriented,</span>
+            <span className="block text-gray-400">Not Award-Oriented.</span>
           </h1>
 
           {/* Subheading - CSS animation for faster LCP */}
