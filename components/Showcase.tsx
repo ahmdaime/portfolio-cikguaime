@@ -6,6 +6,7 @@ import ScrollIndicator from './ScrollIndicator';
 import ExtensionCard from './showcase/ExtensionCard';
 import AutoErphCard from './showcase/AutoErphCard';
 import TvpssBookingCard from './showcase/TvpssBookingCard';
+import { ScrollReveal, StaggerContainer, StaggerItem } from './ScrollReveal';
 
 const Showcase: React.FC = () => {
   return (
@@ -65,37 +66,45 @@ const Showcase: React.FC = () => {
           </p>
 
           {/* Stats Bar */}
-          <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-8 sm:mb-10 pb-6 sm:pb-8 border-b border-[#3c4043]">
-            <div className="flex flex-col items-center sm:items-start gap-1 p-3 sm:p-4 bg-white/[0.02] rounded-xl border border-white/5">
-              <div className="flex items-center gap-2 text-[#8ab4f8]">
-                <Download className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">10,000+</span>
+          <StaggerContainer className="grid grid-cols-3 gap-3 sm:gap-4 mb-8 sm:mb-10 pb-6 sm:pb-8 border-b border-[#3c4043]" staggerDelay={0.1}>
+            <StaggerItem direction="up">
+              <div className="flex flex-col items-center sm:items-start gap-1 p-3 sm:p-4 bg-white/[0.02] rounded-xl border border-white/5 hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300">
+                <div className="flex items-center gap-2 text-[#8ab4f8]">
+                  <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">10,000+</span>
+                </div>
+                <span className="text-[#9aa0a6] text-[10px] sm:text-xs md:text-sm font-medium">Jumlah Pemasangan</span>
               </div>
-              <span className="text-[#9aa0a6] text-[10px] sm:text-xs md:text-sm font-medium">Jumlah Pemasangan</span>
-            </div>
-            <div className="flex flex-col items-center sm:items-start gap-1 p-3 sm:p-4 bg-white/[0.02] rounded-xl border border-white/5">
-              <div className="flex items-center gap-2">
-                <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 fill-yellow-400" />
-                <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">5.0</span>
+            </StaggerItem>
+            <StaggerItem direction="up">
+              <div className="flex flex-col items-center sm:items-start gap-1 p-3 sm:p-4 bg-white/[0.02] rounded-xl border border-white/5 hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300">
+                <div className="flex items-center gap-2">
+                  <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 fill-yellow-400" />
+                  <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">5.0</span>
+                </div>
+                <span className="text-[#9aa0a6] text-[10px] sm:text-xs md:text-sm font-medium">Purata Rating</span>
               </div>
-              <span className="text-[#9aa0a6] text-[10px] sm:text-xs md:text-sm font-medium">Purata Rating</span>
-            </div>
-            <div className="flex flex-col items-center sm:items-start gap-1 p-3 sm:p-4 bg-white/[0.02] rounded-xl border border-white/5">
-              <div className="flex items-center gap-2 text-green-500">
-                <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">100%</span>
+            </StaggerItem>
+            <StaggerItem direction="up">
+              <div className="flex flex-col items-center sm:items-start gap-1 p-3 sm:p-4 bg-white/[0.02] rounded-xl border border-white/5 hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300">
+                <div className="flex items-center gap-2 text-green-500">
+                  <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">100%</span>
+                </div>
+                <span className="text-[#9aa0a6] text-[10px] sm:text-xs md:text-sm font-medium">Percuma Selamanya</span>
               </div>
-              <span className="text-[#9aa0a6] text-[10px] sm:text-xs md:text-sm font-medium">Percuma Selamanya</span>
-            </div>
-          </div>
+            </StaggerItem>
+          </StaggerContainer>
         </div>
 
         {/* Extensions Grid - Chrome Store Style */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-16 sm:mb-24">
-          {EXTENSIONS.map((ext, index) => (
-            <ExtensionCard key={ext.id} ext={ext} index={index} />
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-16 sm:mb-24" staggerDelay={0.15}>
+          {EXTENSIONS.map((ext) => (
+            <StaggerItem key={ext.id} direction="up" distance={30}>
+              <ExtensionCard ext={ext} index={0} />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         {/* Student Innovations Section */}
         <div className="border-t border-[#3c4043] pt-12 sm:pt-24">

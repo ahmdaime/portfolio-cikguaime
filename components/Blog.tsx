@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, FileText, Clock, Eye, TrendingUp, BookOpen, Chrome, Lightbulb, PenTool, Sparkles, GraduationCap } from 'lucide-react';
 import { BLOG_POSTS } from '../constants';
 import ScrollIndicator from './ScrollIndicator';
+import { ScrollReveal, StaggerContainer, StaggerItem } from './ScrollReveal';
 
 // Category color mapping with gradient backgrounds
 const categoryStyles: Record<string, { bg: string; text: string; border: string; gradient: string; icon: React.ReactNode }> = {
@@ -79,14 +80,10 @@ const FeaturedCard: React.FC<{ post: typeof BLOG_POSTS[0] }> = ({ post }) => {
   const styles = categoryStyles[post.category] || categoryStyles.Perkongsian;
 
   return (
-    <motion.a
+    <a
       href={post.link}
       target="_blank"
       rel="noopener noreferrer"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
       className="group block h-full"
     >
       <article className="relative h-full bg-surface border border-white/10 rounded-2xl md:rounded-3xl overflow-hidden hover:border-purple-500/30 transition-all duration-500">
@@ -182,23 +179,19 @@ const FeaturedCard: React.FC<{ post: typeof BLOG_POSTS[0] }> = ({ post }) => {
           </div>
         </div>
       </article>
-    </motion.a>
+    </a>
   );
 };
 
 // Regular Article Card (Compact)
-const ArticleCard: React.FC<{ post: typeof BLOG_POSTS[0]; index: number }> = ({ post, index }) => {
+const ArticleCard: React.FC<{ post: typeof BLOG_POSTS[0] }> = ({ post }) => {
   const styles = categoryStyles[post.category] || categoryStyles.Perkongsian;
 
   return (
-    <motion.a
+    <a
       href={post.link}
       target="_blank"
       rel="noopener noreferrer"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
       className="group block h-full"
     >
       <article className="relative h-full bg-surface border border-white/10 rounded-2xl overflow-hidden hover:border-purple-500/30 transition-all duration-500 flex flex-col">
@@ -265,7 +258,7 @@ const ArticleCard: React.FC<{ post: typeof BLOG_POSTS[0]; index: number }> = ({ 
           </div>
         </div>
       </article>
-    </motion.a>
+    </a>
   );
 };
 
@@ -321,19 +314,19 @@ const Blog: React.FC = () => {
         </div>
 
         {/* Bento Grid Layout */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" staggerDelay={0.1}>
           {/* Featured Article - Spans 2 columns on lg */}
-          <div className="md:col-span-2 lg:col-span-2 lg:row-span-2">
+          <StaggerItem className="md:col-span-2 lg:col-span-2 lg:row-span-2" direction="up" distance={30}>
             <FeaturedCard post={featuredPost} />
-          </div>
+          </StaggerItem>
 
           {/* Other Articles */}
-          {otherPosts.map((post, index) => (
-            <div key={post.id}>
-              <ArticleCard post={post} index={index} />
-            </div>
+          {otherPosts.map((post) => (
+            <StaggerItem key={post.id} direction="up" distance={25}>
+              <ArticleCard post={post} />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         {/* Mobile View All Button */}
         <div className="mt-8 sm:mt-12 text-center md:hidden">
