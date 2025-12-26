@@ -17,7 +17,7 @@ module.exports = {
       },
       colors: {
         // New De-AI-fied Palette
-        primary: '#0d9488', // Teal-600
+        primary: '#0f766e', // Teal-700 (WCAG AA compliant with white text)
         secondary: '#f59e0b', // Amber-500
         dark: '#020617', // Slate-950 (Richer dark)
         bmc: '#FFDD00',

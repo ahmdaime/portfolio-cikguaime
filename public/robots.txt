@@ -1,0 +1,6 @@
+# robots.txt for portfolio-cikguaime.vercel.app
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://portfolio-cikguaime.vercel.app/sitemap.xml
