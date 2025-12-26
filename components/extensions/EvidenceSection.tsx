@@ -29,7 +29,7 @@ const EvidenceSection = () => {
                 {/* Comparison Table - Mobile Cards / Desktop Table */}
                 <div className="mb-20">
                     {/* Desktop Table */}
-                    <div className="hidden md:block bg-gray-900/50 rounded-2xl border border-white/10 overflow-hidden">
+                    <div className="hidden md:block bg-black/50 rounded-2xl border border-white/10 overflow-hidden">
                         <div className="grid grid-cols-12 gap-0 border-b border-white/10 bg-white/5 text-gray-400 text-sm font-semibold uppercase tracking-wider text-left">
                             <div className="col-span-6 p-6">Metrik</div>
                             <div className="col-span-3 p-6 text-red-400">Sebelum</div>
@@ -47,7 +47,7 @@ const EvidenceSection = () => {
                     {/* Mobile Cards */}
                     <div className="md:hidden space-y-4">
                         {comparisons.map((comp, index) => (
-                            <div key={index} className="bg-gray-900/50 rounded-xl border border-white/10 p-4">
+                            <div key={index} className="bg-black/50 rounded-xl border border-white/10 p-4">
                                 <p className="text-white font-medium mb-3 text-sm">{comp.metric}</p>
                                 <div className="flex justify-between items-center">
                                     <div className="text-center">

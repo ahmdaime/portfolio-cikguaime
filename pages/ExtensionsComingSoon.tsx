@@ -123,7 +123,7 @@ const ExtensionsComingSoon = () => {
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                        className="w-full max-w-sm bg-gray-900 border border-white/10 rounded-2xl p-6 shadow-2xl"
+                        className="w-full max-w-sm bg-black border border-white/10 rounded-2xl p-6 shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="text-center mb-6">

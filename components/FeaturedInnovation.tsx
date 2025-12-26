@@ -100,20 +100,20 @@ const FeaturedInnovation = () => {
                             >
                                 <div className="browser-mockup relative rounded-xl overflow-hidden shadow-2xl shadow-black/50 max-w-full">
                                     {/* Chrome Tabs Header */}
-                                    <div className="bg-[#202124] h-10 flex justify-between items-end pl-2 sm:pl-4">
+                                    <div className="bg-black h-10 flex justify-between items-end pl-2 sm:pl-4">
                                         {/* Tab */}
                                         <div className="relative">
-                                            <div className="tab-active bg-[#35363a] h-8 px-3 sm:px-4 rounded-t-lg flex items-center gap-2 relative">
+                                            <div className="tab-active bg-white/10 h-8 px-3 sm:px-4 rounded-t-lg flex items-center gap-2 relative">
                                                 {/* Left curve */}
-                                                <div className="absolute -left-2 bottom-0 w-2 h-2 bg-[#35363a]">
-                                                    <div className="w-full h-full bg-[#202124] rounded-br-lg"></div>
+                                                <div className="absolute -left-2 bottom-0 w-2 h-2 bg-white/10">
+                                                    <div className="w-full h-full bg-black rounded-br-lg"></div>
                                                 </div>
                                                 <Chrome className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
                                                 <span className="text-[11px] sm:text-xs text-gray-300 font-medium truncate max-w-[80px] sm:max-w-[120px]">Extension Hub</span>
                                                 <button className="text-gray-500 hover:text-gray-300 hover:bg-white/10 rounded text-xs px-1 transition-colors flex-shrink-0">✕</button>
                                                 {/* Right curve */}
-                                                <div className="absolute -right-2 bottom-0 w-2 h-2 bg-[#35363a]">
-                                                    <div className="w-full h-full bg-[#202124] rounded-bl-lg"></div>
+                                                <div className="absolute -right-2 bottom-0 w-2 h-2 bg-white/10">
+                                                    <div className="w-full h-full bg-black rounded-bl-lg"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -126,7 +126,7 @@ const FeaturedInnovation = () => {
                                     </div>
 
                                     {/* Chrome Address Bar */}
-                                    <div className="bg-[#35363a] h-11 px-2 sm:px-3 flex items-center gap-1 sm:gap-2">
+                                    <div className="bg-white/5 h-11 px-2 sm:px-3 flex items-center gap-1 sm:gap-2">
                                         <button className="text-gray-400 hover:bg-white/10 p-1 sm:p-1.5 rounded-full transition-colors hidden sm:block">
                                             <ArrowRight className="w-4 h-4 rotate-180" />
                                         </button>
@@ -134,7 +134,7 @@ const FeaturedInnovation = () => {
                                             <ArrowRight className="w-4 h-4" />
                                         </button>
                                         {/* URL Bar */}
-                                        <div className="flex-1 min-w-0 flex items-center bg-[#202124] rounded-full px-3 sm:px-4 py-1.5 border border-transparent hover:border-white/10 focus-within:border-primary/50 transition-colors overflow-hidden">
+                                        <div className="flex-1 min-w-0 flex items-center bg-black rounded-full px-3 sm:px-4 py-1.5 border border-white/10 hover:border-white/20 focus-within:border-primary/50 transition-colors overflow-hidden">
                                             <Puzzle className="w-3.5 h-3.5 text-gray-500 mr-2 flex-shrink-0" />
                                             <span className="text-xs sm:text-sm text-gray-300 truncate">chrome://extensions</span>
                                         </div>
@@ -144,7 +144,7 @@ const FeaturedInnovation = () => {
                                     </div>
 
                                     {/* Browser Content - Extensions */}
-                                    <div className="bg-[#1a1a1a] p-4 sm:p-6">
+                                    <div className="bg-black p-4 sm:p-6">
                                         {/* Extension Grid */}
                                         <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
                                             {extensions.map((ext, index) => (

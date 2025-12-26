@@ -243,7 +243,7 @@ const ImpactSection = () => {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="bg-gray-900/50 rounded-2xl sm:rounded-3xl border border-white/10 p-4 sm:p-6 md:p-10"
+                    className="bg-black/50 rounded-2xl sm:rounded-3xl border border-white/10 p-4 sm:p-6 md:p-10"
                 >
                     <h3 className="text-xl sm:text-2xl font-bold text-center mb-6 sm:mb-10">
                         Perbandingan Visual

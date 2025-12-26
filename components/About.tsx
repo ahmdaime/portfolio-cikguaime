@@ -127,7 +127,7 @@ const About: React.FC = () => {
               <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
               <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-xs sm:text-sm">
                 <span className="font-medium text-white">TOP 150 CJD</span>
-                <span className="hidden sm:block w-1 h-1 rounded-full bg-gray-600"></span>
+                <span className="hidden sm:block w-1 h-1 rounded-full bg-white/20"></span>
                 <span className="text-gray-400">Putrajaya</span>
               </div>
             </div>

@@ -94,7 +94,7 @@ const ExtensionsHero = () => {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="relative"
                     >
-                        <div className="relative rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-gray-900/50 backdrop-blur-sm aspect-video group">
+                        <div className="relative rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-black/50 backdrop-blur-sm aspect-video group">
                             <div className="absolute top-0 w-full h-8 bg-black/40 border-b border-white/5 flex items-center px-2 sm:px-4 gap-1.5 sm:gap-2">
                                 <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500/80"></div>
                                 <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-yellow-500/80"></div>
@@ -104,7 +104,7 @@ const ExtensionsHero = () => {
                                 </div>
                             </div>
                             {/* Extension Cards Preview */}
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-black p-8 pt-12">
+                            <div className="w-full h-full flex items-center justify-center bg-black p-8 pt-12">
                                 <div className="grid grid-cols-3 gap-3 w-full max-w-md">
                                     {['MOIES', 'IDME', 'OnePage'].map((name, i) => (
                                         <div key={i} className="bg-white/5 rounded-lg p-3 border border-white/10 text-center">

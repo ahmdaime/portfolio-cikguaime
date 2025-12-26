@@ -277,7 +277,7 @@ const ProblemSection = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.3 }}
-                        className="bg-gray-900/50 rounded-3xl border border-white/10 overflow-hidden"
+                        className="bg-black/50 rounded-3xl border border-white/10 overflow-hidden"
                     >
                         {/* Extension Header */}
                         <div className={`px-6 py-4 ${colors.bgLight} border-b ${colors.border} flex items-center justify-between`}>
@@ -307,7 +307,7 @@ const ProblemSection = () => {
                                 <ul className="space-y-4 relative border-l border-white/10 ml-3 pl-6">
                                     {currentExt.without.steps.map((step, i) => (
                                         <li key={i} className="text-gray-400 text-sm relative">
-                                            <span className="absolute -left-[30px] w-5 h-5 rounded-full bg-gray-800 border border-gray-600 flex items-center justify-center text-[10px] text-gray-500">
+                                            <span className="absolute -left-[30px] w-5 h-5 rounded-full bg-black border border-white/20 flex items-center justify-center text-[10px] text-gray-500">
                                                 {i + 1}
                                             </span>
                                             {step}

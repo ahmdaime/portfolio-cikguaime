@@ -55,7 +55,7 @@ const Journey2025Modal: React.FC<Journey2025ModalProps> = ({ isOpen, onClose }) 
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto bg-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl"
+                        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto bg-black rounded-2xl border border-white/10 shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Close Button */}
@@ -71,7 +71,7 @@ const Journey2025Modal: React.FC<Journey2025ModalProps> = ({ isOpen, onClose }) 
                         <div className="relative -mt-11 overflow-hidden">
                             <div className="relative h-48 sm:h-64">
                                 <img src="/images/refleksi-2025.webp" alt="Refleksi 2025" className="w-full h-full object-cover object-top" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
                             </div>
                             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
                                 <Badge variant="yellow" size="md" icon={<Star className="w-3 h-3" fill="currentColor" />} className="mb-2">

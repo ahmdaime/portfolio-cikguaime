@@ -138,12 +138,12 @@ const FeaturedCard: React.FC<{ post: typeof BLOG_POSTS[0] }> = ({ post }) => {
             <time dateTime={post.date} className="font-medium">
               {post.date}
             </time>
-            <span className="w-1 h-1 rounded-full bg-gray-600" />
+            <span className="w-1 h-1 rounded-full bg-white/20" />
             <div className="flex items-center gap-1">
               <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               {post.readTime}
             </div>
-            <span className="w-1 h-1 rounded-full bg-gray-600" />
+            <span className="w-1 h-1 rounded-full bg-white/20" />
             <div className="flex items-center gap-1">
               <Eye className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               {post.views}
@@ -246,7 +246,7 @@ const ArticleCard: React.FC<{ post: typeof BLOG_POSTS[0]; index: number }> = ({ 
           {/* Meta Info */}
           <div className="flex items-center gap-2 sm:gap-3 mb-2 text-[10px] sm:text-xs text-gray-400">
             <time dateTime={post.date}>{post.date}</time>
-            <span className="w-1 h-1 rounded-full bg-gray-600" />
+            <span className="w-1 h-1 rounded-full bg-white/20" />
             <div className="flex items-center gap-1">
               <Clock className="w-3 h-3" />
               {post.readTime}

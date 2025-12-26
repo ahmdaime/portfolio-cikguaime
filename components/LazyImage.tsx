@@ -56,7 +56,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
       {/* Placeholder skeleton */}
       {!isLoaded && (
         <div
-          className="absolute inset-0 bg-gray-800 animate-pulse rounded-[inherit]"
+          className="absolute inset-0 bg-white/5 animate-pulse rounded-[inherit]"
           aria-hidden="true"
         />
       )}

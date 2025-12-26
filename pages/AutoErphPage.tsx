@@ -95,7 +95,7 @@ const Hero = () => {
             </div>
             <span className="ml-2 text-gray-300">50+ Guru Berpuas Hati</span>
           </div>
-          <div className="hidden md:block w-1 h-1 bg-gray-700 rounded-full"></div>
+          <div className="hidden md:block w-1 h-1 bg-white/20 rounded-full"></div>
           <div>Trusted by Teachers Nationwide</div>
         </div>
       </div>
@@ -222,7 +222,7 @@ const Process = () => {
 
         <div className="relative max-w-4xl mx-auto">
           {/* Connecting Line (Desktop) */}
-          <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-800 -translate-y-1/2 z-0"></div>
+          <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-white/10 -translate-y-1/2 z-0"></div>
 
           <div className="grid md:grid-cols-4 gap-8 relative z-10">
             {[
@@ -253,7 +253,7 @@ const VideoDemo = () => {
         <h2 className="text-3xl md:text-4xl font-bold mb-8">Lihat Auto eRPH Dalam Aksi</h2>
 
         <div className="max-w-4xl mx-auto bg-white/5 backdrop-blur-sm border border-white/10 p-2 rounded-2xl relative">
-          <div className="aspect-video bg-gray-800 rounded-xl overflow-hidden">
+          <div className="aspect-video bg-black rounded-xl overflow-hidden border border-white/10">
             <iframe
               src="https://www.youtube.com/embed/KBQdJuD8tyM"
               title="Demo Auto eRPH"

@@ -39,10 +39,10 @@ const DemoSection = () => {
 
                 {/* Main Video Frame - Placeholder */}
                 <div
-                    className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gray-900 shadow-2xl shadow-primary/10"
+                    className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black shadow-2xl shadow-primary/10"
                     aria-label="Video demo akan datang"
                 >
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-black">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black">
                         <div className="w-20 h-20 rounded-full bg-white/10 text-white/50 flex items-center justify-center pl-1 mb-4">
                             <Play size={32} fill="currentColor" aria-hidden="true" />
                         </div>
