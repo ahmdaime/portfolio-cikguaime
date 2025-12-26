@@ -4,6 +4,7 @@ import { motion, useInView } from 'framer-motion';
 import { STATS } from '../constants';
 import Magnetic from './Magnetic';
 import ScrollIndicator from './ScrollIndicator';
+import TextScramble from './TextScramble';
 
 // Animated Counter Component
 const AnimatedCounter: React.FC<{ value: string; suffix: string }> = ({ value, suffix }) => {
@@ -89,17 +90,23 @@ const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* Main Heading - Static text for optimal LCP */}
+          {/* Main Heading with Scramble Effect */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold mb-4 sm:mb-6 tracking-tight leading-[1.1]">
-            <span className="block">Solution-Oriented,</span>
+            <span className="block">
+              <TextScramble
+                texts={['Solution-Oriented,', 'Vibe Coder,', 'Builder,']}
+                className="text-white"
+                speed={40}
+                pauseDuration={2500}
+              />
+            </span>
             <span className="block text-gray-400">Not Award-Oriented.</span>
           </h1>
 
-          {/* Subheading - CSS animation for faster LCP */}
-          <p
-            className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed font-light px-2 sm:px-0 animate-fade-in-delayed"
-          >
-            Saya <span className="text-shine text-base sm:text-lg md:text-xl lg:text-2xl align-middle mx-1">Cikgu Aime</span>, saya bina inovasi pendidikan yang berguna untuk murid dan tools yang memudahkan kerja cikgu. Cikgu pening kepala? Carilah <span className="line-through text-gray-400">panadol</span> <span className="text-white font-medium">Cikgu Aime</span>.
+          {/* Subheading */}
+          <p className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed font-light px-2 sm:px-0 animate-fade-in-delayed">
+            Bina <span className="text-white font-medium">solutions</span> untuk masalah sebenar guru.
+            Bukan kejar award, tapi kejar <span className="text-primary">impact</span>.
           </p>
 
           {/* CTAs - CSS animation for faster LCP */}
