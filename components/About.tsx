@@ -51,11 +51,13 @@ const About: React.FC = () => {
               {/* Decorative ring */}
               <div className="absolute inset-0 rounded-full border-2 border-dashed border-white/10 animate-[spin_30s_linear_infinite]"></div>
 
-              {/* Outer glow */}
-              <div className="absolute inset-4 rounded-full bg-gradient-to-br from-indigo-500/20 via-purple-500/15 to-pink-500/20 blur-2xl"></div>
+              {/* Enhanced outer glow - multiple layers for depth */}
+              <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-indigo-600/30 via-purple-600/25 to-pink-600/30 blur-3xl"></div>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-indigo-500/20 via-transparent to-purple-500/20 blur-2xl"></div>
+              <div className="absolute inset-8 rounded-full bg-indigo-500/15 blur-xl"></div>
 
               {/* Main image container */}
-              <div className="absolute inset-4 rounded-full overflow-hidden border-2 border-white/10 bg-gradient-to-br from-white/10 to-transparent p-1.5 shadow-2xl">
+              <div className="absolute inset-4 rounded-full overflow-hidden border-2 border-white/20 bg-gradient-to-br from-white/10 to-transparent p-1.5 shadow-2xl shadow-indigo-500/20">
                 <div className="w-full h-full rounded-full overflow-hidden">
                   <img
                     src="/images/cikguaime-about.webp"
