@@ -212,8 +212,8 @@ const Services: React.FC = () => {
                     </p>
                 </motion.div>
 
-                {/* Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+                {/* Cards Grid - 1 col mobile/tablet, 3 col desktop */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
                     {services.map((item, index) => (
                         <motion.div
                             key={index}
