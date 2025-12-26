@@ -51,7 +51,7 @@ export const EXTENSIONS: Extension[] = [
     gradient: 'from-blue-500 via-indigo-500 to-purple-500',
     icon: <Zap className="w-6 h-6 text-white" />,
     tags: ['Best Seller', 'Produktiviti'],
-    image: 'https://i.imgur.com/aPBQ26s.png',
+    image: '/images/idme-pbd-helper.webp',
     rating: 5.0,
     users: '3,000+',
     category: 'Produktiviti'
@@ -66,7 +66,7 @@ export const EXTENSIONS: Extension[] = [
     gradient: 'from-emerald-500 via-teal-500 to-cyan-500',
     icon: <FileCheck className="w-6 h-6 text-white" />,
     tags: ['Automasi', 'Kehadiran'],
-    image: 'https://i.imgur.com/RODLmhS.png',
+    image: '/images/moies-kehadiran-helper.webp',
     rating: 5.0,
     users: '3,000+',
     category: 'Kehadiran'
@@ -81,7 +81,7 @@ export const EXTENSIONS: Extension[] = [
     gradient: 'from-orange-500 via-amber-500 to-yellow-500',
     icon: <FileText className="w-6 h-6 text-white" />,
     tags: ['Eco-Friendly', 'Printing'],
-    image: 'https://i.imgur.com/JV01XFT.png',
+    image: '/images/pbd-onepage.webp',
     rating: 5.0,
     users: '4,000+',
     category: 'Utiliti'
@@ -291,7 +291,7 @@ export const BLOG_POSTS: BlogPost[] = [
     link: 'https://www.cikguaime.com/2025/11/idme-pbd-helper-memudahkan-guru-mengisi.html',
     category: 'Extension',
     readTime: '5 min',
-    thumbnail: 'https://i.imgur.com/59tQPnV.jpeg',
+    thumbnail: '/images/blog-extension.webp',
     views: '2.4K',
     isPopular: true
   },
@@ -303,7 +303,7 @@ export const BLOG_POSTS: BlogPost[] = [
     link: 'https://www.cikguaime.com/2022/09/contoh-ulasan-pbd.html',
     category: 'Tips',
     readTime: '8 min',
-    thumbnail: 'https://i.imgur.com/prnjU3k.jpeg',
+    thumbnail: '/images/blog-tips.webp',
     views: '5.1K',
     isPopular: true
   },
@@ -315,7 +315,7 @@ export const BLOG_POSTS: BlogPost[] = [
     link: 'https://www.cikguaime.com/2025/10/soalan-sejarah-tahun-6-kuiz-interaktif.html',
     category: 'Inovasi',
     readTime: '3 min',
-    thumbnail: 'https://i.imgur.com/VM7y7Tv.jpeg',
+    thumbnail: '/images/blog-inovasi.webp',
     views: '1.8K'
   }
 ];

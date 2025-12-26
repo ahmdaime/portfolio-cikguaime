@@ -59,7 +59,7 @@ const MediaContent: React.FC = () => {
                   <div className="relative shrink-0">
                     <div className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-pink-500/50 transition-colors">
                       <img
-                        src="https://i.imgur.com/n8jx8DY.png"
+                        src="/images/cikguaime-tiktok.webp"
                         alt="Cikgu Aime"
                         className="w-full h-full object-cover"
                         loading="lazy"

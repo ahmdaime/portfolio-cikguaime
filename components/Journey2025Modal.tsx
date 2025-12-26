@@ -70,7 +70,7 @@ const Journey2025Modal: React.FC<Journey2025ModalProps> = ({ isOpen, onClose }) 
                         {/* Hero */}
                         <div className="relative -mt-11 overflow-hidden">
                             <div className="relative h-48 sm:h-64">
-                                <img src="https://i.imgur.com/aS6cBGI.jpeg" alt="Refleksi 2025" className="w-full h-full object-cover object-top" />
+                                <img src="/images/refleksi-2025.webp" alt="Refleksi 2025" className="w-full h-full object-cover object-top" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent" />
                             </div>
                             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
@@ -242,7 +242,7 @@ const Journey2025Modal: React.FC<Journey2025ModalProps> = ({ isOpen, onClose }) 
                                 {/* Featured - Olahraga */}
                                 <div className="mb-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/5 rounded-xl border border-yellow-500/20 p-3 sm:p-4 flex flex-col sm:flex-row gap-3 sm:gap-4">
                                     <div className="relative w-full sm:w-48 lg:w-56 aspect-video sm:aspect-[4/3] rounded-lg overflow-hidden flex-shrink-0">
-                                        <img src="https://i.imgur.com/GD4ViC4.jpeg" alt="Jurulatih Olahraga" className="w-full h-full object-cover object-center" />
+                                        <img src="/images/jurulatih-olahraga.webp" alt="Jurulatih Olahraga" className="w-full h-full object-cover object-center" />
                                     </div>
                                     <div className="flex-1 flex flex-col justify-center">
                                         <div className="flex items-center gap-2 mb-1.5">
