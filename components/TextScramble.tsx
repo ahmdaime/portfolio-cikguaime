@@ -5,6 +5,7 @@ interface TextScrambleProps {
   className?: string;
   speed?: number;
   pauseDuration?: number;
+  stopAtLast?: boolean;
 }
 
 const chars = '!<>-_\\/[]{}—=+*^?#_アイウエオカキクケコサシスセソタチツテト';
@@ -14,9 +15,11 @@ const TextScramble: React.FC<TextScrambleProps> = ({
   className = '',
   speed = 50,
   pauseDuration = 2000,
+  stopAtLast = false,
 }) => {
   const [displayText, setDisplayText] = useState(texts[0]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isComplete, setIsComplete] = useState(false);
 
   const scramble = useCallback((oldText: string, newText: string, onComplete: () => void) => {
     const length = Math.max(oldText.length, newText.length);
@@ -52,6 +55,16 @@ const TextScramble: React.FC<TextScrambleProps> = ({
   }, [speed]);
 
   useEffect(() => {
+    // Stop if we've reached the last item and stopAtLast is true
+    if (isComplete) return;
+
+    const isLastItem = currentIndex === texts.length - 1;
+
+    if (stopAtLast && isLastItem) {
+      setIsComplete(true);
+      return;
+    }
+
     const nextIndex = (currentIndex + 1) % texts.length;
 
     const timeout = setTimeout(() => {
@@ -61,7 +74,7 @@ const TextScramble: React.FC<TextScrambleProps> = ({
     }, pauseDuration);
 
     return () => clearTimeout(timeout);
-  }, [currentIndex, texts, scramble, pauseDuration]);
+  }, [currentIndex, texts, scramble, pauseDuration, stopAtLast, isComplete]);
 
   return (
     <span className={className}>

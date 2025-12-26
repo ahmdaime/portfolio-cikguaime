@@ -1,17 +1,32 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { motion, useInView } from 'framer-motion';
 import { STATS } from '../constants';
-import Magnetic from './Magnetic';
-import ScrollIndicator from './ScrollIndicator';
 import TextScramble from './TextScramble';
 
-// Animated Counter Component
+// Animated Counter Component - uses Intersection Observer instead of framer-motion
 const AnimatedCounter: React.FC<{ value: string; suffix: string }> = ({ value, suffix }) => {
   const [count, setCount] = useState(0);
+  const [isInView, setIsInView] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true });
   const numericValue = parseInt(value.replace(/[^0-9]/g, '')) || 0;
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!isInView) return;
@@ -94,10 +109,11 @@ const Hero: React.FC = () => {
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold mb-4 sm:mb-6 tracking-tight leading-[1.1]">
             <span className="block">
               <TextScramble
-                texts={['Solution-Oriented,', 'Vibe Coder,', 'Builder,']}
+                texts={['Vibe Coder,', 'Builder,', 'Solution-Oriented,']}
                 className="text-white"
                 speed={40}
-                pauseDuration={2500}
+                pauseDuration={2000}
+                stopAtLast={true}
               />
             </span>
             <span className="block text-gray-400">Not Award-Oriented.</span>
@@ -113,43 +129,35 @@ const Hero: React.FC = () => {
           <div
             className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto animate-fade-in-delayed-2"
           >
-            <Magnetic strength={0.4}>
-              <a
-                href="#projects"
-                className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-primary text-white rounded-full font-semibold hover:bg-primary/90 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-primary/25 text-sm sm:text-base"
-              >
-                Lihat Tools
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </a>
-            </Magnetic>
+            <a
+              href="#projects"
+              className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-primary text-white rounded-full font-semibold hover:bg-primary/90 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-primary/25 text-sm sm:text-base hover:scale-105"
+            >
+              Lihat Tools
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </a>
 
-            <Magnetic strength={0.2}>
-              <a
-                href="https://www.cikguaime.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 sm:px-8 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-full text-white font-medium hover:bg-white/10 hover:border-white/20 transition-all flex items-center gap-2 text-sm sm:text-base"
-              >
-                Baca Blog
-              </a>
-            </Magnetic>
+            <a
+              href="https://www.cikguaime.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 sm:px-8 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-full text-white font-medium hover:bg-white/10 hover:border-white/20 transition-all flex items-center gap-2 text-sm sm:text-base hover:scale-105"
+            >
+              Baca Blog
+            </a>
           </div>
 
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-white/10 w-full max-w-2xl"
+          {/* Stats - CSS animation */}
+          <div
+            className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-white/10 w-full max-w-2xl animate-fade-in-up"
+            style={{ animationDelay: '1s' }}
           >
             <div className="grid grid-cols-3 gap-3 sm:gap-6">
               {STATS.map((stat, index) => (
-                <motion.div
+                <div
                   key={stat.id}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1.2 + index * 0.1, duration: 0.5 }}
-                  className="text-center"
+                  className="text-center animate-fade-in-scale"
+                  style={{ animationDelay: `${1.2 + index * 0.1}s` }}
                 >
                   <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-display font-bold text-white mb-0.5 sm:mb-1 tracking-tight">
                     <AnimatedCounter value={stat.value} suffix={stat.suffix} />
@@ -157,18 +165,16 @@ const Hero: React.FC = () => {
                   <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-wider leading-tight">
                     {stat.label}
                   </p>
-                </motion.div>
+                </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
 
-        {/* Marquee - States */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.4, duration: 0.8 }}
-          className="mt-10 sm:mt-16 pt-6 sm:pt-8 border-t border-white/5"
+        {/* Marquee - States - CSS animation */}
+        <div
+          className="mt-10 sm:mt-16 pt-6 sm:pt-8 border-t border-white/5 animate-fade-in-up"
+          style={{ animationDelay: '1.4s' }}
         >
           <p className="text-gray-400 text-[10px] sm:text-xs uppercase tracking-widest text-center mb-3 sm:mb-4">
             Dipercayai guru-guru dari <span className="text-white font-semibold">16 negeri</span>
@@ -192,12 +198,24 @@ const Hero: React.FC = () => {
               ))}
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator - CSS animation */}
       <div className="absolute bottom-6 md:bottom-8 left-0 right-0 z-10">
-        <ScrollIndicator href="#about" />
+        <a
+          href="#about"
+          className="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors cursor-pointer px-4 py-2 mx-auto w-fit animate-fade-in"
+          style={{ animationDelay: '1.5s' }}
+          aria-label="Scroll ke bawah"
+        >
+          <span className="text-[10px] md:text-xs uppercase tracking-widest">Scroll</span>
+          <div className="animate-bounce-slow">
+            <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+          </div>
+        </a>
       </div>
     </section>
   );

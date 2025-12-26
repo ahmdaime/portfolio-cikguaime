@@ -1,17 +1,21 @@
 
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Coffee, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SOCIALS } from '../constants';
 import { useScrollPosition } from '../hooks/useScrollPosition';
+import { useScrollDirection } from '../hooks/useScrollDirection';
 import { useActiveSection } from '../hooks/useActiveSection';
 
 const Navbar: React.FC = () => {
   const isScrolled = useScrollPosition({ threshold: 20 });
+  const { direction, isAtTop } = useScrollDirection({ threshold: 10 });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const activeSection = useActiveSection(['home', 'about', 'services', 'projects', 'blog', 'contact']);
+
+  // Hide navbar when scrolling down, show when scrolling up (or at top)
+  const isNavbarVisible = isAtTop || direction === 'up' || mobileMenuOpen;
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -42,15 +46,16 @@ const Navbar: React.FC = () => {
       <nav
         role="navigation"
         aria-label="Main menu"
-        className={`fixed top-0 left-0 right-0 z-50 flex justify-center transition-[padding] duration-300 ${isScrolled ? 'py-4' : 'py-4 md:py-6'
-          }`}
+        style={{ willChange: 'transform' }}
+        className={`fixed top-0 left-0 right-0 z-50 flex justify-center transition-transform duration-300 ${isScrolled ? 'py-4' : 'py-4 md:py-6'
+          } ${isNavbarVisible ? 'translate-y-0' : '-translate-y-full'}`}
       >
         <div
           className={`
             flex items-center justify-between px-4 sm:px-6 py-3 rounded-full
-            transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 w-[95%] max-w-5xl
+            transition-colors duration-200 w-[95%] max-w-5xl
             ${isScrolled
-              ? 'bg-black/60 backdrop-blur-xl border border-white/10 shadow-lg shadow-black/20'
+              ? 'bg-black/95 border border-white/10 shadow-lg shadow-black/20'
               : 'bg-transparent border border-transparent'
             }
           `}
@@ -119,6 +124,7 @@ const Navbar: React.FC = () => {
               className="md:hidden text-white p-2.5 -mr-1 rounded-full hover:bg-white/10 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? 'Tutup menu' : 'Buka menu'}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -126,133 +132,126 @@ const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+      {/* Mobile Menu Overlay - CSS animations */}
+      {/* Backdrop */}
+      <div
+        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden transition-opacity duration-200 ${
+          mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setMobileMenuOpen(false)}
+        aria-hidden="true"
+      />
+
+      {/* Menu Panel */}
+      <div
+        className={`fixed top-0 right-0 bottom-0 z-50 w-[85%] max-w-sm bg-black border-l border-white/10 md:hidden overflow-y-auto transition-transform duration-300 ease-out ${
+          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex flex-col h-full">
+          {/* Header */}
+          <div className="flex items-center justify-between p-6 border-b border-white/10">
+            <span className="text-sm font-medium text-gray-400 uppercase tracking-wider">Menu</span>
+            <button
               onClick={() => setMobileMenuOpen(false)}
-            />
-
-            {/* Menu Panel */}
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 z-50 w-[85%] max-w-sm bg-black border-l border-white/10 md:hidden overflow-y-auto"
+              className="p-2.5 rounded-full bg-white/5 hover:bg-white/10 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              aria-label="Tutup menu"
             >
-              <div className="flex flex-col h-full">
-                {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-white/10">
-                  <span className="text-sm font-medium text-gray-400 uppercase tracking-wider">Menu</span>
-                  <button
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="p-2.5 rounded-full bg-white/5 hover:bg-white/10 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-                    aria-label="Tutup menu"
-                  >
-                    <X size={22} className="text-white" />
-                  </button>
-                </div>
+              <X size={22} className="text-white" />
+            </button>
+          </div>
 
-                {/* Navigation Links */}
-                <div className="flex-1 py-6">
-                  {navLinks.map((link, index) => {
-                    const isInternal = link.href.startsWith('/');
-                    const active = isLinkActive(link.section);
-                    const linkClass = `group flex items-center justify-between px-6 py-4 transition-colors ${active ? 'bg-white/5' : 'hover:bg-white/5'}`;
-                    const content = (
-                      <>
-                        <div className="flex items-center gap-4">
-                          <span className={`text-xs font-mono ${active ? 'text-primary' : 'text-gray-600'}`}>0{index + 1}</span>
-                          <span className={`text-lg font-display font-semibold transition-colors ${active ? 'text-primary' : 'text-white group-hover:text-purple-400'}`}>
-                            {link.name}
-                          </span>
-                        </div>
-                        <ArrowUpRight className={`w-4 h-4 transition-all ${active ? 'text-primary' : 'text-gray-600 group-hover:text-purple-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5'}`} />
-                      </>
-                    );
+          {/* Navigation Links */}
+          <div className="flex-1 py-6">
+            {navLinks.map((link, index) => {
+              const isInternal = link.href.startsWith('/');
+              const active = isLinkActive(link.section);
+              const linkClass = `group flex items-center justify-between px-6 py-4 transition-all duration-300 ${active ? 'bg-white/5' : 'hover:bg-white/5'}`;
+              const itemStyle = {
+                opacity: mobileMenuOpen ? 1 : 0,
+                transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(20px)',
+                transition: `opacity 0.3s ease ${index * 0.05}s, transform 0.3s ease ${index * 0.05}s`,
+              };
+              const content = (
+                <>
+                  <div className="flex items-center gap-4">
+                    <span className={`text-xs font-mono ${active ? 'text-primary' : 'text-gray-600'}`}>0{index + 1}</span>
+                    <span className={`text-lg font-display font-semibold transition-colors ${active ? 'text-primary' : 'text-white group-hover:text-purple-400'}`}>
+                      {link.name}
+                    </span>
+                  </div>
+                  <ArrowUpRight className={`w-4 h-4 transition-all ${active ? 'text-primary' : 'text-gray-600 group-hover:text-purple-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5'}`} />
+                </>
+              );
 
-                    return isInternal ? (
-                      <motion.div
-                        key={link.name}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                      >
-                        <Link
-                          to={link.href}
-                          className={linkClass}
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          {content}
-                        </Link>
-                      </motion.div>
-                    ) : (
-                      <motion.a
-                        key={link.name}
-                        href={link.href}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                        className={linkClass}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {content}
-                      </motion.a>
-                    );
-                  })}
-                </div>
-
-                {/* Footer */}
-                <div className="p-6 border-t border-white/10 space-y-6">
-                  {/* Buy Me Coffee */}
-                  <motion.a
-                    href="https://buymeacoffee.com/cikguaime"
-                    target="_blank"
-                    rel="noreferrer"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20 hover:bg-yellow-500/20 transition-colors"
+              return isInternal ? (
+                <div key={link.name} style={itemStyle}>
+                  <Link
+                    to={link.href}
+                    className={linkClass}
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <Coffee size={20} className="text-yellow-500" />
-                    <span className="text-sm font-medium text-yellow-500">Belanja Saya Kopi</span>
-                  </motion.a>
-
-                  {/* Social Links */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.35 }}
-                    className="flex gap-3"
-                  >
-                    {SOCIALS.map((social) => (
-                      <a
-                        key={social.name}
-                        href={social.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex-1 p-3 bg-white/5 rounded-xl text-white hover:bg-white/10 transition-colors flex items-center justify-center min-h-[44px]"
-                        aria-label={social.name}
-                      >
-                        {social.icon}
-                      </a>
-                    ))}
-                  </motion.div>
+                    {content}
+                  </Link>
                 </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              ) : (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  style={itemStyle}
+                  className={linkClass}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {content}
+                </a>
+              );
+            })}
+          </div>
+
+          {/* Footer */}
+          <div className="p-6 border-t border-white/10 space-y-6">
+            {/* Buy Me Coffee */}
+            <a
+              href="https://buymeacoffee.com/cikguaime"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20 hover:bg-yellow-500/20 transition-colors"
+              style={{
+                opacity: mobileMenuOpen ? 1 : 0,
+                transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(10px)',
+                transition: 'opacity 0.3s ease 0.3s, transform 0.3s ease 0.3s',
+              }}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <Coffee size={20} className="text-yellow-500" />
+              <span className="text-sm font-medium text-yellow-500">Belanja Saya Kopi</span>
+            </a>
+
+            {/* Social Links */}
+            <div
+              className="flex gap-3"
+              style={{
+                opacity: mobileMenuOpen ? 1 : 0,
+                transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(10px)',
+                transition: 'opacity 0.3s ease 0.35s, transform 0.3s ease 0.35s',
+              }}
+            >
+              {SOCIALS.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex-1 p-3 bg-white/5 rounded-xl text-white hover:bg-white/10 transition-colors flex items-center justify-center min-h-[44px]"
+                  aria-label={social.name}
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </>,
     document.body
   );

@@ -27,7 +27,6 @@ export default defineConfig({
               // Vendor chunks - separate heavy libraries
               'vendor-react': ['react', 'react-dom', 'react-router-dom'],
               'vendor-framer': ['framer-motion'],
-              'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
               // Separate lucide icons to allow tree-shaking
               'vendor-icons': ['lucide-react'],
               // Embla carousel

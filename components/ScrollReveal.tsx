@@ -1,208 +1,186 @@
-import React from 'react';
-import { motion, Variants } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ScrollRevealProps {
   children: React.ReactNode;
   className?: string;
   delay?: number;
-  duration?: number;
   direction?: 'up' | 'down' | 'left' | 'right' | 'none';
   distance?: number;
   once?: boolean;
-  threshold?: number;
 }
 
-// Single element reveal
+// Lightweight CSS-based scroll reveal using Intersection Observer
 export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
   className = '',
   delay = 0,
-  duration = 0.6,
   direction = 'up',
-  distance = 30,
+  distance = 20,
   once = true,
-  threshold = 0.1,
 }) => {
-  const getInitialPosition = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          if (once) observer.disconnect();
+        } else if (!once) {
+          setIsVisible(false);
+        }
+      },
+      { threshold: 0.1, rootMargin: '50px' }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [once]);
+
+  const getTransform = () => {
+    if (isVisible) return 'translate3d(0,0,0)';
     switch (direction) {
-      case 'up': return { y: distance, x: 0 };
-      case 'down': return { y: -distance, x: 0 };
-      case 'left': return { x: distance, y: 0 };
-      case 'right': return { x: -distance, y: 0 };
-      case 'none': return { x: 0, y: 0 };
+      case 'up': return `translate3d(0,${distance}px,0)`;
+      case 'down': return `translate3d(0,-${distance}px,0)`;
+      case 'left': return `translate3d(${distance}px,0,0)`;
+      case 'right': return `translate3d(-${distance}px,0,0)`;
+      default: return 'translate3d(0,0,0)';
     }
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, ...getInitialPosition() }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once, amount: threshold }}
-      transition={{
-        duration,
-        delay,
-        ease: [0.25, 0.1, 0.25, 1], // Custom easing for smooth feel
-      }}
+    <div
+      ref={ref}
       className={className}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: getTransform(),
+        transition: `opacity 0.5s ease ${delay}s, transform 0.5s ease ${delay}s`,
+        willChange: 'opacity, transform',
+      }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 };
 
-// Container for staggered children
+// Container for staggered children - CSS based
 interface StaggerContainerProps {
   children: React.ReactNode;
   className?: string;
   staggerDelay?: number;
   once?: boolean;
-  threshold?: number;
 }
 
 export const StaggerContainer: React.FC<StaggerContainerProps> = ({
   children,
   className = '',
-  staggerDelay = 0.1,
+  staggerDelay = 0.08,
   once = true,
-  threshold = 0.1,
 }) => {
-  const containerVariants: Variants = {
-    hidden: { opacity: 1 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: staggerDelay,
-        delayChildren: 0.1,
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          if (once) observer.disconnect();
+        }
       },
-    },
-  };
+      { threshold: 0.1 }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [once]);
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once, amount: threshold }}
-      className={className}
-    >
-      {children}
-    </motion.div>
+    <div ref={ref} className={className} data-visible={isVisible}>
+      {React.Children.map(children, (child, index) => {
+        if (React.isValidElement(child)) {
+          return React.cloneElement(child as React.ReactElement<any>, {
+            style: {
+              ...((child.props as any).style || {}),
+              transitionDelay: isVisible ? `${index * staggerDelay}s` : '0s',
+            },
+            'data-stagger-visible': isVisible,
+          });
+        }
+        return child;
+      })}
+    </div>
   );
 };
 
-// Stagger child item
+// Stagger child item - CSS based
 interface StaggerItemProps {
   children: React.ReactNode;
   className?: string;
   direction?: 'up' | 'down' | 'left' | 'right' | 'none';
   distance?: number;
-  duration?: number;
+  style?: React.CSSProperties;
+  'data-stagger-visible'?: boolean;
 }
 
 export const StaggerItem: React.FC<StaggerItemProps> = ({
   children,
   className = '',
   direction = 'up',
-  distance = 20,
-  duration = 0.5,
+  distance = 15,
+  style = {},
+  'data-stagger-visible': isVisible = false,
 }) => {
-  const getInitialPosition = () => {
+  const getTransform = () => {
+    if (isVisible) return 'translate3d(0,0,0)';
     switch (direction) {
-      case 'up': return { y: distance };
-      case 'down': return { y: -distance };
-      case 'left': return { x: distance };
-      case 'right': return { x: -distance };
-      case 'none': return {};
+      case 'up': return `translate3d(0,${distance}px,0)`;
+      case 'down': return `translate3d(0,-${distance}px,0)`;
+      case 'left': return `translate3d(${distance}px,0,0)`;
+      case 'right': return `translate3d(-${distance}px,0,0)`;
+      default: return 'translate3d(0,0,0)';
     }
   };
 
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, ...getInitialPosition() },
-    visible: {
-      opacity: 1,
-      x: 0,
-      y: 0,
-      transition: {
-        duration,
-        ease: [0.25, 0.1, 0.25, 1],
-      },
-    },
-  };
-
   return (
-    <motion.div variants={itemVariants} className={className}>
+    <div
+      className={className}
+      style={{
+        ...style,
+        opacity: isVisible ? 1 : 0,
+        transform: getTransform(),
+        transition: 'opacity 0.4s ease, transform 0.4s ease',
+        willChange: 'opacity, transform',
+      }}
+    >
       {children}
-    </motion.div>
+    </div>
   );
 };
 
-// Text reveal animation (word by word)
+// Text reveal - simplified, no animation for performance
 interface TextRevealProps {
   text: string;
   className?: string;
   wordClassName?: string;
-  delay?: number;
-  staggerDelay?: number;
-  once?: boolean;
 }
 
 export const TextReveal: React.FC<TextRevealProps> = ({
   text,
   className = '',
-  wordClassName = '',
-  delay = 0,
-  staggerDelay = 0.05,
-  once = true,
 }) => {
-  const words = text.split(' ');
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 1 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: staggerDelay,
-        delayChildren: delay,
-      },
-    },
-  };
-
-  const wordVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.4,
-        ease: [0.25, 0.1, 0.25, 1],
-      },
-    },
-  };
-
-  return (
-    <motion.span
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once, amount: 0.5 }}
-      className={className}
-      style={{ display: 'inline-flex', flexWrap: 'wrap', gap: '0.25em' }}
-    >
-      {words.map((word, index) => (
-        <motion.span
-          key={index}
-          variants={wordVariants}
-          className={wordClassName}
-          style={{ display: 'inline-block' }}
-        >
-          {word}
-        </motion.span>
-      ))}
-    </motion.span>
-  );
+  return <span className={className}>{text}</span>;
 };
 
-// Section header with line animation
+// Section header - simplified
 interface SectionHeaderProps {
   badge?: string;
   badgeIcon?: React.ReactNode;
@@ -225,28 +203,22 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   return (
     <div className={`flex flex-col ${alignClass} ${className}`}>
       {badge && (
-        <ScrollReveal delay={0} direction="up" distance={20}>
-          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-3 sm:mb-4">
-            {badgeIcon}
-            <span className="text-[10px] sm:text-xs font-medium text-primary uppercase tracking-wider">
-              {badge}
-            </span>
-          </div>
-        </ScrollReveal>
+        <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-3 sm:mb-4">
+          {badgeIcon}
+          <span className="text-[10px] sm:text-xs font-medium text-primary uppercase tracking-wider">
+            {badge}
+          </span>
+        </div>
       )}
 
-      <ScrollReveal delay={0.1} direction="up" distance={30}>
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-3 md:mb-4">
-          {title}
-        </h2>
-      </ScrollReveal>
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-3 md:mb-4">
+        {title}
+      </h2>
 
       {subtitle && (
-        <ScrollReveal delay={0.2} direction="up" distance={20}>
-          <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-xl font-light">
-            {subtitle}
-          </p>
-        </ScrollReveal>
+        <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-xl font-light">
+          {subtitle}
+        </p>
       )}
     </div>
   );
