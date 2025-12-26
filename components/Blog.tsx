@@ -47,7 +47,7 @@ const categoryStyles: Record<string, { bg: string; text: string; border: string;
 // Author info
 const AUTHOR = {
   name: 'Cikgu Aime',
-  avatar: 'https://i.imgur.com/NCiizgG.png',
+  avatar: '/images/cikguaime-avatar.webp',
 };
 
 // Reusable button component
