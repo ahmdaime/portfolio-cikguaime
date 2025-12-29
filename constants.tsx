@@ -93,7 +93,7 @@ export const AUTO_ERPH = {
   id: 'auto-erph',
   title: 'Auto eRPH',
   description: 'Sistem automasi RPH Google Sheets yang dibina 100% custom mengikut struktur sekolah anda. Siap dalam 5 minit!',
-  features: ['Full Custom', 'Sidebar UI', 'Lifetime Support'],
+  features: ['Full Custom', 'Sidebar UI', 'Sokongan Teknikal'],
   stats: '50+ Guru',
   link: '/auto-erph',
   gradient: 'from-purple-500 via-pink-500 to-rose-500',

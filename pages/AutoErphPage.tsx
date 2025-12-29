@@ -43,7 +43,7 @@ const TELEGRAM_LINK = "https://t.me/cikguaimedotcom";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQAwHl8FWenXAd7h1Ur0nQRO99NJqzbscnbkKtww4g73mKMpT6u9c-CS0hSugMMqk/exec";
 
 // Toggle this to enable/disable ordering (set to true when launching)
-const IS_LAUNCHED = false;
+const IS_LAUNCHED = true;
 
 // --- Types ---
 interface SlotData {
@@ -110,6 +110,12 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // RPH upload states (for Custom package only)
+  const [rphUploadType, setRphUploadType] = useState<'excel' | 'google-sheets'>('excel');
+  const [rphFile, setRphFile] = useState<File | null>(null);
+  const [rphLink, setRphLink] = useState('');
+  const rphFileInputRef = useRef<HTMLInputElement>(null);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -118,6 +124,12 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
+    }
+  };
+
+  const handleRphFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setRphFile(e.target.files[0]);
     }
   };
 
@@ -142,6 +154,19 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
         params.append('resitType', file.type);
       }
 
+      // RPH data for Custom package
+      if (formData.pakej === 'custom-template') {
+        params.append('rphUploadType', rphUploadType);
+        if (rphUploadType === 'excel' && rphFile) {
+          const rphBase64 = await fileToBase64(rphFile);
+          params.append('rphFile', rphBase64);
+          params.append('rphFileName', rphFile.name);
+          params.append('rphFileType', rphFile.type);
+        } else if (rphUploadType === 'google-sheets' && rphLink) {
+          params.append('rphLink', rphLink);
+        }
+      }
+
       // Use no-cors mode for Google Apps Script
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
@@ -156,6 +181,9 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
       setSubmitStatus('success');
       setFormData({ nama: '', email: '', telegram: '', pakej: 'template-tersedia' });
       setFile(null);
+      setRphUploadType('excel');
+      setRphFile(null);
+      setRphLink('');
 
     } catch (error) {
       console.error('Submit error:', error);
@@ -178,6 +206,9 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
     setSubmitStatus('idle');
     setFormData({ nama: '', email: '', telegram: '', pakej: 'template-tersedia' });
     setFile(null);
+    setRphUploadType('excel');
+    setRphFile(null);
+    setRphLink('');
   };
 
   if (!isOpen) return null;
@@ -211,9 +242,17 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
                 <CheckCircle className="w-8 h-8 text-green-400" />
               </div>
               <h3 className="text-xl font-bold mb-2">Tempahan Berjaya!</h3>
-              <p className="text-gray-400 mb-6">
-                Terima kasih! Saya akan hubungi anda melalui Telegram dalam masa 24 jam.
+              <p className="text-gray-400 mb-4">
+                Terima kasih! Pembayaran anda akan disemak dan diproses dalam masa 30 minit.
               </p>
+              <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4 mb-6 text-left">
+                <p className="text-sm text-amber-200 font-medium mb-1">
+                  📧 Penting:
+                </p>
+                <p className="text-sm text-gray-400">
+                  Sila semak folder <strong className="text-white">Spam/Junk</strong> jika tidak menerima email pengesahan dalam inbox anda.
+                </p>
+              </div>
               <button
                 onClick={() => { resetForm(); onClose(); }}
                 className="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-lg font-medium transition-colors"
@@ -295,6 +334,92 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
                   <option value="custom-template" className="bg-navy-800">Custom Template - RM200</option>
                 </select>
               </div>
+
+              {/* RPH Upload - Only for Custom Template */}
+              {formData.pakej === 'custom-template' && (
+                <div className="space-y-3">
+                  <label className="block text-sm font-medium text-gray-300">
+                    Muat Naik RPH Anda
+                  </label>
+
+                  {/* Toggle Options */}
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => { setRphUploadType('excel'); setRphLink(''); }}
+                      className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+                        rphUploadType === 'excel'
+                          ? 'bg-accent-purple/20 border border-accent-purple/50 text-white'
+                          : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10'
+                      }`}
+                    >
+                      <Table className="w-4 h-4" />
+                      Fail Excel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setRphUploadType('google-sheets'); setRphFile(null); }}
+                      className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+                        rphUploadType === 'google-sheets'
+                          ? 'bg-accent-purple/20 border border-accent-purple/50 text-white'
+                          : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10'
+                      }`}
+                    >
+                      <FileText className="w-4 h-4" />
+                      Google Sheets
+                    </button>
+                  </div>
+
+                  {/* Excel Upload */}
+                  {rphUploadType === 'excel' && (
+                    <div
+                      onClick={() => rphFileInputRef.current?.click()}
+                      className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors ${
+                        rphFile
+                          ? 'border-green-500/50 bg-green-500/5'
+                          : 'border-white/10 hover:border-accent-purple/50 hover:bg-white/5'
+                      }`}
+                    >
+                      <input
+                        ref={rphFileInputRef}
+                        type="file"
+                        accept=".xlsx,.xls"
+                        onChange={handleRphFileChange}
+                        className="hidden"
+                      />
+                      {rphFile ? (
+                        <div className="flex items-center justify-center gap-3">
+                          <CheckCircle className="w-5 h-5 text-green-400" />
+                          <span className="text-green-400 text-sm">{rphFile.name}</span>
+                        </div>
+                      ) : (
+                        <>
+                          <FileUp className="w-6 h-6 text-gray-500 mx-auto mb-1" />
+                          <p className="text-sm text-gray-400">Klik untuk muat naik fail Excel</p>
+                          <p className="text-xs text-gray-500">.xlsx atau .xls</p>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Google Sheets Link */}
+                  {rphUploadType === 'google-sheets' && (
+                    <input
+                      type="url"
+                      value={rphLink}
+                      onChange={(e) => setRphLink(e.target.value)}
+                      placeholder="Paste link Google Sheets anda"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-accent-purple/50 focus:ring-1 focus:ring-accent-purple/50 transition-colors text-sm"
+                    />
+                  )}
+
+                  <p className="text-xs text-gray-500">
+                    {rphUploadType === 'google-sheets'
+                      ? 'Pastikan link boleh diakses (Share → Anyone with the link)'
+                      : 'Saya akan gunakan fail ini sebagai rujukan untuk custom template anda'}
+                  </p>
+                </div>
+              )}
 
               {/* Upload Resit */}
               <div>
