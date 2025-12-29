@@ -43,7 +43,7 @@ const TELEGRAM_LINK = "https://t.me/cikguaimedotcom";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQAwHl8FWenXAd7h1Ur0nQRO99NJqzbscnbkKtww4g73mKMpT6u9c-CS0hSugMMqk/exec";
 
 // Toggle this to enable/disable ordering (set to true when launching)
-const IS_LAUNCHED = true;
+const IS_LAUNCHED = false;
 
 // --- Types ---
 interface SlotData {
