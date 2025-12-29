@@ -45,6 +45,9 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQAwHl8FWenX
 // Toggle this to enable/disable ordering (set to true when launching)
 const IS_LAUNCHED = false;
 
+// Launch date: 30 Disember 2025, 8:00 PM Malaysia Time (UTC+8)
+const LAUNCH_DATE = new Date('2025-12-30T20:00:00+08:00');
+
 // --- Types ---
 interface SlotData {
   max: number;
@@ -64,6 +67,81 @@ const Badge = ({ children }: { children?: React.ReactNode }) => (
     {children}
   </div>
 );
+
+// --- Countdown Timer Component ---
+interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+const CountdownTimer = () => {
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [isExpired, setIsExpired] = useState(false);
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = new Date().getTime();
+      const target = LAUNCH_DATE.getTime();
+      const difference = target - now;
+
+      if (difference <= 0) {
+        setIsExpired(true);
+        return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+      }
+
+      return {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((difference % (1000 * 60)) / 1000)
+      };
+    };
+
+    // Initial calculation
+    setTimeLeft(calculateTimeLeft());
+
+    // Update every second
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  if (isExpired) return null;
+
+  const TimeBlock = ({ value, label }: { value: number; label: string }) => (
+    <div className="flex flex-col items-center">
+      <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-2">
+        <span className="text-2xl md:text-3xl font-bold text-white">
+          {value.toString().padStart(2, '0')}
+        </span>
+      </div>
+      <span className="text-xs md:text-sm text-gray-400 uppercase tracking-wider">{label}</span>
+    </div>
+  );
+
+  return (
+    <div className="mb-8">
+      <div className="inline-flex items-center gap-2 text-sm text-amber-400 font-semibold bg-amber-500/10 px-4 py-2 rounded-full mb-6 animate-pulse">
+        <Clock className="w-4 h-4" />
+        Tempahan Dibuka Pada 30 Dis 2025, 8:00 PM
+      </div>
+
+      <div className="flex items-center justify-center gap-3 md:gap-4">
+        <TimeBlock value={timeLeft.days} label="Hari" />
+        <span className="text-2xl md:text-3xl font-bold text-accent-purple mb-6">:</span>
+        <TimeBlock value={timeLeft.hours} label="Jam" />
+        <span className="text-2xl md:text-3xl font-bold text-accent-purple mb-6">:</span>
+        <TimeBlock value={timeLeft.minutes} label="Minit" />
+        <span className="text-2xl md:text-3xl font-bold text-accent-purple mb-6">:</span>
+        <TimeBlock value={timeLeft.seconds} label="Saat" />
+      </div>
+    </div>
+  );
+};
 
 const PrimaryButton = ({
   children,
@@ -543,6 +621,20 @@ const NavBar = ({ onOpenForm }: { onOpenForm: () => void }) => {
 const BlurredPrice = ({ price, color = 'white' }: { price: string; color?: string }) => {
   const [isRevealed, setIsRevealed] = useState(false);
 
+  // If not launched, show mystery price
+  if (!IS_LAUNCHED) {
+    return (
+      <div className="relative select-none">
+        <div className="text-4xl font-bold text-gray-500">
+          RM???
+        </div>
+        <div className="text-xs text-gray-500 mt-1">
+          Harga didedahkan 30 Dis
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="relative cursor-pointer select-none group"
@@ -616,6 +708,9 @@ const Hero = ({ onOpenForm }: { onOpenForm: () => void }) => {
         <div className="inline-flex items-center gap-2 text-sm text-accent-pink font-semibold bg-accent-pink/10 px-4 py-2 rounded-full mb-10">
           <CheckCircle className="w-4 h-4" /> Sekali Bayar, Tiada Yuran Bulanan
         </div>
+
+        {/* Countdown Timer - Only show when not launched */}
+        {!IS_LAUNCHED && <CountdownTimer />}
 
         {/* Price Cards with Slot Counter */}
         <div className="flex flex-col md:flex-row items-stretch justify-center gap-6 mb-10 max-w-2xl mx-auto">
@@ -962,7 +1057,7 @@ const Features = () => {
 
 const Process = () => {
   const templateTersediaSteps = [
-    { step: "1", title: "Hubungi & Bayar", desc: "Chat di Telegram, buat bayaran RM80." },
+    { step: "1", title: "Hubungi & Bayar", desc: IS_LAUNCHED ? "Chat di Telegram, buat bayaran RM80." : "Chat di Telegram, buat bayaran." },
     { step: "2", title: "Terima Template", desc: "Dapat Google Sheet dengan script siap pasang." },
     { step: "3", title: "Guna!", desc: "Terus mula guna dalam 1-2 jam." }
   ];
@@ -986,7 +1081,7 @@ const Process = () => {
             <div className="flex items-center gap-3 mb-8">
               <Package className="w-6 h-6 text-blue-400" />
               <h3 className="text-xl font-bold">Template Tersedia</h3>
-              <span className="text-sm text-blue-400 bg-blue-400/10 px-2 py-1 rounded">RM80</span>
+              <span className="text-sm text-blue-400 bg-blue-400/10 px-2 py-1 rounded">{IS_LAUNCHED ? 'RM80' : 'RM???'}</span>
             </div>
 
             <div className="space-y-6">
@@ -1015,7 +1110,7 @@ const Process = () => {
             <div className="flex items-center gap-3 mb-8">
               <Sparkles className="w-6 h-6 text-accent-purple" />
               <h3 className="text-xl font-bold">Custom Template</h3>
-              <span className="text-sm text-accent-purple bg-accent-purple/10 px-2 py-1 rounded">RM200</span>
+              <span className="text-sm text-accent-purple bg-accent-purple/10 px-2 py-1 rounded">{IS_LAUNCHED ? 'RM200' : 'RM???'}</span>
             </div>
 
             <div className="space-y-6">
@@ -1225,10 +1320,19 @@ const Pricing = ({ onOpenForm }: { onOpenForm: () => void }) => {
                 <p className="text-gray-400 text-sm mb-4">{pkg.description}</p>
 
                 <div className="flex items-baseline gap-2 mb-4">
-                  <span className={`text-4xl font-extrabold bg-gradient-to-r ${pkg.gradient} bg-clip-text text-transparent`}>
-                    {pkg.price}
-                  </span>
-                  <span className="text-gray-500 text-sm">/ sekali bayar</span>
+                  {IS_LAUNCHED ? (
+                    <>
+                      <span className={`text-4xl font-extrabold bg-gradient-to-r ${pkg.gradient} bg-clip-text text-transparent`}>
+                        {pkg.price}
+                      </span>
+                      <span className="text-gray-500 text-sm">/ sekali bayar</span>
+                    </>
+                  ) : (
+                    <div>
+                      <span className="text-4xl font-extrabold text-gray-500">RM???</span>
+                      <p className="text-xs text-gray-500 mt-1">Harga didedahkan 30 Dis</p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Slot Counter */}
@@ -1292,15 +1396,21 @@ const FAQ = () => {
   const faqs = [
     {
       q: "Berapa lama masa untuk siapkan?",
-      a: "Untuk pakej Template Tersedia (RM80), siap dalam 1-2 jam sahaja. Untuk pakej Custom Template (RM200), mengambil masa 2-3 hari bekerja selepas saya menerima link template RPH sekolah anda dan pengesahan bayaran."
+      a: IS_LAUNCHED
+        ? "Untuk pakej Template Tersedia (RM80), siap dalam 1-2 jam sahaja. Untuk pakej Custom Template (RM200), mengambil masa 2-3 hari bekerja selepas saya menerima link template RPH sekolah anda dan pengesahan bayaran."
+        : "Untuk pakej Template Tersedia, siap dalam 1-2 jam sahaja. Untuk pakej Custom Template, mengambil masa 2-3 hari bekerja selepas saya menerima link template RPH sekolah anda dan pengesahan bayaran."
     },
     {
-      q: "Apa beza pakej RM80 dan RM200?",
-      a: "Pakej RM80 menggunakan template RPH yang telah siap sedia - sesuai jika anda fleksibel dengan format. Pakej RM200 pula saya bina Apps Script 100% mengikut template sekolah anda - sesuai jika sekolah ada format template yang spesifik."
+      q: "Apa beza kedua-dua pakej?",
+      a: IS_LAUNCHED
+        ? "Pakej RM80 menggunakan template RPH yang telah siap sedia - sesuai jika anda fleksibel dengan format. Pakej RM200 pula saya bina Apps Script 100% mengikut template sekolah anda - sesuai jika sekolah ada format template yang spesifik."
+        : "Pakej Template Tersedia menggunakan template RPH yang telah siap sedia - sesuai jika anda fleksibel dengan format. Pakej Custom Template pula saya bina Apps Script 100% mengikut template sekolah anda - sesuai jika sekolah ada format template yang spesifik."
     },
     {
       q: "Apa yang termasuk dalam support?",
-      a: "Support meliputi pembaikan ralat teknikal (bug fix) seperti butang tak berfungsi atau script error. Pakej RM80 dapat 30 hari support, manakala pakej RM200 dapat 90 hari. Permintaan feature tambahan atau perubahan template sekolah akan dikenakan caj berasingan."
+      a: IS_LAUNCHED
+        ? "Support meliputi pembaikan ralat teknikal (bug fix) seperti butang tak berfungsi atau script error. Pakej RM80 dapat 30 hari support, manakala pakej RM200 dapat 90 hari. Permintaan feature tambahan atau perubahan template sekolah akan dikenakan caj berasingan."
+        : "Support meliputi pembaikan ralat teknikal (bug fix) seperti butang tak berfungsi atau script error. Pakej Template Tersedia dapat 30 hari support, manakala pakej Custom Template dapat 90 hari. Permintaan feature tambahan atau perubahan template sekolah akan dikenakan caj berasingan."
     },
     {
       q: "Boleh guna untuk berbilang minggu/tahun?",
@@ -1455,7 +1565,9 @@ const documentationData = {
           title: 'Data masuk cell yang salah',
           error: 'Content RPH masuk ke cell yang tidak betul.',
           cause: 'Template anda mempunyai struktur yang berbeza dari template standard (Base RPH 2026).',
-          solution: 'Pakej Template Tersedia (RM80) hanya serasi dengan template standard. Untuk template sekolah anda sendiri, sila gunakan Pakej Custom Template (RM200).',
+          solution: IS_LAUNCHED
+            ? 'Pakej Template Tersedia (RM80) hanya serasi dengan template standard. Untuk template sekolah anda sendiri, sila gunakan Pakej Custom Template (RM200).'
+            : 'Pakej Template Tersedia hanya serasi dengan template standard. Untuk template sekolah anda sendiri, sila gunakan Pakej Custom Template.',
         },
       ]
     },
