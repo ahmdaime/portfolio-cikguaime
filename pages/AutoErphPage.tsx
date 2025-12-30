@@ -1417,6 +1417,10 @@ const FAQ = () => {
       a: "Ya! Sistem ini direka untuk generate RPH minggu demi minggu tanpa had. Anda boleh guna untuk tahun-tahun seterusnya selagi format sekolah tidak berubah drastik."
     },
     {
+      q: "Boleh guna untuk subjek Pendidikan Islam & Bahasa Arab?",
+      a: "Ya, boleh! Template ini menyokong pilihan bahasa Jawi - apabila dipilih, semua label dalam RPH akan bertukar kepada tulisan Jawi secara automatik. Namun, isi kandungan seperti objektif, standard pembelajaran, dan aktiviti PAK-21 masih perlu diisi sendiri oleh cikgu. Kelebihannya, cikgu boleh simpan template aktiviti/objektif yang kerap digunakan supaya tidak perlu taip ulang setiap minggu."
+    },
+    {
       q: "Selamat ke data RPH saya?",
       a: "100% selamat. Apps Script ini berjalan sepenuhnya dalam persekitaran Google akaun anda sendiri. Saya tidak menyimpan data pengajaran anda."
     },
