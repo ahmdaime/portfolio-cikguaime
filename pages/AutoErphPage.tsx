@@ -1435,6 +1435,10 @@ const FAQ = () => {
     {
       q: "Boleh upload RPH dari Word?",
       a: "Ya! Sistem ini menyokong upload fail .docx (bukan .doc). Pastikan dokumen Word anda mempunyai text 'MINGGU 1', 'MINGGU 2', dll untuk setiap bahagian. Sistem akan auto-parse dan simpan sebagai template mingguan."
+    },
+    {
+      q: "Boleh upload Word yang ada teks Jawi/Arab?",
+      a: "Ya, Upload Word boleh baca teks Jawi dan Bahasa Arab. SYARAT: Format dokumen Word perlu guna header dalam Bahasa Melayu seperti 'Tajuk:', 'Objektif:', 'Aktiviti:' dan sebagainya. Isi kandungan boleh dalam Jawi/Arab, tiada masalah. Jika seluruh dokumen dalam tulisan Arab sahaja tanpa header BM, sistem mungkin tidak dapat kenal pasti bahagian-bahagian RPH dengan tepat."
     }
   ];
 
