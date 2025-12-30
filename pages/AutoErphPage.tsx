@@ -177,6 +177,7 @@ interface OrderFormProps {
 }
 
 const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
+  const [slots, setSlots] = useState<SlotsState | null>(null);
   const [formData, setFormData] = useState({
     nama: '',
     email: '',
@@ -193,6 +194,35 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
   const [rphFile, setRphFile] = useState<File | null>(null);
   const [rphLink, setRphLink] = useState('');
   const rphFileInputRef = useRef<HTMLInputElement>(null);
+
+  // Fetch slots when form opens
+  useEffect(() => {
+    if (isOpen) {
+      const fetchSlots = async () => {
+        try {
+          const response = await fetch(GOOGLE_SCRIPT_URL);
+          const data = await response.json();
+          if (data.success && data.slots) {
+            setSlots(data.slots);
+            // Auto-select available package
+            const rm80Available = data.slots['template-tersedia'].remaining > 0;
+            const rm200Available = data.slots['custom-template'].remaining > 0;
+            if (!rm80Available && rm200Available) {
+              setFormData(prev => ({ ...prev, pakej: 'custom-template' }));
+            } else if (rm80Available) {
+              setFormData(prev => ({ ...prev, pakej: 'template-tersedia' }));
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching slots:', error);
+        }
+      };
+      fetchSlots();
+    }
+  }, [isOpen]);
+
+  const rm80Remaining = slots?.['template-tersedia']?.remaining ?? 0;
+  const rm200Remaining = slots?.['custom-template']?.remaining ?? 0;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -408,9 +438,26 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
                   onChange={handleInputChange}
                   className="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-accent-purple/50 focus:ring-1 focus:ring-accent-purple/50 transition-colors"
                 >
-                  <option value="template-tersedia" className="bg-navy-800">Template Tersedia - RM80</option>
-                  <option value="custom-template" className="bg-navy-800">Custom Template - RM200</option>
+                  <option
+                    value="template-tersedia"
+                    className="bg-navy-800"
+                    disabled={rm80Remaining <= 0}
+                  >
+                    Template Tersedia - RM80 {rm80Remaining <= 0 ? '(HABIS)' : `(${rm80Remaining} slot)`}
+                  </option>
+                  <option
+                    value="custom-template"
+                    className="bg-navy-800"
+                    disabled={rm200Remaining <= 0}
+                  >
+                    Custom Template - RM200 {rm200Remaining <= 0 ? '(HABIS)' : `(${rm200Remaining} slot)`}
+                  </option>
                 </select>
+                {rm80Remaining <= 0 && rm200Remaining <= 0 && (
+                  <p className="text-sm text-red-400 mt-2">
+                    Maaf, semua slot telah penuh. Sila hubungi Telegram untuk senarai menunggu.
+                  </p>
+                )}
               </div>
 
               {/* RPH Upload - Only for Custom Template */}
