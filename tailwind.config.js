@@ -33,6 +33,7 @@ module.exports = {
       animation: {
         'blob': 'blob 7s infinite',
         'bounce-slow': 'bounce 3s infinite',
+        'shimmer': 'shimmer 1.5s infinite',
       },
       keyframes: {
         blob: {
@@ -40,6 +41,9 @@ module.exports = {
           '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
           '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
           '100%': { transform: 'translate(0px, 0px) scale(1)' },
+        },
+        shimmer: {
+          '100%': { transform: 'translateX(100%)' },
         }
       }
     }

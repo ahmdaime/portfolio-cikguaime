@@ -1,5 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useSlots, SlotsState } from '../hooks/useSlots';
+import { FAQ, VideoDemo, Documentation, SlotProgressSkeleton, ErrorBoundary } from '../components/auto-erph';
+import {
+  TELEGRAM_LINK,
+  GOOGLE_SCRIPT_URL,
+  IS_LAUNCHED,
+  RM80_ADDITIONAL_SLOTS,
+  TELEGRAM_SUPPORT_LINK,
+  LAUNCH_DATE
+} from '../components/auto-erph/constants';
 import {
   CheckCircle,
   XCircle,
@@ -25,40 +35,15 @@ import {
   Layers,
   Clock,
   Zap,
-  BookOpen,
-  Shield,
-  Settings,
-  Table,
-  FileUp,
-  PenTool,
-  FolderOpen,
-  AlertTriangle,
-  Search,
   ChevronRight,
-  Eye
+  Eye,
+  BookOpen,
+  Table,
+  FileUp
 } from 'lucide-react';
 
-// --- Constants ---
-const TELEGRAM_LINK = "https://t.me/cikguaimedotcom";
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQAwHl8FWenXAd7h1Ur0nQRO99NJqzbscnbkKtww4g73mKMpT6u9c-CS0hSugMMqk/exec";
-
-// Toggle this to enable/disable ordering (set to true when launching)
-const IS_LAUNCHED = true;
-
-// Launch date: 30 Disember 2025, 8:00 PM Malaysia Time (UTC+8)
-const LAUNCH_DATE = new Date('2025-12-30T20:00:00+08:00');
-
 // --- Types ---
-interface SlotData {
-  max: number;
-  sold: number;
-  remaining: number;
-}
-
-interface SlotsState {
-  'template-tersedia': SlotData;
-  'custom-template': SlotData;
-}
+// SlotData and SlotsState imported from useSlots hook
 
 // --- Components ---
 
@@ -177,7 +162,7 @@ interface OrderFormProps {
 }
 
 const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
-  const [slots, setSlots] = useState<SlotsState | null>(null);
+  const { slots } = useSlots({ enabled: isOpen });
   const [formData, setFormData] = useState({
     nama: '',
     email: '',
@@ -195,33 +180,23 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
   const [rphLink, setRphLink] = useState('');
   const rphFileInputRef = useRef<HTMLInputElement>(null);
 
-  // Fetch slots when form opens
-  useEffect(() => {
-    if (isOpen) {
-      const fetchSlots = async () => {
-        try {
-          const response = await fetch(GOOGLE_SCRIPT_URL);
-          const data = await response.json();
-          if (data.success && data.slots) {
-            setSlots(data.slots);
-            // Auto-select available package
-            const rm80Available = data.slots['template-tersedia'].remaining > 0;
-            const rm200Available = data.slots['custom-template'].remaining > 0;
-            if (!rm80Available && rm200Available) {
-              setFormData(prev => ({ ...prev, pakej: 'custom-template' }));
-            } else if (rm80Available) {
-              setFormData(prev => ({ ...prev, pakej: 'template-tersedia' }));
-            }
-          }
-        } catch (error) {
-          console.error('Error fetching slots:', error);
-        }
-      };
-      fetchSlots();
-    }
-  }, [isOpen]);
+  // Policy agreement checkbox
+  const [agreedToPolicy, setAgreedToPolicy] = useState(false);
 
-  const rm80Remaining = slots?.['template-tersedia']?.remaining ?? 0;
+  // Auto-select available package when slots are loaded
+  useEffect(() => {
+    if (slots) {
+      const rm80Available = slots['template-tersedia'].remaining > 0 || RM80_ADDITIONAL_SLOTS > 0;
+      const rm200Available = slots['custom-template'].remaining > 0;
+      if (!rm80Available && rm200Available) {
+        setFormData(prev => ({ ...prev, pakej: 'custom-template' }));
+      } else if (rm80Available) {
+        setFormData(prev => ({ ...prev, pakej: 'template-tersedia' }));
+      }
+    }
+  }, [slots]);
+
+  const rm80Remaining = (slots?.['template-tersedia']?.remaining ?? 0) + RM80_ADDITIONAL_SLOTS;
   const rm200Remaining = slots?.['custom-template']?.remaining ?? 0;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -317,6 +292,7 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
     setRphUploadType('excel');
     setRphFile(null);
     setRphLink('');
+    setAgreedToPolicy(false);
   };
 
   if (!isOpen) return null;
@@ -353,13 +329,30 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
               <p className="text-gray-400 mb-4">
                 Terima kasih! Pembayaran anda akan disemak dan diproses dalam masa 30 minit.
               </p>
-              <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4 mb-6 text-left">
+              <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4 mb-4 text-left">
                 <p className="text-sm text-amber-200 font-medium mb-1">
                   📧 Penting:
                 </p>
                 <p className="text-sm text-gray-400">
                   Sila semak folder <strong className="text-white">Spam/Junk</strong> jika tidak menerima email pengesahan dalam inbox anda.
                 </p>
+              </div>
+              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-6 text-left">
+                <p className="text-sm text-blue-200 font-medium mb-1">
+                  💬 Telegram Support:
+                </p>
+                <p className="text-sm text-gray-400 mb-2">
+                  Join group Telegram untuk sokongan teknikal dan updates.
+                </p>
+                <a
+                  href={TELEGRAM_SUPPORT_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Join Support Group
+                </a>
               </div>
               <button
                 onClick={() => { resetForm(); onClose(); }}
@@ -436,14 +429,18 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
                   name="pakej"
                   value={formData.pakej}
                   onChange={handleInputChange}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-accent-purple/50 focus:ring-1 focus:ring-accent-purple/50 transition-colors"
+                  className={`w-full bg-white/5 border rounded-lg py-3 px-4 text-white focus:outline-none transition-colors ${
+                    formData.pakej === 'template-tersedia' && RM80_ADDITIONAL_SLOTS > 0
+                      ? 'border-green-500/50 focus:border-green-500/70 focus:ring-1 focus:ring-green-500/50'
+                      : 'border-white/10 focus:border-accent-purple/50 focus:ring-1 focus:ring-accent-purple/50'
+                  }`}
                 >
                   <option
                     value="template-tersedia"
                     className="bg-navy-800"
                     disabled={rm80Remaining <= 0}
                   >
-                    Template Tersedia - RM80 {rm80Remaining <= 0 ? '(HABIS)' : `(${rm80Remaining} slot)`}
+                    Template Tersedia - RM80 {rm80Remaining <= 0 ? '(HABIS)' : RM80_ADDITIONAL_SLOTS > 0 ? `(+${RM80_ADDITIONAL_SLOTS} SLOT BARU!)` : `(${rm80Remaining} slot)`}
                   </option>
                   <option
                     value="custom-template"
@@ -453,6 +450,15 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
                     Custom Template - RM200 {rm200Remaining <= 0 ? '(HABIS)' : `(${rm200Remaining} slot)`}
                   </option>
                 </select>
+                {/* Additional Slots Notice */}
+                {formData.pakej === 'template-tersedia' && RM80_ADDITIONAL_SLOTS > 0 && (
+                  <div className="mt-2 bg-green-500/10 border border-green-500/30 rounded-lg px-3 py-2">
+                    <p className="text-xs text-green-300 flex items-center gap-1.5">
+                      <Flame className="w-3 h-3 text-green-400" />
+                      Permintaan tinggi! {RM80_ADDITIONAL_SLOTS} slot tambahan dibuka
+                    </p>
+                  </div>
+                )}
                 {rm80Remaining <= 0 && rm200Remaining <= 0 && (
                   <p className="text-sm text-red-400 mt-2">
                     Maaf, semua slot telah penuh. Sila hubungi Telegram untuk senarai menunggu.
@@ -462,9 +468,23 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
 
               {/* RPH Upload - Only for Custom Template */}
               {formData.pakej === 'custom-template' && (
-                <div className="space-y-3">
+                <div className="space-y-4">
+                  {/* Pre-Assessment Notice */}
+                  <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <Eye className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-medium text-blue-300 mb-1">Proses Pra-Penilaian</p>
+                        <p className="text-xs text-gray-400 leading-relaxed">
+                          Untuk pakej Custom Template, saya akan <strong className="text-white">analisis template anda terlebih dahulu</strong> untuk pastikan ia boleh diautomasikan.
+                          Bayaran hanya dibuat <strong className="text-white">selepas pengesahan</strong> template sesuai. Jika template tidak sesuai, anda tidak perlu bayar.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
                   <label className="block text-sm font-medium text-gray-300">
-                    Muat Naik RPH Anda
+                    Muat Naik Template RPH Sekolah Anda
                   </label>
 
                   {/* Toggle Options */}
@@ -546,11 +566,20 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
                 </div>
               )}
 
-              {/* Upload Resit */}
+              {/* Upload Resit - Required for RM80, Optional for RM200 */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Muat Naik Resit Pembayaran
+                  {formData.pakej === 'custom-template'
+                    ? 'Muat Naik Resit Pembayaran (Optional)'
+                    : 'Muat Naik Resit Pembayaran'}
                 </label>
+
+                {formData.pakej === 'custom-template' && (
+                  <p className="text-xs text-gray-500 mb-2">
+                    Boleh skip dahulu. Bayaran dibuat selepas template disahkan sesuai.
+                  </p>
+                )}
+
                 <div
                   onClick={() => fileInputRef.current?.click()}
                   className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
@@ -582,15 +611,34 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
               </div>
 
               {/* Payment Info */}
-              <div className="bg-accent-purple/10 border border-accent-purple/30 rounded-lg p-4">
-                <p className="text-sm text-gray-300 mb-2">
-                  <strong>Maklumat Pembayaran:</strong>
-                </p>
-                <p className="text-sm text-gray-400">
-                  Bank: <strong className="text-white">Maybank</strong><br/>
-                  No. Akaun: <strong className="text-white">153039127745</strong><br/>
-                  Nama: <strong className="text-white">AHMAD AIMAN</strong>
-                </p>
+              <div className={`rounded-lg p-4 ${
+                formData.pakej === 'custom-template'
+                  ? 'bg-blue-500/10 border border-blue-500/30'
+                  : 'bg-accent-purple/10 border border-accent-purple/30'
+              }`}>
+                {formData.pakej === 'custom-template' ? (
+                  <>
+                    <p className="text-sm text-blue-300 mb-2">
+                      <strong>Proses Seterusnya:</strong>
+                    </p>
+                    <ol className="text-sm text-gray-400 space-y-1 list-decimal list-inside">
+                      <li>Saya akan semak template anda dalam <strong className="text-white">24 jam</strong></li>
+                      <li>Jika sesuai, saya akan hubungi anda untuk pembayaran</li>
+                      <li>Jika tidak sesuai, anda akan dimaklumkan (tiada caj)</li>
+                    </ol>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm text-gray-300 mb-2">
+                      <strong>Maklumat Pembayaran:</strong>
+                    </p>
+                    <p className="text-sm text-gray-400">
+                      Bank: <strong className="text-white">Maybank</strong><br/>
+                      No. Akaun: <strong className="text-white">153039127745</strong><br/>
+                      Nama: <strong className="text-white">AHMAD AIMAN</strong>
+                    </p>
+                  </>
+                )}
               </div>
 
               {/* Error Message */}
@@ -603,16 +651,61 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
                 </div>
               )}
 
+              {/* Policy Agreement Checkbox */}
+              <div className={`rounded-lg p-4 ${
+                formData.pakej === 'custom-template'
+                  ? 'bg-blue-500/5 border border-blue-500/20'
+                  : 'bg-amber-500/5 border border-amber-500/20'
+              }`}>
+                <label className="flex items-start gap-3 cursor-pointer group">
+                  <div className="relative mt-0.5">
+                    <input
+                      type="checkbox"
+                      checked={agreedToPolicy}
+                      onChange={(e) => setAgreedToPolicy(e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-5 h-5 border-2 border-gray-500 rounded transition-all peer-checked:border-green-500 peer-checked:bg-green-500 group-hover:border-gray-400">
+                      {agreedToPolicy && (
+                        <CheckCircle className="w-4 h-4 text-white absolute top-0.5 left-0.5" />
+                      )}
+                    </div>
+                  </div>
+                  <span className="text-sm text-gray-300 leading-relaxed">
+                    {formData.pakej === 'custom-template' ? (
+                      <>
+                        Saya faham bahawa ini adalah <strong className="text-white">permohonan untuk penilaian template</strong>.
+                        Bayaran hanya dibuat selepas template disahkan sesuai.
+                        <strong className="text-blue-400"> Produk digital TIDAK BOLEH di-refund</strong> setelah pembayaran dan script dihantar.
+                      </>
+                    ) : (
+                      <>
+                        Saya telah membaca semua <strong className="text-white">ciri-ciri pakej</strong> dan faham bahawa <strong className="text-amber-400">produk digital TIDAK BOLEH di-refund</strong> setelah template dan script dihantar.
+                      </>
+                    )}
+                  </span>
+                </label>
+              </div>
+
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full py-4 bg-gradient-to-r from-accent-purple to-accent-pink text-white font-bold rounded-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                disabled={isSubmitting || !agreedToPolicy}
+                className={`w-full py-4 text-white font-bold rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${
+                  formData.pakej === 'custom-template'
+                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)]'
+                    : 'bg-gradient-to-r from-accent-purple to-accent-pink hover:shadow-[0_0_20px_rgba(139,92,246,0.5)]'
+                }`}
               >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
                     Menghantar...
+                  </>
+                ) : formData.pakej === 'custom-template' ? (
+                  <>
+                    <Eye className="w-5 h-5" />
+                    Hantar untuk Penilaian
                   </>
                 ) : (
                   <>
@@ -710,29 +803,7 @@ const BlurredPrice = ({ price, color = 'white' }: { price: string; color?: strin
 };
 
 const Hero = ({ onOpenForm }: { onOpenForm: () => void }) => {
-  const [slots, setSlots] = useState<SlotsState | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchSlots = async () => {
-      try {
-        const response = await fetch(GOOGLE_SCRIPT_URL);
-        const data = await response.json();
-        if (data.success && data.slots) {
-          setSlots(data.slots);
-        }
-      } catch (error) {
-        console.error('Error fetching slots:', error);
-        setSlots({
-          'template-tersedia': { max: 10, sold: 0, remaining: 10 },
-          'custom-template': { max: 3, sold: 0, remaining: 3 }
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchSlots();
-  }, []);
+  const { slots, isLoading } = useSlots();
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-16">
@@ -762,7 +833,20 @@ const Hero = ({ onOpenForm }: { onOpenForm: () => void }) => {
         {/* Price Cards with Slot Counter */}
         <div className="flex flex-col md:flex-row items-stretch justify-center gap-6 mb-10 max-w-2xl mx-auto">
           {/* RM80 Card */}
-          <div className="flex-1 bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-blue-500/50 transition-all hover:-translate-y-1">
+          <div className="flex-1 bg-white/5 border border-green-500/50 rounded-2xl p-6 hover:border-green-400/70 transition-all hover:-translate-y-1 relative overflow-hidden shadow-[0_0_20px_rgba(34,197,94,0.15)]">
+            {/* Restock Badge */}
+            {RM80_ADDITIONAL_SLOTS > 0 && (
+              <div className="absolute -top-1 -right-1">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-green-500 rounded-bl-xl rounded-tr-xl blur-md opacity-50 animate-pulse" />
+                  <div className="relative bg-gradient-to-r from-green-500 to-emerald-400 text-white text-xs font-bold px-3 py-1.5 rounded-bl-xl rounded-tr-xl flex items-center gap-1 shadow-lg">
+                    <Flame className="w-3 h-3 animate-pulse" />
+                    <span>+{RM80_ADDITIONAL_SLOTS} SLOT BARU!</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center gap-2 text-blue-400 mb-3">
               <Package className="w-5 h-5" />
               <span className="text-sm font-medium">Template Tersedia</span>
@@ -771,33 +855,48 @@ const Hero = ({ onOpenForm }: { onOpenForm: () => void }) => {
               <BlurredPrice price="RM80" />
             </div>
 
-            {/* Slot Progress */}
-            {!isLoading && slots ? (
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-400">Ditempah</span>
-                  <span className={`font-semibold ${slots['template-tersedia'].remaining <= 3 ? 'text-orange-400' : 'text-white'}`}>
-                    {slots['template-tersedia'].sold} / {slots['template-tersedia'].max}
+            {/* Hot Demand Notice */}
+            {RM80_ADDITIONAL_SLOTS > 0 && (
+              <div className="mb-3 bg-green-500/10 border border-green-500/30 rounded-lg px-3 py-2">
+                <p className="text-xs text-green-300 flex items-center gap-1.5">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                   </span>
-                </div>
-                <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-blue-500 to-accent-purple rounded-full transition-all duration-1000"
-                    style={{ width: `${(slots['template-tersedia'].sold / slots['template-tersedia'].max) * 100}%` }}
-                  />
-                </div>
-                {slots['template-tersedia'].remaining <= 3 && slots['template-tersedia'].remaining > 0 && (
-                  <div className="flex items-center gap-1 text-orange-400 text-xs">
-                    <Flame className="w-3 h-3 animate-pulse" />
-                    <span>Tinggal {slots['template-tersedia'].remaining} slot!</span>
+                  Permintaan tinggi! Slot tambahan dibuka
+                </p>
+              </div>
+            )}
+
+            {/* Slot Progress */}
+            {!isLoading && slots ? (() => {
+              const rm80Max = slots['template-tersedia'].max + RM80_ADDITIONAL_SLOTS;
+              const rm80Remaining = slots['template-tersedia'].remaining + RM80_ADDITIONAL_SLOTS;
+              const rm80Sold = slots['template-tersedia'].sold;
+              return (
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-400">Ditempah</span>
+                    <span className={`font-semibold ${rm80Remaining <= 3 ? 'text-orange-400' : 'text-green-400'}`}>
+                      {rm80Sold} / {rm80Max}
+                    </span>
                   </div>
-                )}
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 text-gray-500 text-sm">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Memuatkan...</span>
-              </div>
+                  <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-green-500 to-emerald-400 rounded-full transition-all duration-1000"
+                      style={{ width: `${(rm80Sold / rm80Max) * 100}%` }}
+                    />
+                  </div>
+                  {rm80Remaining <= 3 && rm80Remaining > 0 && (
+                    <div className="flex items-center gap-1 text-orange-400 text-xs">
+                      <Flame className="w-3 h-3 animate-pulse" />
+                      <span>Tinggal {rm80Remaining} slot!</span>
+                    </div>
+                  )}
+                </div>
+              );
+            })() : (
+              <SlotProgressSkeleton />
             )}
           </div>
 
@@ -837,10 +936,7 @@ const Hero = ({ onOpenForm }: { onOpenForm: () => void }) => {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2 text-gray-500 text-sm">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Memuatkan...</span>
-              </div>
+              <SlotProgressSkeleton />
             )}
           </div>
         </div>
@@ -1179,38 +1275,17 @@ const Process = () => {
     </section>
   );
 };
-
-const VideoDemo = () => {
-  return (
-    <section className="py-20">
-      <div className="container mx-auto px-4 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-8">Lihat Auto eRPH Dalam Aksi</h2>
-
-        <div className="max-w-4xl mx-auto bg-white/5 backdrop-blur-sm border border-white/10 p-2 rounded-2xl relative">
-          <div className="aspect-video bg-black rounded-xl overflow-hidden border border-white/10">
-            <iframe
-              src="https://www.youtube.com/embed/KBQdJuD8tyM"
-              title="Demo Auto eRPH"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="w-full h-full"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
 // Slot Counter Component
 const SlotCounter = ({
   sold,
   max,
-  isPopular
+  isPopular,
+  isRestock = false
 }: {
   sold: number;
   max: number;
   isPopular: boolean;
+  isRestock?: boolean;
 }) => {
   const percentage = (sold / max) * 100;
   const remaining = max - sold;
@@ -1225,18 +1300,28 @@ const SlotCounter = ({
           {isLow && !isSoldOut && (
             <Flame className="w-4 h-4 text-orange-400 animate-pulse" />
           )}
+          {isRestock && !isLow && !isSoldOut && (
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+          )}
           <span className={`text-sm font-medium ${
             isSoldOut
               ? 'text-red-400'
               : isLow
                 ? 'text-orange-400'
-                : 'text-gray-400'
+                : isRestock
+                  ? 'text-green-400'
+                  : 'text-gray-400'
           }`}>
             {isSoldOut
               ? 'Slot Habis!'
               : isLow
                 ? `Tinggal ${remaining} slot lagi!`
-                : `${sold}/${max} telah ditempah`
+                : isRestock
+                  ? `${remaining} slot tersedia!`
+                  : `${sold}/${max} telah ditempah`
             }
           </span>
         </div>
@@ -1250,9 +1335,11 @@ const SlotCounter = ({
               ? 'bg-red-500'
               : isLow
                 ? 'bg-gradient-to-r from-orange-500 to-red-500'
-                : isPopular
-                  ? 'bg-gradient-to-r from-accent-purple to-accent-pink'
-                  : 'bg-gradient-to-r from-blue-500 to-accent-purple'
+                : isRestock
+                  ? 'bg-gradient-to-r from-green-500 to-emerald-400'
+                  : isPopular
+                    ? 'bg-gradient-to-r from-accent-purple to-accent-pink'
+                    : 'bg-gradient-to-r from-blue-500 to-accent-purple'
           }`}
           style={{ width: `${percentage}%` }}
         />
@@ -1262,32 +1349,7 @@ const SlotCounter = ({
 };
 
 const Pricing = ({ onOpenForm }: { onOpenForm: () => void }) => {
-  const [slots, setSlots] = useState<SlotsState | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Fetch slot availability on mount
-  useEffect(() => {
-    const fetchSlots = async () => {
-      try {
-        const response = await fetch(GOOGLE_SCRIPT_URL);
-        const data = await response.json();
-        if (data.success && data.slots) {
-          setSlots(data.slots);
-        }
-      } catch (error) {
-        console.error('Error fetching slots:', error);
-        // Fallback to default values if fetch fails
-        setSlots({
-          'template-tersedia': { max: 10, sold: 0, remaining: 10 },
-          'custom-template': { max: 3, sold: 0, remaining: 3 }
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchSlots();
-  }, []);
+  const { slots, isLoading } = useSlots();
 
   const packages = [
     {
@@ -1340,7 +1402,15 @@ const Pricing = ({ onOpenForm }: { onOpenForm: () => void }) => {
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {packages.map((pkg, idx) => {
             const slotData = slots?.[pkg.id as keyof SlotsState];
-            const isSoldOut = slotData?.remaining === 0;
+            // Apply additional slots for template-tersedia package
+            const additionalSlots = pkg.id === 'template-tersedia' ? RM80_ADDITIONAL_SLOTS : 0;
+            const remaining = (slotData?.remaining ?? 0) + additionalSlots;
+            const max = (slotData?.max ?? 0) + additionalSlots;
+            const sold = slotData?.sold ?? 0;
+            const isSoldOut = remaining === 0;
+
+            // Check if this package has additional slots (for special styling)
+            const hasAdditionalSlots = additionalSlots > 0;
 
             return (
               <div
@@ -1348,10 +1418,25 @@ const Pricing = ({ onOpenForm }: { onOpenForm: () => void }) => {
                 className={`relative bg-white/5 backdrop-blur-sm border rounded-2xl p-8 transition-all duration-300 hover:-translate-y-2 ${
                   pkg.popular
                     ? 'border-accent-purple/50 shadow-[0_0_30px_rgba(139,92,246,0.2)]'
-                    : 'border-white/10'
+                    : hasAdditionalSlots
+                      ? 'border-green-500/50 shadow-[0_0_30px_rgba(34,197,94,0.2)]'
+                      : 'border-white/10'
                 } ${isSoldOut ? 'opacity-75' : ''}`}
               >
-                {pkg.popular && (
+                {/* Restock Badge for RM80 */}
+                {hasAdditionalSlots && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-green-500 rounded-full blur-md opacity-50 animate-pulse" />
+                      <span className="relative bg-gradient-to-r from-green-500 to-emerald-400 text-white text-sm font-bold px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+                        <Flame className="w-3.5 h-3.5 animate-pulse" />
+                        +{additionalSlots} Slot Tambahan!
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {pkg.popular && !hasAdditionalSlots && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                     <span className="bg-gradient-to-r from-accent-purple to-accent-pink text-white text-sm font-bold px-4 py-1 rounded-full">
                       Popular
@@ -1359,17 +1444,30 @@ const Pricing = ({ onOpenForm }: { onOpenForm: () => void }) => {
                   </div>
                 )}
 
-                <div className={`w-16 h-16 rounded-xl bg-gradient-to-r ${pkg.gradient} flex items-center justify-center text-white mb-6`}>
+                <div className={`w-16 h-16 rounded-xl bg-gradient-to-r ${hasAdditionalSlots ? 'from-green-500 to-emerald-400' : pkg.gradient} flex items-center justify-center text-white mb-6`}>
                   {pkg.icon}
                 </div>
 
                 <h3 className="text-2xl font-bold mb-2">{pkg.name}</h3>
                 <p className="text-gray-400 text-sm mb-4">{pkg.description}</p>
 
+                {/* Hot Demand Notice */}
+                {hasAdditionalSlots && (
+                  <div className="mb-4 bg-green-500/10 border border-green-500/30 rounded-lg px-3 py-2">
+                    <p className="text-xs text-green-300 flex items-center gap-1.5">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                      </span>
+                      Permintaan tinggi! Slot tambahan dibuka
+                    </p>
+                  </div>
+                )}
+
                 <div className="flex items-baseline gap-2 mb-4">
                   {IS_LAUNCHED ? (
                     <>
-                      <span className={`text-4xl font-extrabold bg-gradient-to-r ${pkg.gradient} bg-clip-text text-transparent`}>
+                      <span className={`text-4xl font-extrabold bg-gradient-to-r ${hasAdditionalSlots ? 'from-green-500 to-emerald-400' : pkg.gradient} bg-clip-text text-transparent`}>
                         {pkg.price}
                       </span>
                       <span className="text-gray-500 text-sm">/ sekali bayar</span>
@@ -1384,15 +1482,15 @@ const Pricing = ({ onOpenForm }: { onOpenForm: () => void }) => {
 
                 {/* Slot Counter */}
                 {isLoading ? (
-                  <div className="mb-6 flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-gray-500" />
-                    <span className="text-sm text-gray-500">Memuatkan slot...</span>
+                  <div className="mb-6">
+                    <SlotProgressSkeleton />
                   </div>
                 ) : slotData ? (
                   <SlotCounter
-                    sold={slotData.sold}
-                    max={slotData.max}
+                    sold={sold}
+                    max={max}
                     isPopular={pkg.popular}
+                    isRestock={hasAdditionalSlots}
                   />
                 ) : null}
 
@@ -1437,581 +1535,6 @@ const Pricing = ({ onOpenForm }: { onOpenForm: () => void }) => {
   );
 };
 
-const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-  const faqs = [
-    {
-      q: "Berapa lama masa untuk siapkan?",
-      a: IS_LAUNCHED
-        ? "Untuk pakej Template Tersedia (RM80), siap dalam 1-2 jam sahaja. Untuk pakej Custom Template (RM200), mengambil masa 2-3 hari bekerja selepas saya menerima link template RPH sekolah anda dan pengesahan bayaran."
-        : "Untuk pakej Template Tersedia, siap dalam 1-2 jam sahaja. Untuk pakej Custom Template, mengambil masa 2-3 hari bekerja selepas saya menerima link template RPH sekolah anda dan pengesahan bayaran."
-    },
-    {
-      q: "Apa beza kedua-dua pakej?",
-      a: IS_LAUNCHED
-        ? "Pakej RM80 menggunakan template RPH yang telah siap sedia - sesuai jika anda fleksibel dengan format. Pakej RM200 pula saya bina Apps Script 100% mengikut template sekolah anda - sesuai jika sekolah ada format template yang spesifik."
-        : "Pakej Template Tersedia menggunakan template RPH yang telah siap sedia - sesuai jika anda fleksibel dengan format. Pakej Custom Template pula saya bina Apps Script 100% mengikut template sekolah anda - sesuai jika sekolah ada format template yang spesifik."
-    },
-    {
-      q: "Apa yang termasuk dalam support?",
-      a: IS_LAUNCHED
-        ? "Support meliputi pembaikan ralat teknikal (bug fix) seperti butang tak berfungsi atau script error. Pakej RM80 dapat 30 hari support, manakala pakej RM200 dapat 90 hari. Permintaan feature tambahan atau perubahan template sekolah akan dikenakan caj berasingan."
-        : "Support meliputi pembaikan ralat teknikal (bug fix) seperti butang tak berfungsi atau script error. Pakej Template Tersedia dapat 30 hari support, manakala pakej Custom Template dapat 90 hari. Permintaan feature tambahan atau perubahan template sekolah akan dikenakan caj berasingan."
-    },
-    {
-      q: "Boleh guna untuk berbilang minggu/tahun?",
-      a: "Ya! Sistem ini direka untuk generate RPH minggu demi minggu tanpa had. Anda boleh guna untuk tahun-tahun seterusnya selagi format sekolah tidak berubah drastik."
-    },
-    {
-      q: "Boleh guna untuk subjek Pendidikan Islam & Bahasa Arab?",
-      a: "Ya, boleh! Template ini menyokong pilihan bahasa Jawi - apabila dipilih, semua label dalam RPH akan bertukar kepada tulisan Jawi secara automatik. Namun, isi kandungan seperti objektif, standard pembelajaran, dan aktiviti PAK-21 masih perlu diisi sendiri oleh cikgu. Kelebihannya, cikgu boleh simpan template aktiviti/objektif yang kerap digunakan supaya tidak perlu taip ulang setiap minggu."
-    },
-    {
-      q: "Selamat ke data RPH saya?",
-      a: "100% selamat. Apps Script ini berjalan sepenuhnya dalam persekitaran Google akaun anda sendiri. Saya tidak menyimpan data pengajaran anda."
-    },
-    {
-      q: "Ada dokumentasi atau panduan penggunaan?",
-      a: "Ya! Scroll ke bawah ke bahagian 'Dokumentasi Auto eRPH'. Di situ ada panduan lengkap untuk 7 kategori masalah termasuk setup, upload Word, pengisian RPH, dan troubleshooting. Anda juga boleh search error message terus untuk cari penyelesaian."
-    },
-    {
-      q: "Apa perlu buat jika dapat error?",
-      a: "Pertama, rujuk bahagian Dokumentasi di bawah - kebanyakan error biasa sudah ada penyelesaiannya. Cari error message anda menggunakan search bar. Jika masalah tidak tersenarai atau masih tidak selesai, hubungi saya melalui Telegram untuk bantuan lanjut."
-    },
-    {
-      q: "Boleh upload RPH dari Word?",
-      a: "Ya! Sistem ini menyokong upload fail .docx (bukan .doc). Pastikan dokumen Word anda mempunyai text 'MINGGU 1', 'MINGGU 2', dll untuk setiap bahagian. Sistem akan auto-parse dan simpan sebagai template mingguan."
-    },
-    {
-      q: "Boleh upload Word yang ada teks Jawi/Arab?",
-      a: "Ya, Upload Word boleh baca teks Jawi dan Bahasa Arab. SYARAT: Format dokumen Word perlu guna header dalam Bahasa Melayu seperti 'Tajuk:', 'Objektif:', 'Aktiviti:' dan sebagainya. Isi kandungan boleh dalam Jawi/Arab, tiada masalah. Jika seluruh dokumen dalam tulisan Arab sahaja tanpa header BM, sistem mungkin tidak dapat kenal pasti bahagian-bahagian RPH dengan tepat."
-    }
-  ];
-
-  return (
-    <section className="py-20 bg-navy-900/50">
-      <div className="container mx-auto px-4 max-w-3xl">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Soalan Lazim (FAQ)</h2>
-
-        <div className="space-y-4">
-          {faqs.map((item, idx) => (
-            <div
-              key={idx}
-              className={`bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden transition-all duration-300 ${openIndex === idx ? 'border-accent-purple/50 bg-white/10' : ''}`}
-            >
-              <button
-                onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-                className="w-full p-6 text-left flex items-center justify-between focus:outline-none"
-              >
-                <span className="font-semibold text-lg">{item.q}</span>
-                <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-accent-purple' : 'text-gray-500'}`} />
-              </button>
-
-              <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out ${openIndex === idx ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
-              >
-                <div className="p-6 pt-0 text-gray-400 leading-relaxed border-t border-white/5 mt-2">
-                  {item.a}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// Documentation Data
-const documentationData = {
-  categories: [
-    {
-      id: 'permissions',
-      title: 'Kebenaran & Akses',
-      icon: Shield,
-      issues: [
-        {
-          id: 'license-not-found',
-          title: 'Lesen tidak dijumpai',
-          error: '"Lesen tidak dijumpai. Sila hubungi penjual untuk mendapatkan lesen."',
-          cause: 'Email Google anda tidak didaftar dalam sistem lesen.',
-          solution: 'Hubungi penjual melalui Telegram dengan menyertakan email Google yang anda gunakan untuk mendapatkan lesen.',
-        },
-        {
-          id: 'license-deactivated',
-          title: 'Lesen dinyahaktifkan',
-          error: '"Lesen anda telah dinyahaktifkan. Sila hubungi penjual."',
-          cause: 'Admin telah menyahaktifkan lesen anda.',
-          solution: 'Hubungi penjual untuk mengetahui sebab penyahaktifan dan cara mengaktifkan semula.',
-        },
-        {
-          id: 'not-logged-in',
-          title: 'Tidak log masuk',
-          error: '"Sila log masuk ke akaun Google anda"',
-          cause: 'Anda belum log masuk ke akaun Google dalam browser.',
-          solution: 'Log masuk ke akaun Google anda, kemudian refresh Google Sheets dan cuba lagi.',
-        },
-        {
-          id: 'connection-failed',
-          title: 'Connection failed',
-          error: '"Connection failed"',
-          cause: 'Tiada sambungan internet atau Web App server mengalami masalah.',
-          solution: 'Pastikan anda mempunyai sambungan internet yang stabil. Cuba lagi selepas beberapa minit.',
-        },
-      ]
-    },
-    {
-      id: 'setup',
-      title: 'Setup & Pemasangan',
-      icon: Settings,
-      issues: [
-        {
-          id: 'menu-not-showing',
-          title: 'Menu RPH Helper tidak muncul',
-          error: 'Tiada menu "📚 RPH Helper" di toolbar Google Sheets.',
-          cause: 'Fungsi onOpen() tidak berjalan secara automatik.',
-          solution: '1. Refresh halaman Google Sheets (Ctrl+R)\n2. Jika masih tidak muncul, buka Extensions > Apps Script > Run > pilih "onOpen"\n3. Klik Run dan berikan kebenaran jika diminta.',
-        },
-        {
-          id: 'sidebar-not-showing',
-          title: 'Sidebar tidak muncul',
-          error: 'Klik menu tapi sidebar tidak muncul.',
-          cause: 'Google memerlukan kebenaran untuk memaparkan sidebar.',
-          solution: '1. Apabila popup "Authorization required" muncul, klik "Continue"\n2. Pilih akaun Google anda\n3. Klik "Allow" untuk memberi kebenaran\n4. Cuba klik menu sekali lagi.',
-        },
-        {
-          id: 'jadual-sheet-missing',
-          title: 'Sheet JADUAL tidak dijumpai',
-          error: '"Sheet JADUAL tidak dijumpai!"',
-          cause: 'Tiada sheet bernama "JADUAL" dalam spreadsheet anda.',
-          solution: 'Buat sheet baru dengan nama "JADUAL" (huruf besar semua). Sheet ini perlu mengandungi jadual waktu anda dengan format yang betul.',
-        },
-        {
-          id: 'day-sheet-missing',
-          title: 'Sheet hari tidak dijumpai',
-          error: '"Sheet ISNIN tidak dijumpai"',
-          cause: 'Tiada sheet untuk hari tersebut.',
-          solution: 'Buat sheet dengan nama hari dalam huruf besar: ISNIN, SELASA, RABU, KHAMIS, JUMAAT. Setiap sheet mesti mengandungi template RPH.',
-        },
-      ]
-    },
-    {
-      id: 'jadual',
-      title: 'Jadual & Struktur',
-      icon: Table,
-      issues: [
-        {
-          id: 'empty-schedule',
-          title: 'Jadual kosong / tiada kelas',
-          error: 'Sidebar menunjukkan 0 kelas.',
-          cause: 'Format sheet JADUAL tidak mengikut struktur yang ditetapkan.',
-          solution: 'Pastikan sheet JADUAL mempunyai column mengikut urutan: BIL | TAHUN | KELAS | MASA | HINGGA | SUBJEK | BIL MURID. Header hari (ISNIN, SELASA, dll) perlu berada di Column H.',
-        },
-        {
-          id: 'erph-not-detected',
-          title: 'eRPH tidak dikesan',
-          error: 'RPH count = 0 walaupun ada template.',
-          cause: 'Sistem mencari text "eRPH" dalam Column B untuk mengesan section RPH.',
-          solution: 'Pastikan setiap section RPH mempunyai cell dalam Column B yang mengandungi text "eRPH".',
-        },
-        {
-          id: 'wrong-cell-offset',
-          title: 'Data masuk cell yang salah',
-          error: 'Content RPH masuk ke cell yang tidak betul.',
-          cause: 'Template anda mempunyai struktur yang berbeza dari template standard (Base RPH 2026).',
-          solution: IS_LAUNCHED
-            ? 'Pakej Template Tersedia (RM80) hanya serasi dengan template standard. Untuk template sekolah anda sendiri, sila gunakan Pakej Custom Template (RM200).'
-            : 'Pakej Template Tersedia hanya serasi dengan template standard. Untuk template sekolah anda sendiri, sila gunakan Pakej Custom Template.',
-        },
-      ]
-    },
-    {
-      id: 'word-upload',
-      title: 'Upload Word',
-      icon: FileUp,
-      issues: [
-        {
-          id: 'file-not-received',
-          title: 'Fail tidak diterima',
-          error: '"Data fail tidak diterima"',
-          cause: 'Fail tidak dipilih sebelum klik upload.',
-          solution: 'Klik butang "Pilih Fail" dan pilih fail .docx anda sebelum klik "Upload".',
-        },
-        {
-          id: 'invalid-format',
-          title: 'Format fail tidak sah',
-          error: '"Fail bukan format ZIP/DOCX yang sah"',
-          cause: 'Fail yang diupload bukan .docx sebenar. Mungkin fail .doc (format lama) atau fail corrupt.',
-          solution: '1. Buka fail dalam Microsoft Word\n2. Klik File > Save As\n3. Pilih format "Word Document (.docx)"\n4. Save dan upload semula.',
-        },
-        {
-          id: 'extract-failed',
-          title: 'Gagal extract fail',
-          error: '"Gagal extract fail" atau "document.xml tidak dijumpai"',
-          cause: 'Struktur fail .docx rosak atau tidak lengkap.',
-          solution: '1. Buka fail dalam Microsoft Word\n2. Copy semua kandungan\n3. Buka dokumen Word baru\n4. Paste kandungan\n5. Save sebagai .docx baru dan upload.',
-        },
-        {
-          id: 'zero-weeks-parsed',
-          title: '0 minggu diparse',
-          error: 'Upload berjaya tapi "0 minggu diparse".',
-          cause: 'Sistem tidak dapat mengesan pattern "MINGGU X" dalam dokumen.',
-          solution: 'Pastikan dokumen Word anda mempunyai text "MINGGU 1", "MINGGU 2", dll untuk setiap bahagian RPH mingguan.',
-        },
-        {
-          id: 'content-mixed',
-          title: 'SK dan SP tercampur',
-          error: 'Standard Kandungan dan Standard Pembelajaran jadi satu field.',
-          cause: 'Format RPH (contoh: PSV, BM) mempunyai struktur yang berbeza.',
-          solution: 'Sistem v1.0.8+ sudah menyokong format PSV dan BM. Pastikan anda menggunakan versi terkini. Jika masih berlaku, hubungi support.',
-        },
-      ]
-    },
-    {
-      id: 'fill-rph',
-      title: 'Pengisian RPH',
-      icon: PenTool,
-      issues: [
-        {
-          id: 'invalid-day',
-          title: 'Hari tidak sah',
-          error: '"Hari tidak sah: XXXXX"',
-          cause: 'Nama hari yang dimasukkan tidak dikenali.',
-          solution: 'Gunakan nama hari dalam huruf besar sahaja: ISNIN, SELASA, RABU, KHAMIS, JUMAAT.',
-        },
-        {
-          id: 'invalid-week',
-          title: 'Minggu tidak sah',
-          error: '"Minggu mesti antara 1 hingga 42"',
-          cause: 'Nombor minggu di luar julat yang dibenarkan.',
-          solution: 'Pilih nombor minggu antara 1 hingga 42 sahaja.',
-        },
-        {
-          id: 'text-too-long',
-          title: 'Text terlalu panjang',
-          error: '"Tema terlalu panjang (XXXXX aksara). Maksimum: 30000"',
-          cause: 'Kandungan field melebihi had maksimum.',
-          solution: 'Ringkaskan kandungan field tersebut. Had maksimum adalah 30,000 aksara per field.',
-        },
-        {
-          id: 'rph-number-invalid',
-          title: 'Nombor RPH tidak sah',
-          error: '"RPH X tidak sah. RPH yang sah: 1 hingga Y"',
-          cause: 'Nombor RPH yang dipilih melebihi jumlah eRPH yang ada dalam sheet.',
-          solution: 'Semak jumlah section eRPH dalam sheet hari tersebut. Pastikan nombor RPH tidak melebihi jumlah yang ada.',
-        },
-      ]
-    },
-    {
-      id: 'templates',
-      title: 'Template Mingguan',
-      icon: FolderOpen,
-      issues: [
-        {
-          id: 'template-not-found',
-          title: 'Template tidak dijumpai',
-          error: '"Template X Minggu Y tidak dijumpai!"',
-          cause: 'Belum ada template yang disimpan untuk subjek dan minggu tersebut.',
-          solution: 'Upload fail Word untuk import template, atau isi dan simpan template secara manual.',
-        },
-        {
-          id: 'no-templates',
-          title: 'Tiada template disimpan',
-          error: '"Tiada template disimpan!"',
-          cause: 'UserProperties kosong - belum ada template yang pernah disimpan.',
-          solution: 'Upload RPH dari Word untuk import template secara automatik.',
-        },
-        {
-          id: 'template-data-corrupt',
-          title: 'Data template rosak',
-          error: '"Data template rosak. Sila hubungi admin."',
-          cause: 'Data JSON dalam storage corrupt atau tidak valid.',
-          solution: 'Gunakan butang "Reset Semua Template" untuk clear data corrupt, kemudian upload semula dari Word.',
-        },
-        {
-          id: 'slot-invalid',
-          title: 'Slot tidak sah',
-          error: '"Slot tidak sah (1-10)"',
-          cause: 'Nombor slot melebihi had maksimum.',
-          solution: 'Gunakan nombor slot antara 1 hingga 10 sahaja. Untuk subjek teras (BM, BI, MT), biasanya guna slot 1-5.',
-        },
-      ]
-    },
-    {
-      id: 'common-mistakes',
-      title: 'Kesilapan Biasa',
-      icon: AlertTriangle,
-      issues: [
-        {
-          id: 'doc-not-docx',
-          title: 'Upload .doc bukan .docx',
-          error: '"Fail bukan format ZIP/DOCX yang sah"',
-          cause: 'Fail .doc adalah format Word lama (2003 dan ke bawah) yang tidak disokong.',
-          solution: 'Buka fail dalam Word > File > Save As > pilih format "Word Document (.docx)" > Save.',
-        },
-        {
-          id: 'edit-code',
-          title: 'Edit kod Apps Script',
-          error: 'Pelbagai error atau sistem tidak berfungsi.',
-          cause: 'Mengubah kod dalam Code.gs boleh merosakkan sistem.',
-          solution: 'JANGAN edit sebarang kod dalam Apps Script. Jika sudah edit, hubungi support untuk restore.',
-        },
-        {
-          id: 'different-account',
-          title: 'Guna akaun Google berbeza',
-          error: '"Lesen tidak dijumpai"',
-          cause: 'Log masuk dengan akaun Google yang berbeza dari akaun yang didaftarkan.',
-          solution: 'Log masuk menggunakan akaun Google yang sama semasa pembelian dan pendaftaran lesen.',
-        },
-        {
-          id: 'rename-sheets',
-          title: 'Rename sheet hari',
-          error: 'RPH tidak dikesan.',
-          cause: 'Sistem mencari sheet dengan nama tepat: ISNIN, SELASA, RABU, KHAMIS, JUMAAT.',
-          solution: 'Kekalkan nama sheet hari dalam huruf besar tanpa sebarang perubahan.',
-        },
-        {
-          id: 'copy-to-new-spreadsheet',
-          title: 'Copy ke Spreadsheet baru',
-          error: 'Lesen dan template tidak berfungsi.',
-          cause: 'Lesen dan template disimpan dalam spreadsheet asal sahaja.',
-          solution: 'Hubungi admin untuk transfer lesen ke spreadsheet baru. Template perlu diupload semula.',
-        },
-      ]
-    },
-  ]
-};
-
-const Documentation = () => {
-  const [activeCategory, setActiveCategory] = useState('permissions');
-  const [expandedIssue, setExpandedIssue] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const activeData = documentationData.categories.find(c => c.id === activeCategory);
-
-  // Filter issues based on search
-  const filteredCategories = searchQuery.trim()
-    ? documentationData.categories.map(cat => ({
-        ...cat,
-        issues: cat.issues.filter(issue =>
-          issue.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          issue.error.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          issue.solution.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      })).filter(cat => cat.issues.length > 0)
-    : null;
-
-  const displayCategories = filteredCategories || [activeData!];
-
-  return (
-    <section id="documentation" className="py-20 bg-navy-900/50">
-      <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-blue-500/10 text-blue-400 px-4 py-2 rounded-full mb-4">
-            <BookOpen className="w-4 h-4" />
-            <span className="text-sm font-medium">Panduan & Troubleshooting</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Dokumentasi <span className="text-accent-purple">Auto eRPH</span>
-          </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            Penyelesaian untuk masalah-masalah biasa yang mungkin anda hadapi semasa menggunakan Auto eRPH.
-          </p>
-        </div>
-
-        {/* Search Bar */}
-        <div className="max-w-xl mx-auto mb-8">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-            <input
-              type="text"
-              placeholder="Cari masalah atau error message..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-accent-purple/50 focus:ring-1 focus:ring-accent-purple/50 transition-all"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Navigation - Hidden when searching */}
-          {!searchQuery && (
-            <div className="lg:w-64 shrink-0">
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 lg:sticky lg:top-24">
-                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
-                  Kategori
-                </h3>
-                <nav className="space-y-1">
-                  {documentationData.categories.map((cat) => {
-                    const Icon = cat.icon;
-                    return (
-                      <button
-                        key={cat.id}
-                        onClick={() => {
-                          setActiveCategory(cat.id);
-                          setExpandedIssue(null);
-                        }}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${
-                          activeCategory === cat.id
-                            ? 'bg-accent-purple/20 text-accent-purple border border-accent-purple/30'
-                            : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                        }`}
-                      >
-                        <Icon className="w-5 h-5 shrink-0" />
-                        <span className="text-sm font-medium">{cat.title}</span>
-                        <span className={`ml-auto text-xs px-2 py-0.5 rounded-full ${
-                          activeCategory === cat.id
-                            ? 'bg-accent-purple/30 text-accent-purple'
-                            : 'bg-white/10 text-gray-500'
-                        }`}>
-                          {cat.issues.length}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </nav>
-              </div>
-            </div>
-          )}
-
-          {/* Content Area */}
-          <div className="flex-1 min-w-0">
-            {displayCategories.map((category) => (
-              <div key={category.id} className="mb-8 last:mb-0">
-                {/* Category Header (shown when searching) */}
-                {searchQuery && (
-                  <div className="flex items-center gap-3 mb-4">
-                    <category.icon className="w-5 h-5 text-accent-purple" />
-                    <h3 className="text-lg font-semibold text-white">{category.title}</h3>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-accent-purple/20 text-accent-purple">
-                      {category.issues.length} hasil
-                    </span>
-                  </div>
-                )}
-
-                {/* Issues List */}
-                <div className="space-y-3">
-                  {category.issues.map((issue) => (
-                    <div
-                      key={issue.id}
-                      className={`bg-white/5 backdrop-blur-sm border rounded-xl overflow-hidden transition-all duration-300 ${
-                        expandedIssue === issue.id
-                          ? 'border-accent-purple/50 bg-white/10'
-                          : 'border-white/10 hover:border-white/20'
-                      }`}
-                    >
-                      {/* Issue Header */}
-                      <button
-                        onClick={() => setExpandedIssue(expandedIssue === issue.id ? null : issue.id)}
-                        className="w-full p-5 text-left flex items-start gap-4"
-                      >
-                        <div className={`mt-0.5 p-2 rounded-lg shrink-0 ${
-                          expandedIssue === issue.id
-                            ? 'bg-accent-purple/20 text-accent-purple'
-                            : 'bg-white/5 text-gray-400'
-                        }`}>
-                          <AlertTriangle className="w-4 h-4" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-white mb-1">{issue.title}</h4>
-                          <p className="text-sm text-red-400/80 font-mono truncate">{issue.error}</p>
-                        </div>
-                        <ChevronRight className={`w-5 h-5 text-gray-500 shrink-0 transition-transform duration-300 ${
-                          expandedIssue === issue.id ? 'rotate-90' : ''
-                        }`} />
-                      </button>
-
-                      {/* Issue Content */}
-                      <div className={`overflow-hidden transition-all duration-300 ${
-                        expandedIssue === issue.id ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-                      }`}>
-                        <div className="px-5 pb-5 pt-0 border-t border-white/5">
-                          {/* Cause */}
-                          <div className="mt-4 mb-4">
-                            <div className="flex items-center gap-2 text-sm font-medium text-orange-400 mb-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
-                              Punca
-                            </div>
-                            <p className="text-gray-400 text-sm pl-4">{issue.cause}</p>
-                          </div>
-
-                          {/* Solution */}
-                          <div>
-                            <div className="flex items-center gap-2 text-sm font-medium text-green-400 mb-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-green-400"></span>
-                              Penyelesaian
-                            </div>
-                            <div className="text-gray-300 text-sm pl-4 whitespace-pre-line leading-relaxed">
-                              {issue.solution}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-
-            {/* No Results */}
-            {searchQuery && filteredCategories && filteredCategories.length === 0 && (
-              <div className="text-center py-12">
-                <Search className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">Tiada hasil dijumpai</h3>
-                <p className="text-gray-400">
-                  Cuba cari dengan kata kunci lain atau{' '}
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="text-accent-purple hover:underline"
-                  >
-                    lihat semua kategori
-                  </button>
-                </p>
-              </div>
-            )}
-
-            {/* Still Need Help */}
-            {!searchQuery && (
-              <div className="mt-8 p-6 bg-gradient-to-r from-accent-purple/10 to-accent-pink/10 border border-accent-purple/30 rounded-xl">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-accent-purple/20 rounded-lg">
-                    <MessageCircle className="w-6 h-6 text-accent-purple" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-white mb-1">Masih perlukan bantuan?</h4>
-                    <p className="text-gray-400 text-sm mb-3">
-                      Jika masalah anda tidak tersenarai di sini, hubungi saya terus melalui Telegram.
-                    </p>
-                    <a
-                      href={TELEGRAM_LINK}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-medium text-accent-purple hover:text-accent-pink transition-colors"
-                    >
-                      Hubungi Support
-                      <ChevronRight className="w-4 h-4" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
 const Footer = ({ onOpenForm }: { onOpenForm: () => void }) => {
   return (
     <footer className="py-20 relative overflow-hidden">
@@ -2050,19 +1573,21 @@ function AutoErphPage() {
   }, []);
 
   return (
-    <div className="min-h-screen font-sans text-white bg-navy-900 selection:bg-accent-purple selection:text-white">
-      <NavBar onOpenForm={openOrderForm} />
-      <Hero onOpenForm={openOrderForm} />
-      <ProblemSolution />
-      <Features />
-      <Process />
-      <VideoDemo />
-      <Pricing onOpenForm={openOrderForm} />
-      <FAQ />
-      <Documentation />
-      <Footer onOpenForm={openOrderForm} />
-      <OrderForm isOpen={isOrderFormOpen} onClose={closeOrderForm} />
-    </div>
+    <ErrorBoundary>
+      <div className="min-h-screen font-sans text-white bg-navy-900 selection:bg-accent-purple selection:text-white">
+        <NavBar onOpenForm={openOrderForm} />
+        <Hero onOpenForm={openOrderForm} />
+        <ProblemSolution />
+        <Features />
+        <Process />
+        <VideoDemo />
+        <Pricing onOpenForm={openOrderForm} />
+        <FAQ />
+        <Documentation />
+        <Footer onOpenForm={openOrderForm} />
+        <OrderForm isOpen={isOrderFormOpen} onClose={closeOrderForm} />
+      </div>
+    </ErrorBoundary>
   );
 }
 
