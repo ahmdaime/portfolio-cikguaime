@@ -34,6 +34,201 @@
   };
 
   // ============================================
+  // MENU & UI FUNCTIONS
+  // ============================================
+
+  /**
+   * Cipta custom menu bila spreadsheet dibuka
+   * Menu akan muncul di toolbar Google Sheets
+   */
+  function onOpen() {
+    const ui = SpreadsheetApp.getUi();
+    ui.createMenu('📧 Auto eRPH')
+      .addItem('📝 Buat Draft Email (Row Dipilih)', 'sendEmailToSelectedRow')
+      .addItem('📝 Buat Draft Semua Approved', 'sendEmailToAllApproved')
+      .addItem('📤 Buka Gmail Drafts', 'openGmailDrafts')
+      .addSeparator()
+      .addItem('🔧 Run Diagnostic', 'runFullDiagnostic')
+      .addItem('📊 Check Email Quota', 'checkEmailQuotaUI')
+      .addItem('✅ Check Triggers', 'checkTriggersUI')
+      .addSeparator()
+      .addItem('⚙️ Setup Trigger', 'setupTrigger')
+      .addToUi();
+  }
+
+  /**
+   * Buka Gmail Drafts dalam tab baru
+   */
+  function openGmailDrafts() {
+    const ui = SpreadsheetApp.getUi();
+    const html = HtmlService.createHtmlOutput(
+      '<script>window.open("https://mail.google.com/mail/u/0/#drafts", "_blank");google.script.host.close();</script>'
+    ).setWidth(100).setHeight(50);
+    ui.showModalDialog(html, 'Membuka Gmail Drafts...');
+  }
+
+  /**
+   * Hantar email ke row yang sedang dipilih
+   * Pengguna select mana-mana cell dalam row, kemudian klik menu
+   */
+  function sendEmailToSelectedRow() {
+    const ui = SpreadsheetApp.getUi();
+    const sheet = SpreadsheetApp.getActiveSheet();
+
+    // Check jika sheet betul
+    if (sheet.getName() !== 'Orders') {
+      ui.alert('❌ Error', 'Sila buka sheet "Orders" dahulu.', ui.ButtonSet.OK);
+      return;
+    }
+
+    const selectedRow = sheet.getActiveRange().getRow();
+
+    // Skip header
+    if (selectedRow < 2) {
+      ui.alert('❌ Error', 'Sila pilih row data (bukan header).', ui.ButtonSet.OK);
+      return;
+    }
+
+    // Get row data
+    const rowData = sheet.getRange(selectedRow, 1, 1, 10).getValues()[0];
+    const nama = rowData[1];
+    const email = rowData[2];
+    const pakej = rowData[4];
+    const status = rowData[8];
+    const emailSentStatus = rowData[9];
+
+    // Validate
+    if (!email) {
+      ui.alert('❌ Error', 'Email kosong untuk row ini.', ui.ButtonSet.OK);
+      return;
+    }
+
+    // Confirm before creating draft
+    const confirm = ui.alert(
+      '📝 Buat Draft Email?',
+      'Buat draft email untuk:\n\n' +
+      'Nama: ' + nama + '\n' +
+      'Email: ' + email + '\n' +
+      'Pakej: ' + pakej + '\n' +
+      'Status: ' + status,
+      ui.ButtonSet.YES_NO
+    );
+
+    if (confirm !== ui.Button.YES) {
+      return;
+    }
+
+    // Create draft
+    const success = sendApprovalEmail(nama, email);
+
+    if (success) {
+      sheet.getRange(selectedRow, 10).setValue('DRAFT - Check Gmail');
+      ui.alert('✅ Draft Berjaya!',
+        'Draft email telah dicipta untuk ' + email + '\n\n' +
+        '➡️ Buka Gmail > Drafts > Klik Send',
+        ui.ButtonSet.OK);
+    } else {
+      sheet.getRange(selectedRow, 10).setValue('FAILED');
+      ui.alert('❌ Gagal!', 'Gagal buat draft. Check Logs untuk details.', ui.ButtonSet.OK);
+    }
+  }
+
+  /**
+   * Buat draft email untuk SEMUA row yang status "Approved" tapi belum ada draft
+   */
+  function sendEmailToAllApproved() {
+    const ui = SpreadsheetApp.getUi();
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Orders');
+
+    if (!sheet) {
+      ui.alert('❌ Error', 'Sheet "Orders" tidak dijumpai.', ui.ButtonSet.OK);
+      return;
+    }
+
+    const data = sheet.getDataRange().getValues();
+    const pendingRows = [];
+
+    // Find all approved but not sent/drafted
+    for (let i = 1; i < data.length; i++) {
+      const status = data[i][8];
+      const emailSent = data[i][9];
+      const pakej = data[i][4];
+
+      // Skip jika sudah ada status (Yes, DRAFT, Manual, etc)
+      if (status === 'Approved' && !emailSent && pakej.includes('RM80')) {
+        pendingRows.push({
+          row: i + 1,
+          nama: data[i][1],
+          email: data[i][2]
+        });
+      }
+    }
+
+    if (pendingRows.length === 0) {
+      ui.alert('ℹ️ Info', 'Tiada draft pending untuk dicipta.\n\nSemua order yang Approved sudah ada draft/dihantar.', ui.ButtonSet.OK);
+      return;
+    }
+
+    // Confirm
+    const confirm = ui.alert(
+      '📝 Buat Draft Pukal?',
+      'Jumpa ' + pendingRows.length + ' order yang perlu draft email:\n\n' +
+      pendingRows.map(r => '• ' + r.nama + ' (' + r.email + ')').join('\n'),
+      ui.ButtonSet.YES_NO
+    );
+
+    if (confirm !== ui.Button.YES) {
+      return;
+    }
+
+    // Create all drafts
+    let successCount = 0;
+    let failCount = 0;
+
+    pendingRows.forEach(item => {
+      const success = sendApprovalEmail(item.nama, item.email);
+      if (success) {
+        sheet.getRange(item.row, 10).setValue('DRAFT - Check Gmail');
+        successCount++;
+      } else {
+        sheet.getRange(item.row, 10).setValue('FAILED');
+        failCount++;
+      }
+    });
+
+    ui.alert(
+      '📊 Selesai',
+      'Draft dicipta: ' + successCount + '\nGagal: ' + failCount + '\n\n' +
+      '➡️ Buka Gmail > Drafts > Send semua',
+      ui.ButtonSet.OK
+    );
+  }
+
+  /**
+   * UI wrapper untuk check email quota
+   */
+  function checkEmailQuotaUI() {
+    const ui = SpreadsheetApp.getUi();
+    const quota = MailApp.getRemainingDailyQuota();
+    ui.alert('📧 Email Quota', 'Baki email hari ini: ' + quota, ui.ButtonSet.OK);
+  }
+
+  /**
+   * UI wrapper untuk check triggers
+   */
+  function checkTriggersUI() {
+    const ui = SpreadsheetApp.getUi();
+    const triggers = ScriptApp.getProjectTriggers();
+    const hasOnSheetEdit = triggers.some(t => t.getHandlerFunction() === 'onSheetEdit');
+
+    if (hasOnSheetEdit) {
+      ui.alert('✅ Trigger Status', 'Trigger onSheetEdit AKTIF.\n\nEmail akan dihantar automatik bila status tukar ke Approved.', ui.ButtonSet.OK);
+    } else {
+      ui.alert('❌ Trigger Status', 'Trigger TIDAK AKTIF!\n\nSila run "Setup Trigger" dari menu.', ui.ButtonSet.OK);
+    }
+  }
+
+  // ============================================
   // SETUP FUNCTIONS
   // ============================================
 
@@ -350,38 +545,243 @@
   }
 
   /**
-   * Hantar email approval dengan link folder (untuk pembeli RM80)
+   * Buat DRAFT email approval (user perlu send manual dari Gmail)
+   * Ini untuk elak Gmail block automated emails
+   * @param {string} nama - Nama customer
+   * @param {string} email - Email customer
+   * @returns {boolean} true jika draft berjaya dicipta
    */
   function sendApprovalEmail(nama, email) {
-    const subject = '✅ Akses Auto eRPH Anda Sudah Sedia!';
+    try {
+      // Validate email
+      if (!email || !email.includes('@')) {
+        Logger.log('❌ Email tidak sah: ' + email);
+        return false;
+      }
 
-    const body = `Assalamualaikum ${nama},
+      Logger.log('📧 Creating draft for: ' + email);
 
-  Terima kasih kerana membeli Auto eRPH! 🎉
+      const subject = 'Akses Auto eRPH Anda Sudah Sedia! - ' + nama;
 
-  Pembayaran anda telah disahkan. Berikut adalah akses kepada template dan video tutorial:
+      // HTML body (cantik)
+      const bodyHtml = '<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">' +
+        '<h2 style="color: #2563eb;">Akses Auto eRPH Anda Sudah Sedia!</h2>' +
+        '<p>Assalamualaikum <strong>' + nama + '</strong>,</p>' +
+        '<p>Terima kasih kerana membeli Auto eRPH!</p>' +
+        '<p>Pembayaran anda telah disahkan. Berikut adalah akses kepada template dan video tutorial:</p>' +
+        '<p style="background: #f3f4f6; padding: 15px; border-radius: 8px;">' +
+        '<strong>LINK AKSES:</strong><br>' +
+        '<a href="' + TEMPLATE_FOLDER_LINK + '" style="color: #2563eb;">' + TEMPLATE_FOLDER_LINK + '</a>' +
+        '</p>' +
+        '<p>Dalam folder tersebut, anda akan jumpa:</p>' +
+        '<ul>' +
+        '<li>Template Auto eRPH</li>' +
+        '<li>Video tutorial cara setup</li>' +
+        '<li>Panduan penggunaan</li>' +
+        '</ul>' +
+        '<p>Jika ada sebarang soalan, boleh hubungi saya di Telegram.</p>' +
+        '<p>Terima kasih!</p>' +
+        '<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">' +
+        '<p style="color: #6b7280; font-size: 14px;">Cikgu Aime<br>Auto eRPH</p>' +
+        '</div>';
 
-  📁 LINK AKSES
-  ${TEMPLATE_FOLDER_LINK}
+      // Buat draft (bukan send terus)
+      const draft = GmailApp.createDraft(email, subject, '', {
+        htmlBody: bodyHtml,
+        name: 'Cikgu Aime - Auto eRPH'
+      });
 
-  Dalam folder tersebut, anda akan jumpa:
-  • Template Auto eRPH
-  • Video tutorial cara setup
-  • Panduan penggunaan
+      Logger.log('✅ DRAFT BERJAYA DICIPTA!');
+      Logger.log('📧 To: ' + email);
+      Logger.log('📧 Subject: ' + subject);
+      Logger.log('');
+      Logger.log('➡️ Buka Gmail > Drafts > Klik Send');
 
-  Jika ada sebarang soalan, boleh hubungi saya di Telegram.
+      return true;
 
-  Terima kasih! 🙏
+    } catch (error) {
+      Logger.log('❌ GAGAL buat draft untuk ' + email + ': ' + error.toString());
+      return false;
+    }
+  }
 
-  ---
-  Cikgu Aime
-  Auto eRPH`;
+  /**
+   * Hantar TERUS email (bypass draft) - guna jika nak cuba send terus
+   * @param {string} nama - Nama customer
+   * @param {string} email - Email customer
+   */
+  function sendEmailDirect(nama, email) {
+    try {
+      if (!email || !email.includes('@')) {
+        Logger.log('❌ Email tidak sah: ' + email);
+        return false;
+      }
 
-    MailApp.sendEmail({
-      to: email,
-      subject: subject,
-      body: body
+      const subject = 'Akses Auto eRPH Anda Sudah Sedia!';
+      const bodyText = 'Assalamualaikum ' + nama + ',\n\n' +
+        'Terima kasih kerana membeli Auto eRPH!\n\n' +
+        'Pembayaran anda telah disahkan. Berikut adalah akses:\n' +
+        TEMPLATE_FOLDER_LINK + '\n\n' +
+        'Terima kasih!\n\nCikgu Aime';
+
+      GmailApp.sendEmail(email, subject, bodyText);
+      Logger.log('✅ Email DIRECT dihantar ke: ' + email);
+      return true;
+
+    } catch (error) {
+      Logger.log('❌ GAGAL: ' + error.toString());
+      return false;
+    }
+  }
+
+  /**
+   * Debug: Check Gmail Sent folder - MUDAH RUN
+   * Tukar email di bawah kepada email yang anda nak check
+   */
+  function checkMySentEmails() {
+    // ⬇️ TUKAR EMAIL INI kepada email dummy/customer anda
+    const emailToCheck = 'TUKAR_EMAIL_SINI@gmail.com';
+
+    Logger.log('=== CHECKING SENT EMAILS TO: ' + emailToCheck + ' ===');
+
+    const threads = GmailApp.search('to:' + emailToCheck, 0, 10);
+    Logger.log('Found ' + threads.length + ' email threads');
+
+    if (threads.length === 0) {
+      Logger.log('❌ Tiada email dijumpai ke alamat ini dalam Sent folder');
+      Logger.log('Ini bermakna email TIDAK dihantar langsung.');
+      return;
+    }
+
+    threads.forEach((thread, i) => {
+      const messages = thread.getMessages();
+      messages.forEach(msg => {
+        Logger.log('');
+        Logger.log('✅ Email #' + (i + 1));
+        Logger.log('   Subject: ' + msg.getSubject());
+        Logger.log('   Date: ' + msg.getDate());
+        Logger.log('   To: ' + msg.getTo());
+      });
     });
+  }
+
+  /**
+   * Debug: Check 10 email terbaru dalam Sent folder
+   */
+  function checkRecentSentEmails() {
+    Logger.log('=== 10 EMAIL TERBARU DALAM SENT FOLDER ===');
+
+    const threads = GmailApp.search('in:sent', 0, 10);
+    Logger.log('Found ' + threads.length + ' threads');
+
+    threads.forEach((thread, i) => {
+      const msg = thread.getMessages()[0];
+      Logger.log('');
+      Logger.log((i + 1) + '. ' + msg.getSubject());
+      Logger.log('   To: ' + msg.getTo());
+      Logger.log('   Date: ' + msg.getDate());
+    });
+  }
+
+  /**
+   * Debug: Test dengan email ringkas tanpa formatting
+   */
+  function testSimpleEmail() {
+    const myEmail = Session.getActiveUser().getEmail();
+    Logger.log('Testing simple email to: ' + myEmail);
+
+    try {
+      GmailApp.sendEmail(myEmail, 'Test Email Auto eRPH', 'Ini adalah test email ringkas.');
+      Logger.log('✅ Simple email sent!');
+
+      // Also try MailApp
+      MailApp.sendEmail(myEmail, 'Test Email Auto eRPH (MailApp)', 'Ini adalah test email ringkas via MailApp.');
+      Logger.log('✅ MailApp email sent!');
+
+    } catch (error) {
+      Logger.log('❌ Error: ' + error.toString());
+    }
+  }
+
+  /**
+   * 🔧 CHECK BOUNCE: Cari email bounce/gagal dalam inbox
+   */
+  function checkForBounces() {
+    Logger.log('=== CHECKING FOR BOUNCE EMAILS ===');
+
+    // Search for bounce/failure notifications
+    const searchTerms = [
+      'from:mailer-daemon',
+      'subject:delivery',
+      'subject:undeliverable',
+      'subject:failed',
+      'subject:returned'
+    ];
+
+    searchTerms.forEach(term => {
+      const threads = GmailApp.search(term + ' newer_than:7d', 0, 5);
+      if (threads.length > 0) {
+        Logger.log('');
+        Logger.log('⚠️ FOUND: ' + term);
+        threads.forEach(thread => {
+          const msg = thread.getMessages()[0];
+          Logger.log('   Subject: ' + msg.getSubject());
+          Logger.log('   Date: ' + msg.getDate());
+        });
+      }
+    });
+
+    Logger.log('');
+    Logger.log('=== CHECK COMPLETE ===');
+  }
+
+  /**
+   * 🔧 TEST: Hantar email dengan UNIQUE subject (elak duplicate filter)
+   * Tukar EMAIL_TEST kepada email yang nak test
+   */
+  function testUniqueEmail() {
+    // ⬇️ TUKAR EMAIL INI
+    const testEmail = 'tvpsskpp51@gmail.com';
+
+    const uniqueId = new Date().getTime();
+    const subject = 'Test Auto eRPH - ' + uniqueId;
+    const body = 'Ini adalah test email dengan ID unik: ' + uniqueId + '\n\n' +
+                 'Jika anda terima email ini, sistem berfungsi dengan baik.\n\n' +
+                 'Masa dihantar: ' + new Date().toString();
+
+    Logger.log('📧 Sending test email to: ' + testEmail);
+    Logger.log('📧 Subject: ' + subject);
+
+    try {
+      GmailApp.sendEmail(testEmail, subject, body);
+      Logger.log('✅ Email sent! Check inbox ' + testEmail);
+      Logger.log('');
+      Logger.log('⚠️ JIKA MASIH TAK TERIMA:');
+      Logger.log('   1. Gmail mungkin block email dari akaun ini');
+      Logger.log('   2. Cuba hantar dari akaun Gmail lain');
+      Logger.log('   3. Check Google Account security settings');
+    } catch (error) {
+      Logger.log('❌ Error: ' + error.toString());
+    }
+  }
+
+  /**
+   * 🔧 TEST: Hantar ke diri sendiri (pasti sampai)
+   */
+  function testEmailToMyself() {
+    const myEmail = Session.getActiveUser().getEmail();
+    const uniqueId = new Date().getTime();
+    const subject = 'Self Test Auto eRPH - ' + uniqueId;
+    const body = 'Test email ke diri sendiri.\nID: ' + uniqueId;
+
+    Logger.log('📧 Sending to myself: ' + myEmail);
+
+    GmailApp.sendEmail(myEmail, subject, body);
+
+    Logger.log('✅ Sent! Check inbox anda.');
+    Logger.log('');
+    Logger.log('Jika email ini SAMPAI tapi email ke customer TIDAK sampai,');
+    Logger.log('masalah adalah Gmail block email ke external recipients.');
   }
 
   // ============================================
@@ -445,21 +845,203 @@
         return;
       }
 
-      // Hantar email
-      sendApprovalEmail(nama, email);
+      // Buat draft email
+      const draftSuccess = sendApprovalEmail(nama, email);
 
-      // Mark as sent
-      sheet.getRange(row, EMAIL_SENT_COL).setValue('Yes');
-      Logger.log('✅ Email berjaya dihantar kepada: ' + email);
+      if (draftSuccess) {
+        // Mark as draft created
+        sheet.getRange(row, EMAIL_SENT_COL).setValue('DRAFT - Check Gmail');
+        Logger.log('✅ Draft berjaya dicipta untuk: ' + email);
+        Logger.log('➡️ Buka Gmail > Drafts > Send');
+      } else {
+        // Mark as failed
+        sheet.getRange(row, EMAIL_SENT_COL).setValue('FAILED');
+        Logger.log('❌ Gagal buat draft untuk: ' + email);
+      }
 
     } catch (error) {
-      Logger.log('Error in onSheetEdit: ' + error.toString());
+      Logger.log('❌ Error in onSheetEdit: ' + error.toString());
+      // Cuba mark as error dalam sheet
+      try {
+        const sheet = e.source.getActiveSheet();
+        const row = e.range.getRow();
+        sheet.getRange(row, 10).setValue('ERROR: ' + error.message);
+      } catch (e2) {
+        Logger.log('Cannot update sheet: ' + e2.toString());
+      }
     }
   }
 
   // ============================================
-  // TEST FUNCTIONS
+  // TEST & DEBUG FUNCTIONS
   // ============================================
+
+  /**
+   * 🔧 DEBUG: Check semua triggers yang aktif
+   * Run ini untuk pastikan trigger sudah setup
+   */
+  function checkTriggers() {
+    const triggers = ScriptApp.getProjectTriggers();
+    Logger.log('=== SENARAI TRIGGERS ===');
+    Logger.log('Jumlah triggers: ' + triggers.length);
+
+    if (triggers.length === 0) {
+      Logger.log('⚠️ TIADA TRIGGER! Run setupTrigger() untuk setup.');
+      return;
+    }
+
+    triggers.forEach((trigger, index) => {
+      Logger.log('');
+      Logger.log('Trigger #' + (index + 1));
+      Logger.log('  Function: ' + trigger.getHandlerFunction());
+      Logger.log('  Type: ' + trigger.getEventType());
+      Logger.log('  Source: ' + trigger.getTriggerSource());
+    });
+
+    // Check specifically for onSheetEdit
+    const hasOnSheetEdit = triggers.some(t => t.getHandlerFunction() === 'onSheetEdit');
+    if (hasOnSheetEdit) {
+      Logger.log('');
+      Logger.log('✅ Trigger onSheetEdit AKTIF');
+    } else {
+      Logger.log('');
+      Logger.log('❌ Trigger onSheetEdit TIDAK AKTIF! Run setupTrigger()');
+    }
+  }
+
+  /**
+   * 🔧 DEBUG: Check email quota
+   */
+  function checkEmailQuota() {
+    const quota = MailApp.getRemainingDailyQuota();
+    Logger.log('📧 Email quota remaining: ' + quota);
+
+    if (quota <= 0) {
+      Logger.log('❌ QUOTA HABIS! Tidak boleh hantar email hari ini.');
+    } else if (quota < 10) {
+      Logger.log('⚠️ Quota hampir habis!');
+    } else {
+      Logger.log('✅ Quota OK');
+    }
+
+    return quota;
+  }
+
+  /**
+   * 🔧 MANUAL: Hantar email ke row tertentu
+   * Guna ini jika auto email gagal
+   * @param {number} rowNumber - Nombor row dalam sheet (contoh: 2 untuk row pertama data)
+   */
+  function manualSendEmail(rowNumber) {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName('Orders');
+
+    if (!sheet) {
+      Logger.log('❌ Sheet Orders tidak dijumpai!');
+      return;
+    }
+
+    if (!rowNumber || rowNumber < 2) {
+      Logger.log('❌ Sila masukkan nombor row yang sah (minimum 2)');
+      Logger.log('Contoh: manualSendEmail(2) untuk row pertama');
+      return;
+    }
+
+    const rowData = sheet.getRange(rowNumber, 1, 1, 10).getValues()[0];
+    const nama = rowData[1];
+    const email = rowData[2];
+    const pakej = rowData[4];
+    const status = rowData[8];
+    const emailSent = rowData[9];
+
+    Logger.log('=== DATA ROW ' + rowNumber + ' ===');
+    Logger.log('Nama: ' + nama);
+    Logger.log('Email: ' + email);
+    Logger.log('Pakej: ' + pakej);
+    Logger.log('Status: ' + status);
+    Logger.log('Email Sent: ' + emailSent);
+
+    if (!email) {
+      Logger.log('❌ Email kosong!');
+      return;
+    }
+
+    if (!pakej.includes('RM80')) {
+      Logger.log('⚠️ Ini pakej Custom (RM200) - perlu PM manual');
+      return;
+    }
+
+    Logger.log('');
+    Logger.log('📧 Cuba hantar email...');
+
+    const success = sendApprovalEmail(nama, email);
+
+    if (success) {
+      sheet.getRange(rowNumber, 10).setValue('Yes (Manual)');
+      Logger.log('✅ EMAIL BERJAYA DIHANTAR!');
+    } else {
+      sheet.getRange(rowNumber, 10).setValue('FAILED (Manual)');
+      Logger.log('❌ EMAIL GAGAL!');
+    }
+  }
+
+  /**
+   * 🔧 TEST: Hantar test email ke diri sendiri
+   */
+  function testApprovalEmail() {
+    const myEmail = Session.getActiveUser().getEmail();
+    Logger.log('📧 Hantar test email ke: ' + myEmail);
+
+    const success = sendApprovalEmail('Test User', myEmail);
+
+    if (success) {
+      Logger.log('✅ Test email BERJAYA dihantar! Check inbox anda.');
+    } else {
+      Logger.log('❌ Test email GAGAL!');
+    }
+  }
+
+  /**
+   * 🔧 FULL DEBUG: Run semua diagnostic
+   */
+  function runFullDiagnostic() {
+    Logger.log('========================================');
+    Logger.log('   AUTO eRPH - FULL DIAGNOSTIC');
+    Logger.log('========================================');
+    Logger.log('');
+
+    // 1. Check triggers
+    Logger.log('1️⃣ CHECKING TRIGGERS...');
+    checkTriggers();
+    Logger.log('');
+
+    // 2. Check email quota
+    Logger.log('2️⃣ CHECKING EMAIL QUOTA...');
+    checkEmailQuota();
+    Logger.log('');
+
+    // 3. Check sheet
+    Logger.log('3️⃣ CHECKING SHEET...');
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName('Orders');
+    if (sheet) {
+      const lastRow = sheet.getLastRow();
+      Logger.log('✅ Sheet Orders exists');
+      Logger.log('   Total rows: ' + lastRow);
+    } else {
+      Logger.log('❌ Sheet Orders TIDAK DIJUMPAI! Run setup()');
+    }
+    Logger.log('');
+
+    // 4. Test email capability
+    Logger.log('4️⃣ TESTING EMAIL...');
+    Logger.log('Run testApprovalEmail() untuk test hantar email ke diri sendiri');
+    Logger.log('');
+
+    Logger.log('========================================');
+    Logger.log('   DIAGNOSTIC COMPLETE');
+    Logger.log('========================================');
+  }
 
   /**
    * Test order submission
@@ -495,13 +1077,4 @@
 
     const result = doPost(mockEvent);
     Logger.log(result.getContent());
-  }
-
-  /**
-   * Test approval email
-   */
-  function testApprovalEmail() {
-    // Ganti dengan email anda untuk test
-    sendApprovalEmail('Test User', Session.getActiveUser().getEmail());
-    Logger.log('✅ Test email dihantar!');
   }

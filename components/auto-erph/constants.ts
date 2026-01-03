@@ -1,7 +1,7 @@
 // Auto eRPH Constants
 
 export const TELEGRAM_LINK = "https://t.me/cikguaimedotcom";
-export const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQAwHl8FWenXAd7h1Ur0nQRO99NJqzbscnbkKtww4g73mKMpT6u9c-CS0hSugMMqk/exec";
+export const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzwOoBDvnEYHhGOq-mwZUHlZSOynnk4vKHVrEa391bntt91p8CSErYlqihaX17dHwBww/exec";
 
 // Toggle this to enable/disable ordering (set to true when launching)
 export const IS_LAUNCHED = true;

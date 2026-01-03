@@ -13,7 +13,7 @@ export interface SlotsState {
 }
 
 // --- Constants ---
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQAwHl8FWenXAd7h1Ur0nQRO99NJqzbscnbkKtww4g73mKMpT6u9c-CS0hSugMMqk/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzwOoBDvnEYHhGOq-mwZUHlZSOynnk4vKHVrEa391bntt91p8CSErYlqihaX17dHwBww/exec";
 
 const DEFAULT_SLOTS: SlotsState = {
   'template-tersedia': { max: 10, sold: 0, remaining: 10 },
