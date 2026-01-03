@@ -34,6 +34,47 @@
   };
 
   // ============================================
+  // SECURITY FUNCTIONS
+  // ============================================
+
+  /**
+   * Escape HTML entities untuk prevent XSS
+   * @param {string} text - Text yang perlu di-escape
+   * @returns {string} Text yang selamat untuk dimasukkan dalam HTML
+   */
+  function escapeHtml(text) {
+    if (!text) return '';
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  /**
+   * Validate email format
+   * @param {string} email - Email untuk validate
+   * @returns {boolean} true jika email valid
+   */
+  function isValidEmail(email) {
+    if (!email) return false;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  /**
+   * Sanitize input - remove dangerous characters
+   * @param {string} input - Input untuk sanitize
+   * @param {number} maxLength - Maximum length allowed
+   * @returns {string} Sanitized input
+   */
+  function sanitizeInput(input, maxLength = 500) {
+    if (!input) return '';
+    return String(input).trim().substring(0, maxLength);
+  }
+
+  // ============================================
   // MENU & UI FUNCTIONS
   // ============================================
 
@@ -561,12 +602,15 @@
 
       Logger.log('📧 Creating draft for: ' + email);
 
-      const subject = 'Akses Auto eRPH Anda Sudah Sedia! - ' + nama;
+      // Sanitize & escape inputs untuk prevent XSS
+      const safeNama = escapeHtml(sanitizeInput(nama, 100));
 
-      // HTML body (cantik)
+      const subject = 'Akses Auto eRPH Anda Sudah Sedia! - ' + safeNama;
+
+      // HTML body (cantik) - guna safeNama yang sudah di-escape
       const bodyHtml = '<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">' +
         '<h2 style="color: #2563eb;">Akses Auto eRPH Anda Sudah Sedia!</h2>' +
-        '<p>Assalamualaikum <strong>' + nama + '</strong>,</p>' +
+        '<p>Assalamualaikum <strong>' + safeNama + '</strong>,</p>' +
         '<p>Terima kasih kerana membeli Auto eRPH!</p>' +
         '<p>Pembayaran anda telah disahkan. Berikut adalah akses kepada template dan video tutorial:</p>' +
         '<p style="background: #f3f4f6; padding: 15px; border-radius: 8px;">' +

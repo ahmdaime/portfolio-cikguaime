@@ -52,6 +52,40 @@ import {
 // --- Types ---
 // SlotData and SlotsState imported from useSlots hook
 
+// --- Validation Helpers ---
+const MAX_NAME_LENGTH = 100;
+const MAX_FILE_SIZE_MB = 5;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
+const validateEmail = (email: string): boolean => {
+  if (!email) return false;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email) && email.length <= 254;
+};
+
+const validateTelegram = (telegram: string): boolean => {
+  if (!telegram) return false;
+  // Allow @username or username format, 5-32 characters
+  const cleanTelegram = telegram.startsWith('@') ? telegram.slice(1) : telegram;
+  const telegramRegex = /^[a-zA-Z][a-zA-Z0-9_]{4,31}$/;
+  return telegramRegex.test(cleanTelegram);
+};
+
+const validateName = (name: string): boolean => {
+  if (!name) return false;
+  const trimmed = name.trim();
+  return trimmed.length >= 2 && trimmed.length <= MAX_NAME_LENGTH;
+};
+
+const validateGoogleSheetsLink = (link: string): boolean => {
+  if (!link) return false;
+  return link.startsWith('https://docs.google.com/spreadsheets/');
+};
+
+const validateFileSize = (file: File): boolean => {
+  return file.size <= MAX_FILE_SIZE_BYTES;
+};
+
 // --- Components ---
 
 const Badge = ({ children }: { children?: React.ReactNode }) => (
@@ -179,6 +213,7 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
   const [file, setFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // RPH upload states (for Custom package only)
@@ -209,22 +244,86 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear validation error when user types
+    if (validationErrors[name]) {
+      setValidationErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+      const selectedFile = e.target.files[0];
+      if (!validateFileSize(selectedFile)) {
+        setValidationErrors(prev => ({ ...prev, resit: `Saiz fail melebihi had ${MAX_FILE_SIZE_MB}MB.` }));
+        return;
+      }
+      setValidationErrors(prev => ({ ...prev, resit: '' }));
+      setFile(selectedFile);
     }
   };
 
   const handleRphFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setRphFile(e.target.files[0]);
+      const selectedFile = e.target.files[0];
+      if (!validateFileSize(selectedFile)) {
+        setValidationErrors(prev => ({ ...prev, rph: `Saiz fail melebihi had ${MAX_FILE_SIZE_MB}MB.` }));
+        return;
+      }
+      setValidationErrors(prev => ({ ...prev, rph: '' }));
+      setRphFile(selectedFile);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setValidationErrors({});
+
+    // Validate all inputs
+    const errors: Record<string, string> = {};
+
+    if (!validateName(formData.nama)) {
+      errors.nama = `Nama mestilah antara 2-${MAX_NAME_LENGTH} aksara.`;
+    }
+
+    if (!validateEmail(formData.email)) {
+      errors.email = 'Sila masukkan email yang sah.';
+    }
+
+    if (!validateTelegram(formData.telegram)) {
+      errors.telegram = 'Username Telegram mestilah 5-32 aksara (contoh: @username).';
+    }
+
+    // Validate file for RM80 package (required)
+    if (formData.pakej === 'template-tersedia' && !file) {
+      errors.resit = 'Sila muat naik resit pembayaran.';
+    }
+
+    if (file && !validateFileSize(file)) {
+      errors.resit = `Saiz fail melebihi had ${MAX_FILE_SIZE_MB}MB.`;
+    }
+
+    // Validate RPH for custom package
+    if (formData.pakej === 'custom-template') {
+      if (rphUploadType === 'excel' && !rphFile) {
+        errors.rph = 'Sila muat naik fail Excel template RPH.';
+      }
+      if (rphUploadType === 'excel' && rphFile && !validateFileSize(rphFile)) {
+        errors.rph = `Saiz fail melebihi had ${MAX_FILE_SIZE_MB}MB.`;
+      }
+      if (rphUploadType === 'google-sheets' && !rphLink) {
+        errors.rph = 'Sila masukkan link Google Sheets.';
+      }
+      if (rphUploadType === 'google-sheets' && rphLink && !validateGoogleSheetsLink(rphLink)) {
+        errors.rph = 'Link mestilah dari Google Sheets (https://docs.google.com/spreadsheets/...).';
+      }
+    }
+
+    // If there are errors, show them and stop
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
@@ -300,6 +399,7 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
     setRphFile(null);
     setRphLink('');
     setAgreedToPolicy(false);
+    setValidationErrors({});
   };
 
   if (!isOpen) return null;
@@ -382,11 +482,19 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
                     name="nama"
                     value={formData.nama}
                     onChange={handleInputChange}
+                    maxLength={MAX_NAME_LENGTH}
                     required
                     placeholder="Contoh: Ahmad bin Abu"
-                    className="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-11 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-accent-purple/50 focus:ring-1 focus:ring-accent-purple/50 transition-colors"
+                    className={`w-full bg-white/5 border rounded-lg py-3 pl-11 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 transition-colors ${
+                      validationErrors.nama
+                        ? 'border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50'
+                        : 'border-white/10 focus:border-accent-purple/50 focus:ring-accent-purple/50'
+                    }`}
                   />
                 </div>
+                {validationErrors.nama && (
+                  <p className="text-red-400 text-xs mt-1">{validationErrors.nama}</p>
+                )}
               </div>
 
               {/* Email */}
@@ -401,11 +509,19 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
+                    maxLength={254}
                     required
                     placeholder="contoh@email.com"
-                    className="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-11 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-accent-purple/50 focus:ring-1 focus:ring-accent-purple/50 transition-colors"
+                    className={`w-full bg-white/5 border rounded-lg py-3 pl-11 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 transition-colors ${
+                      validationErrors.email
+                        ? 'border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50'
+                        : 'border-white/10 focus:border-accent-purple/50 focus:ring-accent-purple/50'
+                    }`}
                   />
                 </div>
+                {validationErrors.email && (
+                  <p className="text-red-400 text-xs mt-1">{validationErrors.email}</p>
+                )}
               </div>
 
               {/* Telegram */}
@@ -420,11 +536,19 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
                     name="telegram"
                     value={formData.telegram}
                     onChange={handleInputChange}
+                    maxLength={33}
                     required
                     placeholder="@username"
-                    className="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-11 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-accent-purple/50 focus:ring-1 focus:ring-accent-purple/50 transition-colors"
+                    className={`w-full bg-white/5 border rounded-lg py-3 pl-11 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 transition-colors ${
+                      validationErrors.telegram
+                        ? 'border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50'
+                        : 'border-white/10 focus:border-accent-purple/50 focus:ring-accent-purple/50'
+                    }`}
                   />
                 </div>
+                {validationErrors.telegram && (
+                  <p className="text-red-400 text-xs mt-1">{validationErrors.telegram}</p>
+                )}
               </div>
 
               {/* Pakej */}
@@ -561,14 +685,21 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
                       value={rphLink}
                       onChange={(e) => setRphLink(e.target.value)}
                       placeholder="Paste link Google Sheets anda"
-                      className="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder:text-gray-500 focus:outline-none focus:border-accent-purple/50 focus:ring-1 focus:ring-accent-purple/50 transition-colors text-sm"
+                      className={`w-full bg-white/5 border rounded-lg py-3 px-4 text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 transition-colors text-sm ${
+                        validationErrors.rph
+                          ? 'border-red-500/50 focus:border-red-500/50 focus:ring-red-500/50'
+                          : 'border-white/10 focus:border-accent-purple/50 focus:ring-accent-purple/50'
+                      }`}
                     />
                   )}
 
+                  {validationErrors.rph && (
+                    <p className="text-red-400 text-xs">{validationErrors.rph}</p>
+                  )}
                   <p className="text-xs text-gray-500">
                     {rphUploadType === 'google-sheets'
                       ? 'Pastikan link boleh diakses (Share → Anyone with the link)'
-                      : 'Saya akan gunakan fail ini sebagai rujukan untuk custom template anda'}
+                      : `Saya akan gunakan fail ini sebagai rujukan untuk custom template anda (max ${MAX_FILE_SIZE_MB}MB)`}
                   </p>
                 </div>
               )}
@@ -592,7 +723,9 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
                   className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
                     file
                       ? 'border-green-500/50 bg-green-500/5'
-                      : 'border-white/10 hover:border-accent-purple/50 hover:bg-white/5'
+                      : validationErrors.resit
+                        ? 'border-red-500/50 bg-red-500/5'
+                        : 'border-white/10 hover:border-accent-purple/50 hover:bg-white/5'
                   }`}
                 >
                   <input
@@ -611,10 +744,13 @@ const OrderForm = ({ isOpen, onClose }: OrderFormProps) => {
                     <>
                       <Upload className="w-8 h-8 text-gray-500 mx-auto mb-2" />
                       <p className="text-sm text-gray-400">Klik untuk muat naik resit</p>
-                      <p className="text-xs text-gray-500 mt-1">JPG, PNG atau PDF</p>
+                      <p className="text-xs text-gray-500 mt-1">JPG, PNG atau PDF (max {MAX_FILE_SIZE_MB}MB)</p>
                     </>
                   )}
                 </div>
+                {validationErrors.resit && (
+                  <p className="text-red-400 text-xs mt-1">{validationErrors.resit}</p>
+                )}
               </div>
 
               {/* Payment Info */}
