@@ -39,7 +39,14 @@ import {
   Eye,
   BookOpen,
   Table,
-  FileUp
+  FileUp,
+  History,
+  Shield,
+  Cloud,
+  Bot,
+  Globe,
+  Rocket,
+  ArrowUpRight
 } from 'lucide-react';
 
 // --- Types ---
@@ -1535,6 +1542,237 @@ const Pricing = ({ onOpenForm }: { onOpenForm: () => void }) => {
   );
 };
 
+// --- Changelog/Roadmap Section ---
+const ChangelogSection = () => {
+  const [expandedVersion, setExpandedVersion] = useState<string | null>('v1.0.12');
+
+  const changelog = [
+    {
+      version: 'v1.0.12',
+      date: 'Januari 2026',
+      status: 'latest',
+      highlights: [
+        {
+          icon: Bot,
+          title: 'Gemini AI Parsing',
+          description: 'Upload Word dalam apa-apa format, AI faham automatik. Sokong BM, English, Jawi, Arab, Tamil & Cina.',
+          color: 'purple'
+        },
+        {
+          icon: Cloud,
+          title: 'DSKP Cloud Database',
+          description: 'Data SK/SP dari cloud - sentiasa terkini tanpa perlu update manual.',
+          color: 'blue'
+        },
+        {
+          icon: Shield,
+          title: 'Keselamatan Dipertingkat',
+          description: 'Perlindungan data input dan kawalan akses yang lebih baik.',
+          color: 'green'
+        },
+        {
+          icon: Globe,
+          title: 'Sokongan Pelbagai Bahasa',
+          description: 'Parsing pintar untuk dokumen Jawi, Arab, Tamil dan Cina.',
+          color: 'pink'
+        }
+      ],
+      details: [
+        'Pilihan Tahun/Tingkatan untuk template mingguan',
+        'DSKP Helper dengan dropdown filter (Subjek → Tahun → Tema)',
+        'Auto-retry untuk upload Word jika API sibuk',
+        'Tetapan API Key sendiri (optional) untuk penggunaan tinggi'
+      ]
+    },
+    {
+      version: 'v1.0.11',
+      date: 'Disember 2025',
+      status: 'previous',
+      highlights: [
+        {
+          icon: Layers,
+          title: 'Multi-Slot System',
+          description: 'Sokongan multiple RPH per minggu dengan sistem slot.',
+          color: 'purple'
+        },
+        {
+          icon: FileUp,
+          title: 'Word Parser Improved',
+          description: 'Parsing lebih tepat untuk format PSV, BM dan lain-lain.',
+          color: 'blue'
+        }
+      ],
+      details: [
+        'Auto-assign slot untuk multiple RPH dalam satu minggu',
+        'Simpan template lebih pantas',
+        'Format SK/SP yang lebih kemas dan tersusun'
+      ]
+    },
+    {
+      version: 'v1.0.10',
+      date: 'November 2025',
+      status: 'previous',
+      highlights: [
+        {
+          icon: Table,
+          title: 'Template Mingguan',
+          description: 'Simpan dan guna semula template untuk setiap minggu.',
+          color: 'green'
+        }
+      ],
+      details: [
+        'Sistem template mingguan',
+        'DSKP browser untuk cari SK/SP',
+        'Antaramuka pengguna yang lebih baik'
+      ]
+    }
+  ];
+
+  const colorClasses: Record<string, { bg: string; border: string; text: string }> = {
+    purple: { bg: 'bg-accent-purple/10', border: 'border-accent-purple/30', text: 'text-accent-purple' },
+    blue: { bg: 'bg-blue-500/10', border: 'border-blue-500/30', text: 'text-blue-400' },
+    green: { bg: 'bg-green-500/10', border: 'border-green-500/30', text: 'text-green-400' },
+    pink: { bg: 'bg-accent-pink/10', border: 'border-accent-pink/30', text: 'text-accent-pink' }
+  };
+
+  return (
+    <section id="changelog" className="py-20 bg-navy-900/50">
+      <div className="container mx-auto px-4">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-purple/10 border border-accent-purple/30 text-accent-purple text-sm font-medium mb-6">
+            <History className="w-4 h-4" />
+            Changelog & Roadmap
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            Kemas Kini <span className="text-accent-purple">Terbaru</span>
+          </h2>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            Lihat apa yang baru dalam Auto eRPH. Kami sentiasa menambah baik sistem untuk pengalaman terbaik.
+          </p>
+        </div>
+
+        {/* Changelog Timeline */}
+        <div className="max-w-4xl mx-auto">
+          {changelog.map((release, index) => (
+            <div key={release.version} className="relative">
+              {/* Timeline line */}
+              {index < changelog.length - 1 && (
+                <div className="absolute left-6 top-16 bottom-0 w-0.5 bg-gradient-to-b from-accent-purple/50 to-transparent" />
+              )}
+
+              {/* Version Card */}
+              <div className="relative pl-16 pb-12">
+                {/* Timeline dot */}
+                <div className={`absolute left-3 top-1 w-6 h-6 rounded-full flex items-center justify-center ${
+                  release.status === 'latest'
+                    ? 'bg-accent-purple shadow-[0_0_20px_rgba(139,92,246,0.5)]'
+                    : 'bg-gray-700'
+                }`}>
+                  {release.status === 'latest' ? (
+                    <Rocket className="w-3 h-3 text-white" />
+                  ) : (
+                    <div className="w-2 h-2 rounded-full bg-gray-500" />
+                  )}
+                </div>
+
+                {/* Card */}
+                <div
+                  className={`bg-white/5 border rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer ${
+                    release.status === 'latest'
+                      ? 'border-accent-purple/50 shadow-[0_0_30px_rgba(139,92,246,0.15)]'
+                      : 'border-white/10 hover:border-white/20'
+                  }`}
+                  onClick={() => setExpandedVersion(expandedVersion === release.version ? null : release.version)}
+                >
+                  {/* Card Header */}
+                  <div className="p-6 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div>
+                        <div className="flex items-center gap-3">
+                          <h3 className="text-2xl font-bold">{release.version}</h3>
+                          {release.status === 'latest' && (
+                            <span className="px-2 py-0.5 text-xs font-semibold bg-accent-purple rounded-full">
+                              TERKINI
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-gray-400 text-sm mt-1">{release.date}</p>
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${
+                      expandedVersion === release.version ? 'rotate-180' : ''
+                    }`} />
+                  </div>
+
+                  {/* Expanded Content */}
+                  <div className={`overflow-hidden transition-all duration-500 ${
+                    expandedVersion === release.version ? 'max-h-[1000px]' : 'max-h-0'
+                  }`}>
+                    <div className="px-6 pb-6">
+                      {/* Highlights Grid */}
+                      <div className="grid md:grid-cols-2 gap-4 mb-6">
+                        {release.highlights.map((highlight, i) => {
+                          const colors = colorClasses[highlight.color];
+                          return (
+                            <div
+                              key={i}
+                              className={`${colors.bg} border ${colors.border} rounded-xl p-4`}
+                            >
+                              <div className="flex items-start gap-3">
+                                <div className={`p-2 rounded-lg ${colors.bg}`}>
+                                  <highlight.icon className={`w-5 h-5 ${colors.text}`} />
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold mb-1">{highlight.title}</h4>
+                                  <p className="text-sm text-gray-400">{highlight.description}</p>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Details List */}
+                      <div className="bg-black/20 rounded-xl p-4">
+                        <h4 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                          <FileText className="w-4 h-4" />
+                          Perincian Perubahan
+                        </h4>
+                        <ul className="space-y-2">
+                          {release.details.map((detail, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm text-gray-400">
+                              <CheckCircle className="w-4 h-4 text-green-400 shrink-0 mt-0.5" />
+                              {detail}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Coming Soon */}
+        <div className="max-w-4xl mx-auto mt-8">
+          <div className="bg-gradient-to-r from-accent-purple/10 to-accent-pink/10 border border-accent-purple/30 rounded-2xl p-6 text-center">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Sparkles className="w-5 h-5 text-accent-purple" />
+              <span className="font-semibold">Akan Datang</span>
+            </div>
+            <p className="text-gray-400 text-sm max-w-xl mx-auto">
+              Integrasi Google Classroom, Export PDF automatik, Dashboard statistik penggunaan, dan banyak lagi dalam perancangan.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Footer = ({ onOpenForm }: { onOpenForm: () => void }) => {
   return (
     <footer className="py-20 relative overflow-hidden">
@@ -1584,6 +1822,7 @@ function AutoErphPage() {
         <Pricing onOpenForm={openOrderForm} />
         <FAQ />
         <Documentation />
+        <ChangelogSection />
         <Footer onOpenForm={openOrderForm} />
         <OrderForm isOpen={isOrderFormOpen} onClose={closeOrderForm} />
       </div>
